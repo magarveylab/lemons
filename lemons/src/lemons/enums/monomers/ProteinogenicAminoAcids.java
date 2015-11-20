@@ -1,8 +1,8 @@
-package lemons.enums;
+package lemons.enums.monomers;
 
-import lemons.interfaces.IMonomerType;
+import lemons.interfaces.IAminoAcidType;
 
-public enum NMethylatedAminoAcids implements IMonomerType {
+public enum ProteinogenicAminoAcids implements IAminoAcidType {
 
 	ALANINE("IC(C(C)NF)=O", "Alanine", "A"),
 	ASPARAGINE("FNC(C(I)=O)CC(N)=O", "Asparagine", "N"),
@@ -30,7 +30,7 @@ public enum NMethylatedAminoAcids implements IMonomerType {
 	private String fullName;
 	private String abbreviation;
 	
-	private NMethylatedAminoAcids(String smiles, String fullName, String abbreviation) {
+	private ProteinogenicAminoAcids(String smiles, String fullName, String abbreviation) {
 		this.smiles = smiles;
 		this.fullName = fullName;
 		this.abbreviation = abbreviation;

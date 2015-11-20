@@ -1,48 +1,85 @@
 package lemons.data;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 import lemons.interfaces.IFingerprint;
 import lemons.interfaces.IFingerprintList;
-import lemons.interfaces.IMonomerType;
+import lemons.interfaces.IMonomer;
+import lemons.interfaces.IPolymer;
+import lemons.interfaces.IReaction;
+import lemons.interfaces.IReactionList;
 import lemons.interfaces.IScaffold;
 
 public class Scaffold implements IScaffold {
 	
-	private List<IMonomerType> monomers = new ArrayList<IMonomerType>();
+	private IPolymer polymer = new Polymer();
 	private IFingerprintList<IFingerprint> fingerprints = new FingerprintList();
+	private IReactionList<IReaction> reactions = new ReactionList();
 	
-	public List<IMonomerType> monomers() {
-		return monomers;
+	public List<IMonomer> monomers() {
+		return polymer.monomers();
 	}
 	
-	public void add(IMonomerType monomer) {
-		monomers.add(monomer);
+	public void addMonomer(IMonomer monomer) {
+		polymer.addMonomer(monomer);
 	}
 	
-	public void add(List<IMonomerType> monomers) {
-		this.monomers.addAll(monomers);
+	public void addMonomers(List<IMonomer> monomers) {
+		polymer.addMonomers(monomers);
 	}
 	
-	public void set(int index, IMonomerType monomer) {
-		monomers.set(index, monomer);
+	public void setMonomer(int index, IMonomer monomer) {
+		polymer.setMonomer(index, monomer);
+	}
+	
+	public IMonomer getMonomer(int index) {
+		return polymer.getMonomer(index);
 	}
 	
 	public int size() {
-		return monomers.size();
+		return polymer.size();
+	}
+	
+	public IPolymer polymer() {
+		return polymer;
+	}
+	
+	public void setPolymer(IPolymer polymer) {
+		this.polymer = polymer; 
+	}
+	
+	public IAtomContainer molecule() {
+		return polymer.molecule();
+	}
+	
+	public void setMolecule(IAtomContainer molecule) {
+		polymer.setMolecule(molecule);
 	}
 	
 	public IFingerprintList<IFingerprint> fingerprints() {
 		return fingerprints;
 	}
 	
-	public void add(IFingerprint fingerprint) {
+	public void addFingerprint(IFingerprint fingerprint) {
 		fingerprints.add(fingerprint);
 	}
 	
-	public void set(IFingerprintList<IFingerprint> fingerprints) {
+	public void setFingerprints(IFingerprintList<IFingerprint> fingerprints) {
 		this.fingerprints = fingerprints;
+	}
+	
+	public IReactionList<IReaction> reactions() {
+		return reactions;
+	}
+	
+	public void addReaction(IReaction reaction) {
+		reactions.add(reaction);
+	}
+	
+	public void setReactions(IReactionList<IReaction> reactions) {
+		this.reactions = reactions;
 	}
 	
 }

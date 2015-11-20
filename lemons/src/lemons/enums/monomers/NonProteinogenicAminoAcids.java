@@ -1,9 +1,17 @@
-package lemons.enums;
+package lemons.enums.monomers;
 
-import lemons.interfaces.IMonomerType;
+import lemons.interfaces.IAminoAcidType;
 
-public enum ProteinogenicAminoAcids implements IMonomerType {
+public enum NonProteinogenicAminoAcids implements IAminoAcidType {
 
+	// methylated amino acids
+	
+	// glycosylated (with several sugars)
+	
+	// hydroxylated and chlorinated as in PRISM enum
+	
+	// oxazole, thiazole 
+	
 	ALANINE("IC(C(C)NF)=O", "Alanine", "A"),
 	ASPARAGINE("FNC(C(I)=O)CC(N)=O", "Asparagine", "N"),
 	ASPARTATE("FNC(C(I)=O)CC(O)=O", "Aspartate", "D"),
@@ -30,7 +38,7 @@ public enum ProteinogenicAminoAcids implements IMonomerType {
 	private String fullName;
 	private String abbreviation;
 	
-	private ProteinogenicAminoAcids(String smiles, String fullName, String abbreviation) {
+	private NonProteinogenicAminoAcids(String smiles, String fullName, String abbreviation) {
 		this.smiles = smiles;
 		this.fullName = fullName;
 		this.abbreviation = abbreviation;

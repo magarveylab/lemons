@@ -2,6 +2,8 @@ package lemons.interfaces;
 
 import java.util.List;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
+
 /**
  * A scaffold containing multiple monomers.
  * 
@@ -10,20 +12,36 @@ import java.util.List;
  */
 public interface IScaffold {
 	
-	public List<IMonomerType> monomers();
+	public IAtomContainer molecule();
 	
-	public void add(IMonomerType monomer);
+	public void setMolecule(IAtomContainer molecule);
 	
-	public void add(List<IMonomerType> monomers);
+	public List<IMonomer> monomers();
 	
-	public void set(int index, IMonomerType monomer);
+	public void addMonomer(IMonomer monomer);
+	
+	public void addMonomers(List<IMonomer> monomers);
+	
+	public void setMonomer(int index, IMonomer monomer);
+	
+	public IMonomer getMonomer(int index);
+	
+	public IPolymer polymer();
+	
+	public void setPolymer(IPolymer polymer);
 	
 	public int size();
 	
 	public IFingerprintList<IFingerprint> fingerprints();
 	
-	public void add(IFingerprint fingerprint);
+	public void addFingerprint(IFingerprint fingerprint);
 	
-	public void set(IFingerprintList<IFingerprint> fingerprints);
-
+	public void setFingerprints(IFingerprintList<IFingerprint> fingerprints);
+	
+	public IReactionList<IReaction> reactions();
+	
+	public void addReaction(IReaction reaction);
+	
+	public void setReactions(IReactionList<IReaction> reactions);
+	
 }

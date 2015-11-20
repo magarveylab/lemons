@@ -1,7 +1,13 @@
 package lemons.data;
 
+import lemons.enums.tags.ScaffoldTags;
 import lemons.interfaces.IMonomer;
 import lemons.interfaces.IMonomerType;
+import lemons.interfaces.ITag;
+import lemons.interfaces.ITagList;
+import lemons.interfaces.ITagType;
+import lemons.util.TagManipulator;
+import lemons.util.exception.BadTagException;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -15,9 +21,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 public class Monomer implements IMonomer {
 
 	private IMonomerType type;
-	private IAtom begin;
-	private IAtom extend;
 	private IAtomContainer structure;
+	private ITagList<ITag> tags = new TagList();
 
 	/**
 	 * Instantiate a new biological monomer.
@@ -36,21 +41,15 @@ public class Monomer implements IMonomer {
 	public void setType(IMonomerType type) {
 		this.type = type;
 	}
-	
-	public IAtom begin() {
-		return begin;
+
+	public IAtom begin() throws BadTagException {
+		return TagManipulator.getSingleTag(this,
+				ScaffoldTags.BACKBONE_BEGIN).atom();
 	}
-	
-	public void setBegin(IAtom begin) {
-		this.begin = begin;
-	}
-	
-	public IAtom extend() {
-		return extend;
-	}
-	
-	public void setExtend(IAtom extend) {
-		this.extend = extend;
+
+	public IAtom extend() throws BadTagException {
+		return TagManipulator.getSingleTag(this, 
+				ScaffoldTags.BACKBONE_EXTEND).atom();
 	}
 	
 	/**
@@ -67,6 +66,30 @@ public class Monomer implements IMonomer {
 	 */
 	public void setStructure(IAtomContainer structure) {
 		this.structure = structure;
+	}
+	
+	public ITagList<ITag> getTags() {
+		return tags;
+	}
+	
+	public ITagList<ITag> getTags(IAtom atom) {
+		return tags.getTags(atom);
+	}
+	
+	public ITagList<ITag> getTags(ITagType type) {
+		return tags.getTags(type);
+	}
+	
+	public void addTag(ITag tag) {
+		tags.add(tag);
+	}
+	
+	public void addTags(ITagList<ITag> tags) {
+		tags.addAll(tags);
+	}
+	
+	public void setTags(ITagList<ITag> tags) {
+		this.tags = tags;
 	}
 
 }

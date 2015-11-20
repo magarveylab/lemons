@@ -20,6 +20,10 @@ public class Polymer implements IPolymer {
 	public void addMonomer(IMonomer monomer) {
 		monomers.add(monomer);
 	}
+	
+	public void addMonomers(List<IMonomer> monomers) {
+		this.monomers.addAll(monomers);
+	}
 
 	public void setMonomers(List<IMonomer> monomers) {
 		this.monomers = monomers;
@@ -32,6 +36,14 @@ public class Polymer implements IPolymer {
 	public IMonomer getLastMonomer() {
 		return monomers.get(monomers.size() - 1);
 	}
+	
+	public IMonomer getMonomer(int idx) {
+		return monomers.get(idx);
+	}
+	
+	public void setMonomer(int idx, IMonomer monomer) {
+		monomers.set(idx, monomer);
+	}
 		
 	public IAtomContainer molecule() {
 		return molecule;
@@ -39,6 +51,10 @@ public class Polymer implements IPolymer {
 	
 	public void setMolecule(IAtomContainer molecule) {
 		this.molecule = molecule;
+	}
+	
+	public int size() {
+		return monomers.size();
 	}
 
 }
