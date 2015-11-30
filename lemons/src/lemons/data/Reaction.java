@@ -11,6 +11,7 @@ import lemons.interfaces.ITagType;
 public class Reaction implements IReaction {
 
 	private IReactionType type;
+	private boolean executed = false;
 	private ITagList<ITag> tags = new TagList();
 	
 	public Reaction(IReactionType type) {
@@ -43,6 +44,14 @@ public class Reaction implements IReaction {
 	
 	public void setTags(ITagList<ITag> tags) {
 		this.tags = tags;
+	}
+
+	public boolean wasExecuted() {
+		return executed;
+	}
+
+	public void setExecuted(boolean executed) {
+		this.executed = executed;
 	}
 	
 }

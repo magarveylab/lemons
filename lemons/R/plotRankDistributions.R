@@ -1,4 +1,4 @@
-setwd("~/Desktop/lemons/2015-11-15-1820/")
+setwd("/Users/michaelskinnider/Desktop/lemons/2015-11-24-1154-07/Bootstrap_1/")
 library(plyr)
 library(ggplot2)
 library(reshape2)
@@ -13,6 +13,7 @@ for (i in 1:length(files)) {
   name <- sub("^([^.]*).*", "\\1", basename(files[i]))
   data <- read.table(files[i], header=TRUE, sep=",") # load file 
   dist <- count(data, 'Rank') # create rank distribution
+  cat(name, ":", dist[1,2], "\n")
   dists[[name]] <- 0 # create empty column 
   for (j in 1:nrow(dist)) { 
     count <- dist[j,2]
@@ -22,5 +23,6 @@ for (i in 1:length(files)) {
 
 #plot 
 dists.melted <- melt(dists, id="rankIdx")
-plot <- ggplot(data=dists.melted, aes(x=rankIdx, y=value, color=variable)) + geom_point() + coord_cartesian(xlim = c(0, 10)) 
+plot <- ggplot(data=dists.melted, aes(x=rankIdx, y=value, color=variable)) + geom_point() + geom_line() + theme_bw() + coord_cartesian(xlim = c(1, 5)) 
 plot(plot)
+ggsave(file="Ranks_1-5.pdf", width=11, height=8.5)

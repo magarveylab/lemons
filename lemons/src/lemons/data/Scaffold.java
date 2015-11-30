@@ -78,6 +78,10 @@ public class Scaffold implements IScaffold {
 		reactions.add(reaction);
 	}
 	
+	public void addReactions(IReactionList<IReaction> reactions) {
+		this.reactions.addAll(reactions);
+	}
+	
 	public void setReactions(IReactionList<IReaction> reactions) {
 		this.reactions = reactions;
 	}

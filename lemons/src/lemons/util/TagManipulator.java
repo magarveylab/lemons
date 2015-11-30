@@ -12,9 +12,10 @@ public class TagManipulator {
 			throws BadTagException {
 		ITagList<ITag> allTags = monomer.getTags();
 		ITagList<ITag> tags = allTags.getTags(type);
-		if (tags.size() != 1)
-			throw new BadTagException("Error: " + "number of " + type
-					+ " tags not equal to 1!");
+		if (tags.size() > 1)
+			throw new BadTagException("Error: more than 1 " + type + " tags!");
+		if (tags.size() == 0)
+			return null;
 		ITag tag = tags.get(0);
 		return tag;
 	}

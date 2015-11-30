@@ -18,4 +18,8 @@ public interface IReaction {
 
 	public ITagList<ITag> getTags(IAtom atom);
 	
+	public boolean wasExecuted();
+
+	public void setExecuted(boolean executed);
+	
 }

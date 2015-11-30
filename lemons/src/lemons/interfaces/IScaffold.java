@@ -41,6 +41,8 @@ public interface IScaffold {
 	public IReactionList<IReaction> reactions();
 	
 	public void addReaction(IReaction reaction);
+
+	public void addReactions(IReactionList<IReaction> reactions);
 	
 	public void setReactions(IReactionList<IReaction> reactions);
 	

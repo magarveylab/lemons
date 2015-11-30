@@ -15,15 +15,19 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 
 public enum Fingerprinters {
 	
+	// substructure 
 	MACCS(new MACCSFingerprinter()),
-	KLEKOTA_ROTH(new KlekotaRothFingerprinter()),
-	ESTATE(new EStateFingerprinter()),
-	EXTENDED(new ExtendedFingerprinter()),
-	GRAPH_ONLY(new GraphOnlyFingerprinter()),
-	HYBRIDIZATION(new HybridizationFingerprinter()),
-	DEFAULT(new Fingerprinter()),
 	PUBCHEM(new PubchemFingerprinter(DefaultChemObjectBuilder.getInstance())),
+	KLEKOTA_ROTH(new KlekotaRothFingerprinter()),
+	E_STATE(new EStateFingerprinter()),
 
+	// topological 
+	CDK_EXTENDED(new ExtendedFingerprinter()),
+	CDK_GRAPH_ONLY(new GraphOnlyFingerprinter()),
+	CDK_HYBRIDIZATION(new HybridizationFingerprinter()),
+	CDK_DEFAULT(new Fingerprinter()),
+
+	// circular 
 	ECFP0(new CircularFingerprinter(1)),
 	ECFP2(new CircularFingerprinter(2)),
 	ECFP4(new CircularFingerprinter(3)),
@@ -32,6 +36,8 @@ public enum Fingerprinters {
 	FCFP2(new CircularFingerprinter(6)),
 	FCFP4(new CircularFingerprinter(7)),
 	FCFP6(new CircularFingerprinter(8)),
+	
+	// lexical 
 	LINGO(new LingoFingerprinter()),
 	;
 	
