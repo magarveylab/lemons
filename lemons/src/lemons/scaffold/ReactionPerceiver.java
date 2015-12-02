@@ -18,10 +18,6 @@ import lemons.util.exception.BadTagException;
 
 public class ReactionPerceiver {
 	
-	public static void removeReactions(IReactionType type, double num, IScaffold scaffold) {
-		
-	}
-	
 	public static void detectReactions(IReactionType type, double num, IScaffold scaffold)
 			throws BadTagException {
 		if	(type == ReactionTypes.CYCLIZATION)
@@ -37,18 +33,18 @@ public class ReactionPerceiver {
 			return;
 		
 		// get C-terminus
-		IMonomer last = scaffold.getMonomer(scaffold.size() - 1);
+		IMonomer last = scaffold.getMonomer(0);
 		ITag cTerminus = TagManipulator.getSingleTag(last,
 				ScaffoldTags.BACKBONE_KETONE);
 
 		// get N-terminus
-		IMonomer first = scaffold.getMonomer(0);
+		IMonomer first = scaffold.getMonomer(scaffold.size() - 1);
 		ITag nitrogen = TagManipulator.getSingleTag(first,
 				ScaffoldTags.BACKBONE_NITROGEN);
 		
 		// perceive -OH tags
 		ITagList<ITag> hydroxyls = new TagList();
-		for (int i = 0; i < scaffold.size() - 3; i++) {
+		for (int i = 3; i < scaffold.size(); i++) {
 			IMonomer monomer = scaffold.getMonomer(i);
 			hydroxyls.addAll(TagPeceiver.perceiveHydroxyls(monomer));
 		}

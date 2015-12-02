@@ -34,14 +34,16 @@ public class Config {
 	public static Map<IReactionType, Double> REMOVE_REACTIONS;
 	static { 
 		INITIAL_REACTIONS	 = new HashMap<IReactionType, Double>();
-		INITIAL_REACTIONS.put(ReactionTypes.CYCLIZATION, 1.0d);
+		INITIAL_REACTIONS.put(ReactionTypes.CYCLIZATION, 0.0d);
 
 		SWAP_REACTIONS 		= new HashMap<IReactionType, Double>();
-		INITIAL_REACTIONS.put(ReactionTypes.CYCLIZATION, 1.0d);
+		SWAP_REACTIONS.put(ReactionTypes.CYCLIZATION, 0.0d);
 		
 		ADD_REACTIONS 		= new HashMap<IReactionType, Double>();
+		ADD_REACTIONS.put(ReactionTypes.CYCLIZATION, 0.0d);
+
 		REMOVE_REACTIONS 	= new HashMap<IReactionType, Double>();
-	
+		REMOVE_REACTIONS.put(ReactionTypes.CYCLIZATION, 0.0d);
 	}
 
 }

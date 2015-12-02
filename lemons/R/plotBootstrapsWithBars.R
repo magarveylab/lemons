@@ -1,4 +1,4 @@
-setwd("~/Desktop/Peptides_linear_100_3/")
+setwd("~/Desktop/Peptides_linear_100_5/")
 library(plyr)
 library(ggplot2)
 library(reshape2)

@@ -52,7 +52,7 @@ public class RandomUtil {
 			double probability = num - Math.floor(num);
 			double randomProbability = new Random().nextDouble();
 			if (randomProbability > probability) {
-				int r = RandomUtil.randomInt(0, allReactions.size());
+				int r = RandomUtil.randomInt(0, allReactions.size() - 1);
 				IReaction reaction = allReactions.get(r);
 				randomReactions.add(reaction);
 			}

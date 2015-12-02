@@ -7,7 +7,10 @@ import lemons.data.Fingerprint;
 import lemons.fingerprint.Fingerprinters;
 import lemons.interfaces.IFingerprint;
 import lemons.interfaces.IScaffold;
+import lemons.scaffold.ReactionExecutor;
 import lemons.util.exception.FingerprintGenerationException;
+import lemons.util.exception.PolymerGenerationException;
+
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.fingerprint.IFingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -15,7 +18,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 public class FingerprintUtil {
 
 	public static void setFingerprints(List<IScaffold> scaffolds)
-			throws CDKException, FingerprintGenerationException {
+			throws CDKException, FingerprintGenerationException,
+			PolymerGenerationException {
 		// generate fingerprints
 		for (int i = 0; i < scaffolds.size(); i++) {
 			IScaffold peptide = scaffolds.get(i);
@@ -25,7 +29,11 @@ public class FingerprintUtil {
 	}
 
 	public static void setFingerprints(IScaffold scaffold, String name)
-			throws CDKException, FingerprintGenerationException {
+			throws CDKException, FingerprintGenerationException,
+			PolymerGenerationException {
+		// run reactions
+		ReactionExecutor.executeReactions(scaffold);
+		
 		// calculate fingerprints
 		IAtomContainer molecule = scaffold.molecule();
 		for (Fingerprinters fingerprinter : Fingerprinters.values()) {

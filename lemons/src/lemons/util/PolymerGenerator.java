@@ -73,6 +73,13 @@ public class PolymerGenerator {
 		IAtomContainer molecule = polymer.molecule();
 		IMonomer starter = polymer.getLastMonomer();
 
+		if (monomer == null)
+			System.out.println("Monomer is null");
+		if (molecule == null)
+			System.out.println("Molecule is null");
+		if (starter == null)
+			System.out.println("Starter is null");
+
 		polymer.addMonomer(monomer);
 		molecule.add(monomer.structure());
 
@@ -90,7 +97,15 @@ public class PolymerGenerator {
 		
 		IMonomer last = polymer.getLastMonomer();
 		IAtom extend = last.extend();
-		extend.setImplicitHydrogenCount(extend.getImplicitHydrogenCount() + 1);
+		
+		double bondOrderSum = molecule.getBondOrderSum(extend);
+		if (extend.getSymbol().equals("N")) {
+			while (bondOrderSum + extend.getImplicitHydrogenCount() < 3)
+				extend.setImplicitHydrogenCount(extend.getImplicitHydrogenCount() + 1);
+		} else if (extend.getSymbol().equals("C")) {
+			while (bondOrderSum + extend.getImplicitHydrogenCount() < 4)
+				extend.setImplicitHydrogenCount(extend.getImplicitHydrogenCount() + 1);
+		}
 	}
 
 }

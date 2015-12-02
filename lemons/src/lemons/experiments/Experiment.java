@@ -1,4 +1,4 @@
-package lemons.experiments.impl;
+package lemons.experiments;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,12 +26,6 @@ import lemons.util.exception.PolymerGenerationException;
 
 public class Experiment implements IExperiment {
 
-	/*
-	 * TODO
-	 * 1. Add reaction execution to setFingerprints() function
-	 * 2. Add reaction copying to the swapMonomers() function 
-	 */
-
 	public void run() throws CDKException, PolymerGenerationException,
 	IOException, FingerprintGenerationException {
 		// generate a set of linear scaffolds
@@ -52,7 +46,7 @@ public class Experiment implements IExperiment {
 		calculateRanks(scaffolds, swapScaffolds);
 	}
 	
-	public List<IScaffold> swapScaffolds(List<IScaffold> scaffolds)
+	private List<IScaffold> swapScaffolds(List<IScaffold> scaffolds)
 			throws IOException, CDKException, PolymerGenerationException {
 		List<IScaffold> newScaffolds = new ArrayList<IScaffold>();
 		
@@ -60,11 +54,11 @@ public class Experiment implements IExperiment {
 		for (int i = 0; i < scaffolds.size(); i++) {
 			IScaffold scaffold = scaffolds.get(i);
 
-			// swap monomers
+			// swap monomers and copy reactions 
 			IScaffold newScaffold = MonomerManipulator.swapMonomers(scaffold);
-
-			// copy reactions
-			//XXX TODO 
+			
+			// remove reactions
+			ReactionManipulator.removeReactions(newScaffold);
 			
 			// swap reactions
 			ReactionManipulator.swapReactions(newScaffold); 
@@ -72,16 +66,13 @@ public class Experiment implements IExperiment {
 			// add new reactions
 			ReactionManipulator.addReactions(newScaffold);
 
-			// remove reactions
-			ReactionManipulator.removeReactions(newScaffold);
-			
-			newScaffolds.add(scaffold);
+			newScaffolds.add(newScaffold);
 		}
 		
 		return newScaffolds;
 	}
 
-	public void calculateRanks(List<IScaffold> scaffolds,
+	private void calculateRanks(List<IScaffold> scaffolds,
 			List<IScaffold> swapScaffolds)
 			throws FingerprintGenerationException, CDKException, IOException {
 		for (int i = 0; i < scaffolds.size(); i++) {

@@ -4,9 +4,11 @@ import java.io.IOException;
 
 import org.openscience.cdk.exception.CDKException;
 
+import lemons.enums.ReactionTypes;
+import lemons.enums.monomers.ProteinogenicAminoAcids;
+import lemons.enums.monomers.PolyketideMonomers;
 import lemons.experiments.Bootstrapper;
-import lemons.experiments.impl.PeptideExperiment;
-import lemons.experiments.impl.PolyketideExperiment;
+import lemons.experiments.Experiment;
 import lemons.util.exception.FingerprintGenerationException;
 import lemons.util.exception.PolymerGenerationException;
 
@@ -18,32 +20,54 @@ public class Main {
 		// set dir
 		if (args.length > 0)
 			Config.BASE_DIRECTORY = args[0];
+
+		Config.INITIAL_MONOMERS = ProteinogenicAminoAcids.values();
+		Config.SWAP_MONOMERS = ProteinogenicAminoAcids.values();
+		Config.NUM_MONOMER_SWAPS = 1;
+//		Config.INITIAL_REACTIONS.put(ReactionTypes.CYCLIZATION, 1.0d);
+		Bootstrapper.bootstrap(new Experiment());
 		
-		runPaperExperiments();
-		
-	//	Config.REACTIONS.put(ReactionTypes.CYCLIZATION, 1);
-	//	Bootstrapper.bootstrap("Peptides_linear_1swap", new PeptideExperiment(10, 1), 2);
-		
-	//	PolyketideExperiment lpt1 = new PolyketideExperiment(100, 3);
-	//	Bootstrapper.bootstrap(lpt1, 1);
+//		runPaperExperiments();
 	}
 
 	public static void runPaperExperiments() throws CDKException,
 			PolymerGenerationException, IOException,
 			FingerprintGenerationException {
-		// test linear peptides with 1, 2, 3, 4, and 5 swaps 
-		Bootstrapper.bootstrap("Peptides_linear_100_1", new PeptideExperiment(1));
-		Bootstrapper.bootstrap("Peptides_linear_100_2", new PeptideExperiment(2));
-		Bootstrapper.bootstrap("Peptides_linear_100_3", new PeptideExperiment(3));
-		Bootstrapper.bootstrap("Peptides_linear_100_4", new PeptideExperiment(4));
-		Bootstrapper.bootstrap("Peptides_linear_100_5", new PeptideExperiment(5));
+		// test linear, proteinogenic peptides with 1, 2, 3, 4, and 5 swaps 
+		Config.INITIAL_MONOMERS = ProteinogenicAminoAcids.values();
+		Config.SWAP_MONOMERS = ProteinogenicAminoAcids.values();
+		Config.NUM_MONOMER_SWAPS = 1;
+		Bootstrapper.bootstrap("Peptides_linear_100_1", new Experiment());
+
+		Config.NUM_MONOMER_SWAPS = 2;
+		Bootstrapper.bootstrap("Peptides_linear_100_2", new Experiment());
+
+		Config.NUM_MONOMER_SWAPS = 3;
+		Bootstrapper.bootstrap("Peptides_linear_100_3", new Experiment());
+		
+		Config.NUM_MONOMER_SWAPS = 4;
+		Bootstrapper.bootstrap("Peptides_linear_100_4", new Experiment());
+
+		Config.NUM_MONOMER_SWAPS = 5;
+		Bootstrapper.bootstrap("Peptides_linear_100_5", new Experiment());
 
 		// test linear polyketides with 1, 2, 3, 4, and 5 swaps 
-		Bootstrapper.bootstrap("Polyketides_linear_100_1", new PolyketideExperiment(1));
-		Bootstrapper.bootstrap("Polyketides_linear_100_2", new PolyketideExperiment(2));
-		Bootstrapper.bootstrap("Polyketides_linear_100_3", new PolyketideExperiment(3));
-		Bootstrapper.bootstrap("Polyketides_linear_100_4", new PolyketideExperiment(4));
-		Bootstrapper.bootstrap("Polyketides_linear_100_5", new PolyketideExperiment(5));
+		Config.INITIAL_MONOMERS = PolyketideMonomers.values();
+		Config.SWAP_MONOMERS = PolyketideMonomers.values();
+		Config.NUM_MONOMER_SWAPS = 1;
+		Bootstrapper.bootstrap("Polyketides_linear_100_1", new Experiment());
+		
+		Config.NUM_MONOMER_SWAPS = 2;
+		Bootstrapper.bootstrap("Polyketides_linear_100_2", new Experiment());
+		
+		Config.NUM_MONOMER_SWAPS = 3;
+		Bootstrapper.bootstrap("Polyketides_linear_100_3", new Experiment());
+
+		Config.NUM_MONOMER_SWAPS = 4;
+		Bootstrapper.bootstrap("Polyketides_linear_100_4", new Experiment());
+		
+		Config.NUM_MONOMER_SWAPS = 5;
+		Bootstrapper.bootstrap("Polyketides_linear_100_5", new Experiment());
 
 		// test cyclic/branched peptides with 1, 2, 3, 4, and 5 swaps 
 	/*	Config.REACTIONS.put(ReactionTypes.CYCLIZATION, 1);

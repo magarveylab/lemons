@@ -3,6 +3,8 @@ package lemons.scaffold;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.exception.CDKException;
 
@@ -19,9 +21,12 @@ import lemons.util.RandomUtil;
 import lemons.util.exception.PolymerGenerationException;
 
 public class ScaffoldBuilder {
+	
+	private static final Logger logger = Logger.getLogger(ScaffoldBuilder.class.getName());
 
 	public static List<IScaffold> buildScaffolds(int number)
 			throws IOException, CDKException, PolymerGenerationException {
+		logger.log(Level.INFO, "Building " + number + " scaffolds");
 		List<IScaffold> scaffolds = new ArrayList<IScaffold>();
 		for (int i = 0; i < number; i++) {
 			IScaffold scaffold = buildLinearPolymer();
@@ -44,7 +49,7 @@ public class ScaffoldBuilder {
 					Config.REMOVE_REACTIONS.get(ReactionTypes.CYCLIZATION) > 0) { 
 				// terminal residue must have ketone if cyclizing 
 				String smiles = null;
-				while (!smiles.contains("=0") || smiles == null) {
+				while (smiles == null || !smiles.contains("=0")) {
 					type = RandomUtil.getRandomMonomer(types);
 					smiles = type.smiles();
 				}
