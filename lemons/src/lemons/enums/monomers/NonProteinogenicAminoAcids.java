@@ -3,57 +3,64 @@ package lemons.enums.monomers;
 import lemons.interfaces.IAminoAcidType;
 
 public enum NonProteinogenicAminoAcids implements IAminoAcidType {
-
-	// methylated amino acids
 	
-	// glycosylated (with several sugars)
+	_2_AMINO_ADIPIC_ACID("O=C(O)C(NF)CCCC(I)=O"),
+	AMINOBUTYRIC_ACID("CCC(NF)C(I)=O"),
+	BETA_AMINOISOBUTYRIC_ACID("CC(C(I)=O)CNF"),
+	AMINOISOBUTYRIC_ACID("CC(C(I)=O)(C)NF"),
+	BETA_ALANINE("O=C(C(C)CNF)I"),
+	BETA_HYDROXY_ASPARAGINE("O=C(C(C(O)C(N)=O)NF)I"),
+	BETA_HYDROXY_ASPARTATE("O=C(C(C(O)C(O)=O)NF)I"),
+	METHYL_ASPARTIC_ACID("O=C(C(C(C(O)=O)C)NF)I"),
+	BETA_HYDROXYTYROSINE("OC(C(C(I)=O)NF)c1ccc(O)cc1"),
+	_4R_4E_2_BUTENYL_4_METHYL_L_THREONINE("IC(C(C(O)C(C)C/C=C/C)NF)=O"),
+	CAPREOMYCIDINE("O=C(I)C(NF)C1NC(N)=NCC1"),
+	DIAMINOPROPIONATE("O=C(I)C(NF)CN"),
+	_2_4_DIAMINO_BUTYRIC_ACID("O=C(C(CCN)NF)I"),
+	DHAB_AKA_DEHYDROTHREONINE("C/C=C(C(I)=O)\\NF"), 
+	DEHYDROAMINOBUTYRIC_ACID("C/C=C(C(I)=O)\\NF"),
+	_3_5_DIHYDROXYPHENYLGLYCINE("O=C(C(C1=CC(O)=CC(O)=C1)NF)I"),
+	METHYL_GLUTAMATE("IC(C(C(CC(O)=O)C)NF)=O"),
+	_4_HYDROXY_PHENYLGLYCINE("OC(C=C1)=CC=C1C(C(I)=O)NF"),
+	HYDROXYVALINE("O=C(C(C(C)(C)O)NF)I"),
+	BETA_HYDROXY_LEUCINE("IC(C(C(O)C(C)C)NF)=O"),
+	BETA_LYSINE("O=C(I)CC(NF)CCCN"),
+	N5_HYDROXYORNITHINE("O=C(I)C(NF)CCCNO"),
+	HYDROXY_ACETYL_ORNITHINE("O=C(I)C(NF)CCCN(C(C)=O)O"),
+	BETA_PHENYLALANINE("IC(CC(NF)C1=CC=CC=C1)=O"),
+	BETA_METHYL_PHENYLALANINE("IC(C(C(C)C1=CC=CC=C1)NF)=O"),
+	BETA_HYDROXY_PHENYLALANINE("IC(C(C(O)C1=CC=CC=C1)NF)=O"),
+	PIPECOLIC_ACID("O=C(I)C1N(F)CCCC1"),
+	HYDROXYPIPECOLIC_ACID("O=C(C1N(CCCC1O)F)I"),
+	PIPERAZIC_ACID("O=C(C1N(NCCC1)F)I"),
+	METHYL_PROLINE("O=C(C1N(F)CC(C1)C)I" ),
+	HYDROXYPROLINE("O=C(I)C1N(CC(O)C1)F"),
+	HYDROXYPHENYLPYRUVATE("O=C(C(Cc1ccc(O)cc1)=O)I"),
+	DEHYDROALANINE("IC(C(NF)=C)=O"),
+	HYDROXYGLUTAMINE("IC(C(NF)C(O)CC(N)=O)=O"),
+	HYDROXYMETHYLPENTANOIC_ACID("O=C(C(OF)C(C)CC)I"),
+	HOMOSERINE("OCCC(C(I)=O)NF"),
+	HOMOTYROSINE("OC1=CC=C(C=C1)CCC(C(I)=O)NF"),
+	HYDROXYHOMOTYROSINE_SULFATE("OC1=CC=C(C(O)CC(NF)C(I)=O)C=C1OS(=O)([O-])=O"),
+	INDOLE_PYRUVIC_ACID("O=C(C(I)=O)CC1=CNC2=CC=CC=C21"),
+	N_METHOXY_TRYPTOPHAN("IC(C(NF)CC1=CN(OC)C2=C1C=CC=C2)=O"),
 	
-	// hydroxylated and chlorinated as in PRISM enum
-	
-	// oxazole, thiazole 
-	
-	ALANINE("IC(C(C)NF)=O", "Alanine", "A"),
-	ASPARAGINE("FNC(C(I)=O)CC(N)=O", "Asparagine", "N"),
-	ASPARTATE("FNC(C(I)=O)CC(O)=O", "Aspartate", "D"),
-	ARGININE("FNC(C(I)=O)CCCNC(N)=N", "Arginine", "R"),
-	CYSTEINE("IC(C(CS)NF)=O", "Cysteine", "C"),
-	GLYCINE("IC(CNF)=O", "Glycine", "G"),
-	GLUTAMINE("FNC(C(I)=O)CCC(N)=O", "Glutamine", "Q"),
-	GLUTAMATE("FNC(C(I)=O)CCC(O)=O", "Glutamate", "E"),
-	HISTIDINE("FNC(CC1=CN=CN1)C(I)=O", "Histidine", "H"),
-	ISOLEUCINE("IC(C(C(C)CC)NF)=O", "Isoleucine", "I"),
-	LEUCINE("IC(C(CC(C)C)NF)=O", "Leucine", "L"),
-	LYSINE("FNC(C(I)=O)CCCCN", "Lysine", "K"),
-	METHIONINE("FNC(CCSC)C(I)=O", "Methionine", "M"),
-	PHENYLALANINE("FNC(CC1=CC=CC=C1)C(I)=O", "Phenylalanine", "F"),
-	PROLINE("FN1CCCC1C(I)=O", "Proline", "P"),
-	SERINE("IC(C(CO)NF)=O", "Serine", "S"),
-	THREONINE("IC(C(C(C)O)NF)=O", "Threonine", "T"),
-	TRYPTOPHAN("FNC(CC1=CNC2=C1C=CC=C2)C(I)=O", "Tryptophan", "W"),
-	TYROSINE("FNC(CC1=CC=C(O)C=C1)C(I)=O", "Tyrosine", "Y"),
-	VALINE("IC(C(C(C)C)NF)=O", "Valine", "V"),
+	// alpha keto/alpha hydroxy acids
+	PYRUVATE("IC(C(C)OF)=O"),
+	ALPHA_KETOISOVALERATE("IC(C(C(C)C)OF)=O"),
+	ALPHA_KETOISOCAPROATE("IC(C(CC(C)C)OF)=O"),
+	_3_METHYL_2_OXOPENTANOIC_ACID("IC(C(OF)C(CC)C)=O"),
+	PHENYLPYRUVATE("IC(C(OF)CC1=CC=CC=C1)=O"),
 	;
 	
-	private String smiles;
-	private String fullName;
-	private String abbreviation;
+	private final String smiles;
 	
-	private NonProteinogenicAminoAcids(String smiles, String fullName, String abbreviation) {
+	private NonProteinogenicAminoAcids(final String smiles) {
 		this.smiles = smiles;
-		this.fullName = fullName;
-		this.abbreviation = abbreviation;
 	}
 	
 	public String smiles() {
 		return smiles;
-	}
-	
-	public String fullName() {
-		return fullName;
-	}
-	
-	public String abbreviation() {
-		return abbreviation;
 	}
 	
 }

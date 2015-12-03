@@ -2,6 +2,7 @@ package lemons;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -9,8 +10,11 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.lang3.ArrayUtils;
 import org.openscience.cdk.exception.CDKException;
 
+import lemons.enums.Reactions;
+import lemons.enums.monomers.*;
 import lemons.experiments.Bootstrapper;
 import lemons.experiments.Experiment;
 import lemons.util.exception.FingerprintGenerationException;
@@ -138,24 +142,34 @@ public class Main {
 		Option initialMonomers = Option.builder().longOpt("initial_monomers")
 				.argName("initial scaffold monomers").desc("Monomers used to construct the initial scaffolds.\n"
 						+ "Options: p, proteinogenic amino acids; np, nonproteinogenic amino acids;"
-						+ "pk, polyketide monomers"
+						+ "pk, polyketide monomers; s, starter units"
 				).hasArgs().build();
 		Option swapMonomers = Option.builder().longOpt("swap_monomers")
 				.argName("swap scaffold monomers").desc("Monomers that can be swapped into a modified scaffold.\n"
 						+ "Options: p, proteinogenic amino acids; np, nonproteinogenic amino acids;"
-						+ "pk, polyketide monomers"
+						+ "pk, polyketide monomers; s, starter units"
 				).hasArgs().build();
 		Option initialReactions = Option.builder().longOpt("initial_reactions")
-				.argName("").desc("Reactions that can be swapped into a modified scaffold.\n"
-						+ "Options: p, proteinogenic amino acids; np, nonproteinogenic amino acids;"
-						+ "pk, polyketide monomers"
+				.argName("initial reactions").desc("Reactions that can be swapped into a modified scaffold.\n"
+						+ "Specify the reaction and the number of times that it is executed.\n"
+						+ "The execution number can be probabilistic: e.g. 0.33 means the reaction will be "
+						+ "executed on 1/3 of  scaffolds.\n"
+						+ "Example: --initial_reactions glycosylation 1.5 cyclization 1\n"
+						+ "Options: cyclization, azole, glycosylation, n_methylation, halogenation.\n"
+						+ "This option MUST have an even number of arguments!"
 				).hasArgs().build();
-
-		//XXX TODO How to do this...? 
-/*		public static Map<IReactionType, Double> INITIAL_REACTIONS;
-		public static Map<IReactionType, Double> SWAP_REACTIONS;
-		public static Map<IReactionType, Double> ADD_REACTIONS;
-		public static Map<IReactionType, Double> REMOVE_REACTIONS; */
+		Option addReactions = Option.builder().longOpt("add_reactions")
+				.argName("initial reactions").desc("Reactions that can be added to a modified scaffold.\n"
+						+ "Usage is the same as initial_reactions."
+				).hasArgs().build();
+		Option swapReactions = Option.builder().longOpt("swap_reactions")
+				.argName("swap reactions").desc("Reactions that can be swapped into a modified scaffold.\n"
+						+ "Usage is the same as initial_reactions."
+				).hasArgs().build();
+		Option removeReactions = Option.builder().longOpt("remove_reactions")
+				.argName("remove reactions").desc("Reactions that can be removed from the original scaffold.\n"
+						+ "Usage is the same as initial_reactions."
+				).hasArgs().build();
 
 		options.addOption(writeStructures);
 		options.addOption(testFingerprints);
@@ -167,12 +181,13 @@ public class Main {
 		options.addOption(numSwaps);
 		options.addOption(initialMonomers);
 		options.addOption(swapMonomers);
-		options.addOption(minSize);
+		options.addOption(initialReactions);
+		options.addOption(addReactions);
+		options.addOption(swapReactions);
+		options.addOption(removeReactions);
 		
 		return options;
 	}
-	
-	
 
 	/**
 	 * Parse the command line input.
@@ -215,10 +230,124 @@ public class Main {
 			String value = line.getOptionValue("swaps");
 			Config.NUM_MONOMER_SWAPS = Integer.parseInt(value);
 		}
-		
-		// parse options with multiple arguments 
+
+		// parse options with multiple arguments
+		if (line.hasOption("initial_monomers")) {
+			String[] values = line.getOptionValues("initial_monomers");
+			for (String v : values) {
+				if (!v.equals("np") && !v.equals("p") && !v.equals("pk")
+						&& !v.equals("s"))
+					throw new IllegalArgumentException(
+							"Illegal initial_monomers value: " + v);
+				if (v.equals("np"))
+					Config.SWAP_MONOMERS = ArrayUtils.addAll(
+							Config.SWAP_MONOMERS,
+							NonProteinogenicAminoAcids.values());
+				if (v.equals("p"))
+					Config.SWAP_MONOMERS = ArrayUtils.addAll(
+							Config.SWAP_MONOMERS,
+							ProteinogenicAminoAcids.values());
+				if (v.equals("pk"))
+					Config.SWAP_MONOMERS = ArrayUtils.addAll(
+							Config.SWAP_MONOMERS, PolyketideMonomers.values());
+				if (v.equals("s"))
+					Config.SWAP_MONOMERS = ArrayUtils.addAll(
+							Config.SWAP_MONOMERS, Starters.values());
+			}
+		}
+		if (line.hasOption("swap_monomers")) {
+			String[] values = line.getOptionValues("swap_monomers");
+			for (String v : values) {
+				if (!v.equals("np") && !v.equals("p") && !v.equals("pk")
+						&& !v.equals("s"))
+					throw new IllegalArgumentException(
+							"Illegal swap_monomers value: " + v);
+				if (v.equals("np"))
+					Config.SWAP_MONOMERS = ArrayUtils.addAll(
+							Config.SWAP_MONOMERS,
+							NonProteinogenicAminoAcids.values());
+				if (v.equals("p"))
+					Config.SWAP_MONOMERS = ArrayUtils.addAll(
+							Config.SWAP_MONOMERS,
+							ProteinogenicAminoAcids.values());
+				if (v.equals("pk"))
+					Config.SWAP_MONOMERS = ArrayUtils.addAll(
+							Config.SWAP_MONOMERS, PolyketideMonomers.values());
+				if (v.equals("s"))
+					Config.SWAP_MONOMERS = ArrayUtils.addAll(
+							Config.SWAP_MONOMERS, Starters.values());
+			}
+		}
+		if (line.hasOption("initial_reactions")) {
+			String[] values = line.getOptionValues("initial_reactions");
+			if (values.length % 2 != 0)
+				throw new IllegalArgumentException("Illegal number of arguments for "
+						+ "parameter initial_reactions: must be an even number!");
+			for (int i = 0; i < values.length - 1; i += 2) {
+				String reaction = values[i];
+				String num = values[i+1];
+				if (getReaction(reaction) == null)
+					throw new IllegalArgumentException("Illegal reaction type in initial_reactions: " + reaction);
+				Config.INITIAL_REACTIONS.put(getReaction(reaction), Double.parseDouble(num));
+			}
+		}
+		if (line.hasOption("add_reactions")) {
+			String[] values = line.getOptionValues("add_reactions");
+			if (values.length % 2 != 0)
+				throw new IllegalArgumentException("Illegal number of arguments for "
+						+ "parameter add_reactions: must be an even number!");
+			for (int i = 0; i < values.length - 1; i += 2) {
+				String reaction = values[i];
+				String num = values[i+1];
+				if (getReaction(reaction) == null)
+					throw new IllegalArgumentException("Illegal reaction type in add_reactions: " + reaction);
+				Config.ADD_REACTIONS.put(getReaction(reaction), Double.parseDouble(num));
+			}
+		}
+		if (line.hasOption("swap_reactions")) {
+			String[] values = line.getOptionValues("swap_reactions");
+			if (values.length % 2 != 0)
+				throw new IllegalArgumentException("Illegal number of arguments for "
+						+ "parameter swap_reactions: must be an even number!");
+			for (int i = 0; i < values.length - 1; i += 2) {
+				String reaction = values[i];
+				String num = values[i+1];
+				if (getReaction(reaction) == null)
+					throw new IllegalArgumentException("Illegal reaction type in swap_reactions: " + reaction);
+				Config.SWAP_REACTIONS.put(getReaction(reaction), Double.parseDouble(num));
+			}
+		}
+		if (line.hasOption("remove_reactions")) {
+			String[] values = line.getOptionValues("remove_reactions");
+			if (values.length % 2 != 0)
+				throw new IllegalArgumentException("Illegal number of arguments for "
+						+ "parameter remove_reactions: must be an even number!");
+			for (int i = 0; i < values.length - 1; i += 2) {
+				String reaction = values[i];
+				String num = values[i+1];
+				if (getReaction(reaction) == null)
+					throw new IllegalArgumentException("Illegal reaction type in remove_reactions: " + reaction);
+				Config.REMOVE_REACTIONS.put(getReaction(reaction), Double.parseDouble(num));
+			}
+		}
+
 	}
 	
+	/**
+	 * Get the reaction that corresponds to a string.
+	 * 
+	 * @param arg
+	 *            the string passed into the command line as an argument
+	 * @return the reaction, or null if the argument is invalid
+	 */
+	public static Reactions getReaction(String arg) {
+		Reactions reaction = null;
+		Reactions[] reactions = Reactions.values();
+		for (Reactions r : reactions)
+			if (arg.toLowerCase().equals(r.toString().toLowerCase()))
+				reaction = r;
+		return reaction;
+	}
 	
 	/**
 	 * Handle an exception by printing the stack trace to the command line, and
@@ -235,5 +364,4 @@ public class Main {
 		System.exit(0);
 	}
 
-	
 }
