@@ -1,12 +1,12 @@
 package lemons;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import lemons.enums.Reactions;
-import lemons.enums.monomers.ProteinogenicAminoAcids;
+import lemons.enums.monomers.*;
 import lemons.interfaces.IMonomerType;
 import lemons.interfaces.IReactionType;
 
@@ -27,11 +27,13 @@ public class Config {
 	public static int LIBRARY_SIZE = 100;
 	public static int BOOTSTRAPS = 100;
 	
-	public static IMonomerType[] INITIAL_MONOMERS = ArrayUtils.addAll(
-			ProteinogenicAminoAcids.values());
-	public static IMonomerType[] SWAP_MONOMERS = ArrayUtils
-			.addAll(ProteinogenicAminoAcids.values());
 	public static int NUM_MONOMER_SWAPS = 0;
+	public static List<IMonomerType> INITIAL_MONOMERS;
+	public static List<IMonomerType> SWAP_MONOMERS;
+	static {
+		INITIAL_MONOMERS = new ArrayList<IMonomerType>();
+		SWAP_MONOMERS	 = new ArrayList<IMonomerType>();
+	}
 	
 	public static Map<IReactionType, Double> INITIAL_REACTIONS;
 	public static Map<IReactionType, Double> SWAP_REACTIONS;

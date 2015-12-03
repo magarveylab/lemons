@@ -23,6 +23,8 @@ public interface IMonomer {
 	
 	public IAtom begin() throws BadTagException;
 		
+	public boolean hasExtend() throws BadTagException;
+	
 	public IAtom extend() throws BadTagException;
 	
 	public ITagList<ITag> getTags();

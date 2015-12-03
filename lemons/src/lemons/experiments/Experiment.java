@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.IAtom;
-
 import lemons.Config;
 import lemons.data.TanimotoCoefficientList;
 import lemons.fingerprint.Fingerprinters;
@@ -17,7 +15,6 @@ import lemons.interfaces.IScaffold;
 import lemons.interfaces.ITanimotoCoefficient;
 import lemons.interfaces.ITanimotoCoefficientList;
 import lemons.io.ExperimentWriter;
-import lemons.io.SmilesIO;
 import lemons.io.SmilesWriter;
 import lemons.scaffold.MonomerManipulator;
 import lemons.scaffold.ReactionExecutor;

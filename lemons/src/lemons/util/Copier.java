@@ -1,7 +1,5 @@
 package lemons.util;
 
-import java.util.List;
-
 import javax.vecmath.Point2d;
 import javax.vecmath.Point3d;
 
@@ -12,10 +10,7 @@ import lemons.interfaces.IMonomer;
 import lemons.interfaces.ITag;
 import lemons.interfaces.ITagList;
 import lemons.interfaces.ITagType;
-import lemons.io.SmilesIO;
-
 import org.openscience.cdk.Bond;
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -113,55 +108,23 @@ public class Copier {
 			copy.addBond(bonds[index]);
 		}
 	}
-	
-    private static void copyBonds(IAtom[] atoms, IAtomContainer container, IAtomContainer newAtomContainer) {
-        int bondCount = container.getBondCount();
-        IBond[] bonds = new IBond[bondCount];
-        for (int index = 0; index < container.getBondCount(); index++) {
-            bonds[index] = new Bond();
-            int IndexI = 999;
-            for (int i = 0; i < container.getAtomCount(); i++) {
-                if (container.getBond(index).getAtom(0) == container.getAtom(i)) {
-                    IndexI = i;
-                    break;
-                }
-            }
-            int IndexJ = 999;
-            for (int j = 0; j < container.getAtomCount(); j++) {
-                if (container.getBond(index).getAtom(1) == container.getAtom(j)) {
-                    IndexJ = j;
-                    break;
-                }
-            }
-
-            IAtom atom1 = atoms[IndexI];
-            IAtom atom2 = atoms[IndexJ];
-
-            Order order = container.getBond(index).getOrder();
-            IBond.Stereo stereo = container.getBond(index).getStereo();
-            bonds[index] = new Bond(atom1, atom2, order, stereo);
-            if (container.getBond(index).getID() != null) {
-                bonds[index].setID(new String(container.getBond(index).getID()));
-            }
-            newAtomContainer.addBond(bonds[index]);
-
-        }
-    }
-
 
 	public static ITagList<ITag> copyTags(IMonomer monomer, IAtomContainer original,
 			IAtomContainer copy) {
 		ITagList<ITag> tagsCopy = new TagList();
 		
-		for (ITag tag : monomer.getTags()) {
-			IAtom originalAtom = tag.atom();
-			int originalAtomIdx = original.getAtomNumber(originalAtom);
-			IAtom copyAtom = copy.getAtom(originalAtomIdx);
-			ITagType type = tag.type();
-			ITag tagCopy = new Tag(type, copyAtom);
-			tagsCopy.add(tagCopy);
-		}
-
+			for (ITag tag : monomer.getTags()) {
+				try {
+					IAtom originalAtom = tag.atom();
+					int originalAtomIdx = original.getAtomNumber(originalAtom);
+					IAtom copyAtom = copy.getAtom(originalAtomIdx);
+					ITagType type = tag.type();
+					ITag tagCopy = new Tag(type, copyAtom);
+					tagsCopy.add(tagCopy);
+				} catch (Exception e ){
+					throw new RuntimeException("Couldn't copy tag " + tag.type());
+				}
+			}
 		return tagsCopy;
 	}
 	

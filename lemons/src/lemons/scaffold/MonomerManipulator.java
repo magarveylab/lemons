@@ -1,6 +1,7 @@
 package lemons.scaffold;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import lemons.Config;
 import lemons.data.Reaction;
 import lemons.data.Scaffold;
+import lemons.enums.monomers.Starters;
 import lemons.interfaces.IMonomer;
 import lemons.interfaces.IMonomerType;
 import lemons.interfaces.IPolymer;
@@ -30,7 +32,6 @@ public class MonomerManipulator {
 	public static IScaffold swapMonomers(IScaffold original)
 			throws CDKException, PolymerGenerationException, IOException {
 		// create empty lists
-		IMonomerType[] swapTypes = Config.SWAP_MONOMERS;
 		IMonomer[] newMonomers = new IMonomer[original.size()];
 		boolean[] usedSwaps = new boolean[original.size()];
 
@@ -44,15 +45,23 @@ public class MonomerManipulator {
 		
 		// set new monomers 
 		for (int j = 0; j < Config.NUM_MONOMER_SWAPS; j++) {
-			int r = RandomUtil.randomInt(0, swapTypes.length - 1);
-			IMonomerType swapType = swapTypes[r];
-
 			int s = -1;
 			while (s == -1 || usedSwaps[s] == true
 					|| newMonomers[s] != null)
 				s = RandomUtil.randomInt(0, original.size() - 1);
 			usedSwaps[s] = true;
 			
+			IMonomerType swapType = null;
+			if (s == (original.size() - 1)) {
+				int r = RandomUtil.randomInt(0, Starters.values().length - 1);
+				swapType = Starters.values()[r];
+			} else {
+				List<IMonomerType> extenderSwapTypes = new ArrayList<IMonomerType>(Config.SWAP_MONOMERS);
+				extenderSwapTypes.removeAll(Arrays.asList(Starters.values()));
+				int r = RandomUtil.randomInt(0, extenderSwapTypes.size() - 1);
+				swapType = extenderSwapTypes.get(r);
+			}
+
 			newMonomers[s] = MonomerGenerator.buildMonomer(swapType);
 		}
 		

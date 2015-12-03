@@ -50,21 +50,26 @@ public class MonomerGenerator {
 			IAtom beginAtom) {
 		IMonomerType type = monomer.type();
 
-		ITag begin = new Tag(ScaffoldTags.BACKBONE_BEGIN, beginAtom);
-		monomer.addTag(begin);
-		ITag extend = new Tag(ScaffoldTags.BACKBONE_EXTEND, extendAtom);
-		monomer.addTag(extend);
-
-		if (type instanceof IAminoAcidType) {
-			ITag nitrogen = new Tag(ScaffoldTags.BACKBONE_NITROGEN, extendAtom);
-			monomer.addTag(nitrogen);
-		} else {
-			ITag alphaCarbon = new Tag(ScaffoldTags.BACKBONE_ALPHA_CARBON,
-					extendAtom);
-			monomer.addTag(alphaCarbon);
+		if (beginAtom != null) {
+			ITag begin = new Tag(ScaffoldTags.BACKBONE_BEGIN, beginAtom);
+			monomer.addTag(begin);
+			ITag ketone = new Tag(ScaffoldTags.BACKBONE_KETONE, beginAtom);
+			monomer.addTag(ketone);
 		}
-		ITag ketone = new Tag(ScaffoldTags.BACKBONE_KETONE, beginAtom);
-		monomer.addTag(ketone);
+
+		if (extendAtom != null) {
+			ITag extend = new Tag(ScaffoldTags.BACKBONE_EXTEND, extendAtom);
+			monomer.addTag(extend);
+			
+			if (type instanceof IAminoAcidType) {
+				ITag nitrogen = new Tag(ScaffoldTags.BACKBONE_NITROGEN, extendAtom);
+				monomer.addTag(nitrogen);
+			} else {
+				ITag alphaCarbon = new Tag(ScaffoldTags.BACKBONE_ALPHA_CARBON,
+						extendAtom);
+				monomer.addTag(alphaCarbon);
+			}
+		}
 	}
 
 }

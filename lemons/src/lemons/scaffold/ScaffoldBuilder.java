@@ -2,6 +2,7 @@ package lemons.scaffold;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,6 +12,7 @@ import org.openscience.cdk.exception.CDKException;
 import lemons.Config;
 import lemons.data.Scaffold;
 import lemons.enums.Reactions;
+import lemons.enums.monomers.Starters;
 import lemons.interfaces.IMonomer;
 import lemons.interfaces.IMonomerType;
 import lemons.interfaces.IPolymer;
@@ -38,7 +40,9 @@ public class ScaffoldBuilder {
 	public static IScaffold buildLinearPolymer()
 			throws IOException, CDKException, PolymerGenerationException {
 		IScaffold scaffold = new Scaffold();
-		IMonomerType[] types = Config.INITIAL_MONOMERS;
+		List<IMonomerType> types = Config.INITIAL_MONOMERS;
+		List<IMonomerType> extenderTypes = new ArrayList<IMonomerType>(types);
+		extenderTypes.removeAll(Arrays.asList(Starters.values()));
 		int size = RandomUtil.randomInt(Config.MIN_SCAFFOLD_SIZE, Config.MAX_SCAFFOLD_SIZE);
 		List<IMonomer> monomers = new ArrayList<IMonomer>();
 		for (int i = 0; i < size; i++) {
@@ -51,13 +55,19 @@ public class ScaffoldBuilder {
 				// terminal residue must have ketone if cyclizing 
 				boolean hasKetone = false;
 				while (!hasKetone) {
-					type = RandomUtil.getRandomMonomer(types);
+					type = RandomUtil.getRandomMonomer(extenderTypes);
 					String smiles = type.smiles();
 					if (smiles.contains("=O"))
 						hasKetone = true;
+					System.out.println("Adding monomer " + i + " " + type);
 				}
+			} else if (i == (size - 1) && types.contains(Starters.values()[0])) {
+				// if starter units, last unit must be starter
+				type = RandomUtil.getRandomMonomer(Starters.values());
+				System.out.println("Adding monomer " + i + " " + type);
 			} else {
-				type = RandomUtil.getRandomMonomer(types);
+				type = RandomUtil.getRandomMonomer(extenderTypes);
+				System.out.println("Adding monomer " + i + " " + type);
 			}
 			IMonomer monomer = MonomerGenerator.buildMonomer(type); 
 			monomers.add(monomer);

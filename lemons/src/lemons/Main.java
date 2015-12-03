@@ -2,6 +2,7 @@ package lemons;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -10,7 +11,6 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.lang3.ArrayUtils;
 import org.openscience.cdk.exception.CDKException;
 
 import lemons.enums.Reactions;
@@ -240,19 +240,17 @@ public class Main {
 					throw new IllegalArgumentException(
 							"Illegal initial_monomers value: " + v);
 				if (v.equals("np"))
-					Config.SWAP_MONOMERS = ArrayUtils.addAll(
-							Config.SWAP_MONOMERS,
-							NonProteinogenicAminoAcids.values());
+					Config.INITIAL_MONOMERS.addAll(Arrays
+							.asList(NonProteinogenicAminoAcids.values()));
 				if (v.equals("p"))
-					Config.SWAP_MONOMERS = ArrayUtils.addAll(
-							Config.SWAP_MONOMERS,
-							ProteinogenicAminoAcids.values());
+					Config.INITIAL_MONOMERS.addAll(Arrays
+							.asList(ProteinogenicAminoAcids.values()));
 				if (v.equals("pk"))
-					Config.SWAP_MONOMERS = ArrayUtils.addAll(
-							Config.SWAP_MONOMERS, PolyketideMonomers.values());
+					Config.INITIAL_MONOMERS.addAll(Arrays
+							.asList(PolyketideMonomers.values()));
 				if (v.equals("s"))
-					Config.SWAP_MONOMERS = ArrayUtils.addAll(
-							Config.SWAP_MONOMERS, Starters.values());
+					Config.INITIAL_MONOMERS.addAll(Arrays
+							.asList(Starters.values()));
 			}
 		}
 		if (line.hasOption("swap_monomers")) {
@@ -263,19 +261,18 @@ public class Main {
 					throw new IllegalArgumentException(
 							"Illegal swap_monomers value: " + v);
 				if (v.equals("np"))
-					Config.SWAP_MONOMERS = ArrayUtils.addAll(
-							Config.SWAP_MONOMERS,
-							NonProteinogenicAminoAcids.values());
-				if (v.equals("p"))
-					Config.SWAP_MONOMERS = ArrayUtils.addAll(
-							Config.SWAP_MONOMERS,
-							ProteinogenicAminoAcids.values());
-				if (v.equals("pk"))
-					Config.SWAP_MONOMERS = ArrayUtils.addAll(
-							Config.SWAP_MONOMERS, PolyketideMonomers.values());
-				if (v.equals("s"))
-					Config.SWAP_MONOMERS = ArrayUtils.addAll(
-							Config.SWAP_MONOMERS, Starters.values());
+					if (v.equals("np"))
+						Config.SWAP_MONOMERS.addAll(Arrays
+								.asList(NonProteinogenicAminoAcids.values()));
+					if (v.equals("p"))
+						Config.SWAP_MONOMERS.addAll(Arrays
+								.asList(ProteinogenicAminoAcids.values()));
+					if (v.equals("pk"))
+						Config.SWAP_MONOMERS.addAll(Arrays
+								.asList(PolyketideMonomers.values()));
+					if (v.equals("s"))
+						Config.SWAP_MONOMERS.addAll(Arrays
+								.asList(Starters.values()));
 			}
 		}
 		if (line.hasOption("initial_reactions")) {

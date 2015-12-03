@@ -1,10 +1,9 @@
 package lemons;
 
 import java.io.IOException;
+import java.util.Arrays;
 
-import lemons.enums.Reactions;
-import lemons.enums.monomers.PolyketideMonomers;
-import lemons.enums.monomers.ProteinogenicAminoAcids;
+import lemons.enums.monomers.*;
 import lemons.experiments.Bootstrapper;
 import lemons.experiments.Experiment;
 import lemons.util.exception.FingerprintGenerationException;
@@ -28,13 +27,14 @@ public class Test {
 			IOException, FingerprintGenerationException {
 		// for bug testing
 
-		Config.INITIAL_MONOMERS = PolyketideMonomers.values();
+		Config.INITIAL_MONOMERS.addAll(Arrays.asList(Starters.values()));
+		Config.INITIAL_MONOMERS.addAll(Arrays.asList(ProteinogenicAminoAcids.values()));
 		Config.MIN_SCAFFOLD_SIZE = 14;
-		Config.SWAP_MONOMERS = PolyketideMonomers.values();
+		Config.SWAP_MONOMERS.addAll(Arrays.asList(ProteinogenicAminoAcids.values()));
 		Config.NUM_MONOMER_SWAPS = 3;
 		Config.BOOTSTRAPS = 1;
 		Config.LIBRARY_SIZE = 2;
-		Config.INITIAL_REACTIONS.put(Reactions.CYCLIZATION, 1.0d);
+//		Config.INITIAL_REACTIONS.put(Reactions.CYCLIZATION, 1.0d);
 		Bootstrapper.bootstrap(new Experiment());
 	}
 
@@ -42,8 +42,8 @@ public class Test {
 			PolymerGenerationException, IOException,
 			FingerprintGenerationException {
 		// test linear, proteinogenic peptides with 1, 2, 3, 4, and 5 swaps
-		Config.INITIAL_MONOMERS = ProteinogenicAminoAcids.values();
-		Config.SWAP_MONOMERS = ProteinogenicAminoAcids.values();
+		Config.INITIAL_MONOMERS.addAll(Arrays.asList(ProteinogenicAminoAcids.values()));
+		Config.SWAP_MONOMERS.addAll(Arrays.asList(ProteinogenicAminoAcids.values()));
 		Config.NUM_MONOMER_SWAPS = 1;
 		Bootstrapper.bootstrap("Peptides_linear_100_1", new Experiment());
 
@@ -60,8 +60,8 @@ public class Test {
 		Bootstrapper.bootstrap("Peptides_linear_100_5", new Experiment());
 
 		// test linear polyketides with 1, 2, 3, 4, and 5 swaps
-		Config.INITIAL_MONOMERS = PolyketideMonomers.values();
-		Config.SWAP_MONOMERS = PolyketideMonomers.values();
+//		Config.INITIAL_MONOMERS = PolyketideMonomers.values();
+//		Config.SWAP_MONOMERS = PolyketideMonomers.values();
 		Config.NUM_MONOMER_SWAPS = 1;
 		Bootstrapper.bootstrap("Polyketides_linear_100_1", new Experiment());
 

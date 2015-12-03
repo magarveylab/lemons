@@ -1,5 +1,6 @@
 package lemons.util;
 
+import java.util.List;
 import java.util.Random;
 
 import lemons.data.ReactionList;
@@ -16,6 +17,12 @@ public class RandomUtil {
 		Random rand = new Random();
 		int size = rand.nextInt((max - min) + 1) + min;
 		return size;
+	}
+	
+	public static IMonomerType getRandomMonomer(List<IMonomerType> monomers) {
+		int index = randomInt(0, monomers.size() - 1);
+		IMonomerType monomer = monomers.get(index);
+		return monomer;
 	}
 	
 	public static IMonomerType getRandomMonomer(IMonomerType[] monomers) {

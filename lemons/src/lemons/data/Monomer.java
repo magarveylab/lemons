@@ -47,6 +47,10 @@ public class Monomer implements IMonomer {
 				ScaffoldTags.BACKBONE_BEGIN).atom();
 	}
 
+	public boolean hasExtend() throws BadTagException {
+		return (TagManipulator.getSingleTag(this, ScaffoldTags.BACKBONE_EXTEND) != null);
+	}
+	
 	public IAtom extend() throws BadTagException {
 		return TagManipulator.getSingleTag(this, 
 				ScaffoldTags.BACKBONE_EXTEND).atom();

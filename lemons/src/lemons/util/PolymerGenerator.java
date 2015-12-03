@@ -73,17 +73,18 @@ public class PolymerGenerator {
 		IAtomContainer molecule = polymer.molecule();
 		IMonomer starter = polymer.getLastMonomer();
 
-		if (monomer == null)
-			System.out.println("Monomer is null");
-		if (molecule == null)
-			System.out.println("Molecule is null");
-		if (starter == null)
-			System.out.println("Starter is null");
-
 		polymer.addMonomer(monomer);
 		molecule.add(monomer.structure());
 
-		ReactionsUtil.addBond(starter.extend(), monomer.begin(), molecule);
+		try {
+			ReactionsUtil.addBond(starter.extend(), monomer.begin(), molecule);
+		} catch (Exception e) {
+			throw new PolymerGenerationException(
+					"Couldn't extend polymer with new residue "
+							+ monomer.type() + " and last residue "
+							+ starter.type() + "\nFull message: "
+							+ e.getLocalizedMessage());
+		}
 	}
 
 	public static void finishPolymer(IPolymer polymer) throws CDKException,
@@ -96,15 +97,16 @@ public class PolymerGenerator {
 		ReactionsUtil.functionalize(smiles, atom, molecule);
 		
 		IMonomer last = polymer.getLastMonomer();
-		IAtom extend = last.extend();
-		
-		double bondOrderSum = molecule.getBondOrderSum(extend);
-		if (extend.getSymbol().equals("N")) {
-			while (bondOrderSum + extend.getImplicitHydrogenCount() < 3)
-				extend.setImplicitHydrogenCount(extend.getImplicitHydrogenCount() + 1);
-		} else if (extend.getSymbol().equals("C")) {
-			while (bondOrderSum + extend.getImplicitHydrogenCount() < 4)
-				extend.setImplicitHydrogenCount(extend.getImplicitHydrogenCount() + 1);
+		if (last.hasExtend()) {
+			IAtom extend = last.extend();
+			double bondOrderSum = molecule.getBondOrderSum(extend);
+			if (extend.getSymbol().equals("N")) {
+				while (bondOrderSum + extend.getImplicitHydrogenCount() < 3)
+					extend.setImplicitHydrogenCount(extend.getImplicitHydrogenCount() + 1);
+			} else if (extend.getSymbol().equals("C")) {
+				while (bondOrderSum + extend.getImplicitHydrogenCount() < 4)
+					extend.setImplicitHydrogenCount(extend.getImplicitHydrogenCount() + 1);
+			}
 		}
 	}
 
