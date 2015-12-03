@@ -18,7 +18,9 @@ import lemons.interfaces.ITanimotoCoefficient;
 import lemons.interfaces.ITanimotoCoefficientList;
 import lemons.io.ExperimentWriter;
 import lemons.io.SmilesIO;
+import lemons.io.SmilesWriter;
 import lemons.scaffold.MonomerManipulator;
+import lemons.scaffold.ReactionExecutor;
 import lemons.scaffold.ReactionManipulator;
 import lemons.scaffold.ScaffoldBuilder;
 import lemons.util.FingerprintUtil;
@@ -41,12 +43,24 @@ public class Experiment implements IExperiment {
 		// swap monomers and add, remove, or swap reactions 
 		List<IScaffold> swapScaffolds = swapScaffolds(scaffolds);
 
-		// generate fingerprints
-		FingerprintUtil.setFingerprints(scaffolds);
-		FingerprintUtil.setFingerprints(swapScaffolds);
+		// execute reactions
+		ReactionExecutor.executeReactions(scaffolds);
+		ReactionExecutor.executeReactions(swapScaffolds);
+		
+		// write structures
+		if (Config.WRITE_STRUCTURES) {
+			SmilesWriter.write("scaffolds.tsv", scaffolds);
+			SmilesWriter.write("swap_scaffolds.tsv", swapScaffolds);
+		}
 
-		// calculate all Tanimoto coefficients
-		calculateRanks(scaffolds, swapScaffolds);
+		// generate fingerprints
+		if (Config.GET_FINGERPRINTS) {
+			FingerprintUtil.setFingerprints(scaffolds);
+			FingerprintUtil.setFingerprints(swapScaffolds);
+
+			// calculate all Tanimoto coefficients
+			calculateRanks(scaffolds, swapScaffolds);
+		}
 	}
 	
 	private List<IScaffold> swapScaffolds(List<IScaffold> scaffolds)

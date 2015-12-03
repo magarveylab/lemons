@@ -1,5 +1,6 @@
 package lemons.scaffold;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,6 +24,12 @@ public class ReactionExecutor {
 	
 	private static final Logger logger = Logger.getLogger(ReactionExecutor.class.getName());
 	
+	public static void executeReactions(List<IScaffold> scaffolds)
+			throws PolymerGenerationException, CDKException {
+		for (IScaffold s : scaffolds)
+			executeReactions(s);
+	}
+
 	public static void executeReactions(IScaffold scaffold)
 			throws PolymerGenerationException, CDKException {
 		for (IReaction reaction : scaffold.reactions()) {
