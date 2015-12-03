@@ -23,9 +23,12 @@ public class TagManipulator {
 	public static ITag getSingleTag(ITagList<ITag> allTags, ITagType type)
 			throws BadTagException {
 		ITagList<ITag> tags = allTags.getTags(type);
-		if (tags.size() != 1)
+		if (tags.size() > 1)
 			throw new BadTagException("Error: " + "number of " + type
-					+ " tags not equal to 1!");
+					+ " tags >1!");
+		if (tags.size() == 0)
+			throw new BadTagException("Error: " + "number of " + type
+					+ " tags = 0!");
 		ITag tag = tags.get(0);
 		return tag;
 	}

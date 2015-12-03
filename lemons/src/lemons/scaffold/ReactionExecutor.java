@@ -7,7 +7,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import lemons.enums.ReactionTypes;
+import lemons.enums.Reactions;
 import lemons.enums.tags.AtomTags;
 import lemons.enums.tags.ScaffoldTags;
 import lemons.interfaces.IReaction;
@@ -26,14 +26,14 @@ public class ReactionExecutor {
 	public static void executeReactions(IScaffold scaffold)
 			throws PolymerGenerationException, CDKException {
 		for (IReaction reaction : scaffold.reactions()) {
-			if (reaction.type() == ReactionTypes.CYCLIZATION) 
+			if (reaction.type() == Reactions.CYCLIZATION) 
 				executeCyclization(reaction, scaffold);
 		}
 		logger.log(Level.INFO, "Executed reactions, new scaffold: " + SmilesIO.smiles(scaffold.molecule()));
 	}
 	
 	public static void executeCyclization(IReaction reaction, IScaffold scaffold)
-			throws PolymerGenerationException {
+			throws PolymerGenerationException, CDKException {
 		IAtomContainer molecule = scaffold.molecule();
 		ITagList<ITag> tags = reaction.getTags();
 		ITag ketone = TagManipulator.getSingleTag(tags, 
@@ -44,13 +44,22 @@ public class ReactionExecutor {
 					ScaffoldTags.BACKBONE_NITROGEN);
 		} else {
 			cyclization = TagManipulator.getSingleTag(tags, 
-					AtomTags.HYDROXYL);
+					AtomTags.SP3_CARBON_HYDROXYL);
 		}
 		IAtom ketoneAtom = ketone.atom();
 		IAtom cyclizationAtom = cyclization.atom();
-		cyclizationAtom.setImplicitHydrogenCount(cyclizationAtom.getImplicitHydrogenCount() - 1);
+		
+		// correct valency of cyclization atom 
+		int valency = cyclizationAtom.getValency();
+		int bondOrderSum = (int) molecule.getBondOrderSum(cyclizationAtom)
+				+ cyclizationAtom.getImplicitHydrogenCount() + 1; // (a bond is about to be added) 		
+		if (valency != bondOrderSum) {
+			int remainder = valency - bondOrderSum;
+			cyclizationAtom.setImplicitHydrogenCount(cyclizationAtom.getImplicitHydrogenCount() + remainder);
+		}
+
 		ReactionsUtil.removeAlcohol(ketoneAtom, molecule);
-		ReactionsUtil.addBond(cyclization.atom(), ketone.atom(), molecule);
+		ReactionsUtil.addBond(cyclizationAtom, ketoneAtom, molecule);
 	}
 	
 }

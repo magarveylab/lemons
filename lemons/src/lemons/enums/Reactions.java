@@ -2,7 +2,7 @@ package lemons.enums;
 
 import lemons.interfaces.IReactionType;
 
-public enum ReactionTypes implements IReactionType {
+public enum Reactions implements IReactionType {
 
 	CYCLIZATION,
 	AZOLE,

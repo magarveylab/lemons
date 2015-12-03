@@ -12,8 +12,10 @@ import lemons.interfaces.IMonomer;
 import lemons.interfaces.ITag;
 import lemons.interfaces.ITagList;
 import lemons.interfaces.ITagType;
+import lemons.io.SmilesIO;
 
 import org.openscience.cdk.Bond;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -26,7 +28,7 @@ public class Copier {
 	public static IMonomer deepCopy(IMonomer monomer) {
 		IMonomer copy = new Monomer(monomer.type());
 		deepCopy(monomer, copy);
-		return monomer;
+		return copy;
 	}
 
 	public static void deepCopy(IMonomer monomer, IMonomer copy) {
@@ -74,19 +76,13 @@ public class Copier {
 	public static void copyBonds(IAtomContainer original, IAtomContainer copy) {
 		int bondCount = original.getBondCount();
 		IBond[] bonds = new IBond[bondCount];
-		for (int i = 0; i < bondCount; i++) {
-			bonds[i] = new Bond();
+		for (int index = 0; index < bondCount; index++) {
+			bonds[index] = new Bond();
 
 			int atomIdx1 = -1;
-			for (int j = 0; j < original.getAtomCount(); j++) {
-				if (original.getBond(j) == null) //
-					continue; // 
-				if (original.getBond(j).getAtom(1) == null)
-					System.out.println("Atom #1 is null");
-				if (original.getAtom(j) == null)
-					System.out.println("Atom j is null");
-				if (original.getBond(j).getAtom(0) == original.getAtom(i)) {
-					atomIdx1 = j;
+			for (int i = 0; i < original.getAtomCount(); i++) {
+				if (original.getBond(index).getAtom(0) == original.getAtom(i)) {
+					atomIdx1 = i;
 					break;
 				}
 			}
@@ -95,15 +91,9 @@ public class Copier {
 				continue; // 
 
 			int atomIdx2 = -1;
-			for (int j = 0; j < original.getAtomCount(); j++) {
-				if (original.getBond(j) == null) //
-					continue; // 
-				if (original.getBond(j).getAtom(1) == null)
-					System.out.println("Atom #1 is null");
-				if (original.getAtom(j) == null)
-					System.out.println("Atom j is null");
-				if (original.getBond(j).getAtom(1) == original.getAtom(j)) {
-					atomIdx2 = j;
+			for (int i = 0; i < original.getAtomCount(); i++) {
+				if (original.getBond(index).getAtom(1) == original.getAtom(i)) {
+					atomIdx2 = i;
 					break;
 				}
 			}
@@ -114,35 +104,67 @@ public class Copier {
 			IAtom atom1 = copy.getAtom(atomIdx1);
 			IAtom atom2 = copy.getAtom(atomIdx2);
 
-			Order order = original.getBond(i).getOrder();
-			IBond.Stereo stereo = original.getBond(i).getStereo();
-			bonds[i] = new Bond(atom1, atom2, order, stereo);
-			if (original.getBond(i).getID() != null) {
-				bonds[i].setID(new String(original.getBond(i).getID()));
+			Order order = original.getBond(index).getOrder();
+			IBond.Stereo stereo = original.getBond(index).getStereo();
+			bonds[index] = new Bond(atom1, atom2, order, stereo);
+			if (original.getBond(index).getID() != null) {
+				bonds[index].setID(new String(original.getBond(index).getID()));
 			}
-			copy.addBond(bonds[i]);
+			copy.addBond(bonds[index]);
 		}
 	}
+	
+    private static void copyBonds(IAtom[] atoms, IAtomContainer container, IAtomContainer newAtomContainer) {
+        int bondCount = container.getBondCount();
+        IBond[] bonds = new IBond[bondCount];
+        for (int index = 0; index < container.getBondCount(); index++) {
+            bonds[index] = new Bond();
+            int IndexI = 999;
+            for (int i = 0; i < container.getAtomCount(); i++) {
+                if (container.getBond(index).getAtom(0) == container.getAtom(i)) {
+                    IndexI = i;
+                    break;
+                }
+            }
+            int IndexJ = 999;
+            for (int j = 0; j < container.getAtomCount(); j++) {
+                if (container.getBond(index).getAtom(1) == container.getAtom(j)) {
+                    IndexJ = j;
+                    break;
+                }
+            }
+
+            IAtom atom1 = atoms[IndexI];
+            IAtom atom2 = atoms[IndexJ];
+
+            Order order = container.getBond(index).getOrder();
+            IBond.Stereo stereo = container.getBond(index).getStereo();
+            bonds[index] = new Bond(atom1, atom2, order, stereo);
+            if (container.getBond(index).getID() != null) {
+                bonds[index].setID(new String(container.getBond(index).getID()));
+            }
+            newAtomContainer.addBond(bonds[index]);
+
+        }
+    }
+
 
 	public static ITagList<ITag> copyTags(IMonomer monomer, IAtomContainer original,
 			IAtomContainer copy) {
 		ITagList<ITag> tagsCopy = new TagList();
-
-		for (int i = 0; i < original.getAtomCount(); i++) {
-			IAtom originalAtom = original.getAtom(i);
-			IAtom copyAtom = copy.getAtom(i);
-
-			List<ITag> atomTags = monomer.getTags(originalAtom);
-			for (ITag atomTag : atomTags) {
-				ITagType type = atomTag.type();
-				ITag tagCopy = new Tag(type, copyAtom);
-				tagsCopy.add(tagCopy);
-			}
+		
+		for (ITag tag : monomer.getTags()) {
+			IAtom originalAtom = tag.atom();
+			int originalAtomIdx = original.getAtomNumber(originalAtom);
+			IAtom copyAtom = copy.getAtom(originalAtomIdx);
+			ITagType type = tag.type();
+			ITag tagCopy = new Tag(type, copyAtom);
+			tagsCopy.add(tagCopy);
 		}
 
 		return tagsCopy;
 	}
-
+	
 	private static void set2D(IAtomContainer container, int index, IAtom[] atoms) {
 		if ((container.getAtom(index)).getPoint2d() != null) {
 			atoms[index].setPoint2d(new Point2d(container.getAtom(index)

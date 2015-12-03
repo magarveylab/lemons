@@ -1,9 +1,11 @@
 package lemons.scaffold;
 
+import org.openscience.cdk.exception.CDKException;
+
 import lemons.data.Reaction;
 import lemons.data.ReactionList;
 import lemons.data.TagList;
-import lemons.enums.ReactionTypes;
+import lemons.enums.Reactions;
 import lemons.enums.tags.ScaffoldTags;
 import lemons.interfaces.IMonomer;
 import lemons.interfaces.IReaction;
@@ -19,15 +21,15 @@ import lemons.util.exception.BadTagException;
 public class ReactionPerceiver {
 	
 	public static void detectReactions(IReactionType type, double num, IScaffold scaffold)
-			throws BadTagException {
-		if	(type == ReactionTypes.CYCLIZATION)
+			throws BadTagException, CDKException {
+		if	(type == Reactions.CYCLIZATION)
 			detectCyclizations(num, scaffold);
-		if	(type == ReactionTypes.AZOLE)
+		if	(type == Reactions.AZOLE)
 			detectOxazolesOrThiazoles(num, scaffold);
 	}
 	
 	public static void detectCyclizations(double numReactions, IScaffold scaffold)
-			throws BadTagException {
+			throws BadTagException, CDKException {
 		// length check
 		if (scaffold.size() < 4)
 			return;
@@ -37,28 +39,29 @@ public class ReactionPerceiver {
 		ITag cTerminus = TagManipulator.getSingleTag(last,
 				ScaffoldTags.BACKBONE_KETONE);
 
-		// get N-terminus
-		IMonomer first = scaffold.getMonomer(scaffold.size() - 1);
-		ITag nitrogen = TagManipulator.getSingleTag(first,
-				ScaffoldTags.BACKBONE_NITROGEN);
-		
 		// perceive -OH tags
 		ITagList<ITag> hydroxyls = new TagList();
 		for (int i = 3; i < scaffold.size(); i++) {
 			IMonomer monomer = scaffold.getMonomer(i);
-			hydroxyls.addAll(TagPeceiver.perceiveHydroxyls(monomer));
+			hydroxyls.addAll(TagPerceiver.perceiveHydroxyls(monomer,
+					scaffold.molecule()));
 		}
 
 		// create reactions
 		IReactionList<IReaction> reactions = new ReactionList();
 		for (ITag hydroxyl : hydroxyls) {
-			IReaction reaction = new Reaction(ReactionTypes.CYCLIZATION);
+			IReaction reaction = new Reaction(Reactions.CYCLIZATION);
 			reaction.addTag(cTerminus);
 			reaction.addTag(hydroxyl);
 			reactions.add(reaction);
 		}
-		if (nitrogen != null) {
-			IReaction reaction = new Reaction(ReactionTypes.CYCLIZATION);
+		
+		// get N-terminus
+		IMonomer first = scaffold.getMonomer(scaffold.size() - 1);
+		if (first.getTags().contains(ScaffoldTags.BACKBONE_NITROGEN)) {
+			ITag nitrogen = TagManipulator.getSingleTag(first,
+					ScaffoldTags.BACKBONE_NITROGEN);
+			IReaction reaction = new Reaction(Reactions.CYCLIZATION);
 			reaction.addTag(cTerminus);
 			reaction.addTag(nitrogen);
 			reactions.add(reaction);

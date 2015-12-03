@@ -10,7 +10,7 @@ import org.openscience.cdk.exception.CDKException;
 
 import lemons.Config;
 import lemons.data.Scaffold;
-import lemons.enums.ReactionTypes;
+import lemons.enums.Reactions;
 import lemons.interfaces.IMonomer;
 import lemons.interfaces.IMonomerType;
 import lemons.interfaces.IPolymer;
@@ -43,15 +43,18 @@ public class ScaffoldBuilder {
 		List<IMonomer> monomers = new ArrayList<IMonomer>();
 		for (int i = 0; i < size; i++) {
 			IMonomerType type = null;
-			if (Config.INITIAL_REACTIONS.get(ReactionTypes.CYCLIZATION) > 0 || 
-					Config.ADD_REACTIONS.get(ReactionTypes.CYCLIZATION) > 0 || 
-					Config.SWAP_REACTIONS.get(ReactionTypes.CYCLIZATION) > 0 ||
-					Config.REMOVE_REACTIONS.get(ReactionTypes.CYCLIZATION) > 0) { 
+			if (i == 0
+					&& (Config.INITIAL_REACTIONS.get(Reactions.CYCLIZATION) > 0
+							|| Config.ADD_REACTIONS.get(Reactions.CYCLIZATION) > 0
+							|| Config.SWAP_REACTIONS.get(Reactions.CYCLIZATION) > 0
+							|| Config.REMOVE_REACTIONS.get(Reactions.CYCLIZATION) > 0)) {
 				// terminal residue must have ketone if cyclizing 
-				String smiles = null;
-				while (smiles == null || !smiles.contains("=0")) {
+				boolean hasKetone = false;
+				while (!hasKetone) {
 					type = RandomUtil.getRandomMonomer(types);
-					smiles = type.smiles();
+					String smiles = type.smiles();
+					if (smiles.contains("=O"))
+						hasKetone = true;
 				}
 			} else {
 				type = RandomUtil.getRandomMonomer(types);

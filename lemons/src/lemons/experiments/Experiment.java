@@ -3,7 +3,9 @@ package lemons.experiments;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtom;
 
 import lemons.Config;
 import lemons.data.TanimotoCoefficientList;
@@ -15,6 +17,7 @@ import lemons.interfaces.IScaffold;
 import lemons.interfaces.ITanimotoCoefficient;
 import lemons.interfaces.ITanimotoCoefficientList;
 import lemons.io.ExperimentWriter;
+import lemons.io.SmilesIO;
 import lemons.scaffold.MonomerManipulator;
 import lemons.scaffold.ReactionManipulator;
 import lemons.scaffold.ScaffoldBuilder;
@@ -62,10 +65,10 @@ public class Experiment implements IExperiment {
 			
 			// swap reactions
 			ReactionManipulator.swapReactions(newScaffold); 
-			
+
 			// add new reactions
 			ReactionManipulator.addReactions(newScaffold);
-
+			
 			newScaffolds.add(newScaffold);
 		}
 		

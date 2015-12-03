@@ -4,6 +4,6 @@ import lemons.interfaces.ITagType;
 
 public enum AtomTags implements ITagType {
 	
-	HYDROXYL,
+	SP3_CARBON_HYDROXYL,
 	
 }

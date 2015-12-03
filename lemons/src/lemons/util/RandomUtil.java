@@ -43,16 +43,24 @@ public class RandomUtil {
 			return randomReactions;
 		} else {
 			// if probability is 2.33: remove 2 random reactions,
-			// plus remove another one 0.33% of the time
+			boolean[] used = new boolean[allReactions.size()];
 			for (int k = 0; k < Math.floor(num); k++) {
-				int r = RandomUtil.randomInt(0, allReactions.size());
+				int r = -1;
+				while (r == -1 || used[r] == true)
+					r = RandomUtil.randomInt(0, allReactions.size() - 1);
+				used[r] = true; 
 				IReaction reaction = allReactions.get(r);
 				randomReactions.add(reaction);
 			}
+			
+			// plus remove another one 0.33% of the time
 			double probability = num - Math.floor(num);
-			double randomProbability = new Random().nextDouble();
-			if (randomProbability > probability) {
-				int r = RandomUtil.randomInt(0, allReactions.size() - 1);
+			double randomDouble = new Random().nextDouble();
+			if (randomDouble < probability) {
+				int r = -1;
+				while (r == -1 || used[r] == true)
+					r = RandomUtil.randomInt(0, allReactions.size() - 1);
+				used[r] = true; 
 				IReaction reaction = allReactions.get(r);
 				randomReactions.add(reaction);
 			}

@@ -5,12 +5,17 @@ import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import lemons.enums.ReactionTypes;
+import lemons.enums.Reactions;
 import lemons.enums.monomers.ProteinogenicAminoAcids;
 import lemons.interfaces.IMonomerType;
 import lemons.interfaces.IReactionType;
 
 public class Config {
+	
+	public static final String VERSION = "0.0.1-SNAPSHOT";
+
+	public static boolean WRITE_STRUCTURES = false;
+	public static boolean GET_FINGERPRINTS = true;
 	
 	public static int MAX_SCAFFOLD_SIZE = 15;
 	public static int MIN_SCAFFOLD_SIZE = 4;
@@ -34,16 +39,16 @@ public class Config {
 	public static Map<IReactionType, Double> REMOVE_REACTIONS;
 	static { 
 		INITIAL_REACTIONS	 = new HashMap<IReactionType, Double>();
-		INITIAL_REACTIONS.put(ReactionTypes.CYCLIZATION, 0.0d);
+		INITIAL_REACTIONS.put(Reactions.CYCLIZATION, 0.0d);
 
 		SWAP_REACTIONS 		= new HashMap<IReactionType, Double>();
-		SWAP_REACTIONS.put(ReactionTypes.CYCLIZATION, 0.0d);
+		SWAP_REACTIONS.put(Reactions.CYCLIZATION, 0.0d);
 		
 		ADD_REACTIONS 		= new HashMap<IReactionType, Double>();
-		ADD_REACTIONS.put(ReactionTypes.CYCLIZATION, 0.0d);
+		ADD_REACTIONS.put(Reactions.CYCLIZATION, 0.0d);
 
 		REMOVE_REACTIONS 	= new HashMap<IReactionType, Double>();
-		REMOVE_REACTIONS.put(ReactionTypes.CYCLIZATION, 0.0d);
+		REMOVE_REACTIONS.put(Reactions.CYCLIZATION, 0.0d);
 	}
 
 }

@@ -1,94 +1,239 @@
 package lemons;
 
 import java.io.IOException;
-
+import java.io.UnsupportedEncodingException;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.openscience.cdk.exception.CDKException;
 
-import lemons.enums.ReactionTypes;
-import lemons.enums.monomers.ProteinogenicAminoAcids;
-import lemons.enums.monomers.PolyketideMonomers;
 import lemons.experiments.Bootstrapper;
 import lemons.experiments.Experiment;
 import lemons.util.exception.FingerprintGenerationException;
 import lemons.util.exception.PolymerGenerationException;
 
+/**
+ * LEMONS: Library for the Enumeration of MOdular Natural Structures. 
+ * 
+ * @author michaelskinnider
+ *
+ */
 public class Main {
 
 	public static void main(String[] args) throws CDKException,
 			PolymerGenerationException, IOException,
 			FingerprintGenerationException {
-		// set dir
-		if (args.length > 0)
-			Config.BASE_DIRECTORY = args[0];
+		Options help = createHelp();
+		Options version = createVersion();
+		Options options = createOptions();
 
-		Config.INITIAL_MONOMERS = ProteinogenicAminoAcids.values();
-		Config.SWAP_MONOMERS = ProteinogenicAminoAcids.values();
-		Config.NUM_MONOMER_SWAPS = 1;
-//		Config.INITIAL_REACTIONS.put(ReactionTypes.CYCLIZATION, 1.0d);
-		Bootstrapper.bootstrap(new Experiment());
-		
-//		runPaperExperiments();
+		CommandLineParser parser = new DefaultParser();
+
+		try {
+			// parse help first
+			CommandLine line = parser.parse(help, args, true);
+			if (line.hasOption("help")) {
+				HelpFormatter formatter = new HelpFormatter();
+				String header = "LEMONS: Library for the Enumeration of MOdular Natural Structures\n"
+						+ "Generate libraries of hypothetical natural product structures, "
+						+ "and use them to compare chemical fingerprints.\n\n";
+				String footer = "\nSource available at http://github.com/magarveylab/lemons";
+				formatter.printHelp("lemons", header, options, footer, true);
+			} else { 
+				line = parser.parse(version, args, true);
+				if (line.hasOption("version")) {
+					System.out.println("LEMONS: version " + Config.VERSION);
+				} else {
+					line = parser.parse(options, args);
+					parseCommandLine(line);
+					Bootstrapper.bootstrap(new Experiment());
+				}
+			} 
+		} catch (UnsupportedEncodingException e) {
+			handleException(e, "Error: unsupported encoding!");
+		} catch (ParseException e) {
+			handleException(e, "Error parsing command line arguments!");
+		} catch (IllegalArgumentException e) {
+			handleException(e, "Error: must specify input sequence file!");
+		} catch (Exception e) {
+			handleException(e, "Error!");
+		} finally {
+			System.exit(0);
+		}
+	}	
+
+	/**
+	 * Create the help option.
+	 * 
+	 * @return newly created help option
+	 */
+	public static Options createHelp() {
+		Options options = new Options();
+		Option help = new Option("help", "help", false, "Print this message");
+		options.addOption(help);
+		return options;
+	}
+	
+	/**
+	 * Create the version option.
+	 * 
+	 * @return newly created version option
+	 */
+	public static Options createVersion() {
+		Options options = new Options();
+		Option version = new Option("version", "version", false, "Print the current version and exit");
+		options.addOption(version);
+		return options;
 	}
 
-	public static void runPaperExperiments() throws CDKException,
-			PolymerGenerationException, IOException,
-			FingerprintGenerationException {
-		// test linear, proteinogenic peptides with 1, 2, 3, 4, and 5 swaps 
-		Config.INITIAL_MONOMERS = ProteinogenicAminoAcids.values();
-		Config.SWAP_MONOMERS = ProteinogenicAminoAcids.values();
-		Config.NUM_MONOMER_SWAPS = 1;
-		Bootstrapper.bootstrap("Peptides_linear_100_1", new Experiment());
-
-		Config.NUM_MONOMER_SWAPS = 2;
-		Bootstrapper.bootstrap("Peptides_linear_100_2", new Experiment());
-
-		Config.NUM_MONOMER_SWAPS = 3;
-		Bootstrapper.bootstrap("Peptides_linear_100_3", new Experiment());
+	/**
+	 * Create all other command line options.
+	 * 
+	 * @return newly created options
+	 */
+	public static Options createOptions() {
+		Options options = new Options();
 		
-		Config.NUM_MONOMER_SWAPS = 4;
-		Bootstrapper.bootstrap("Peptides_linear_100_4", new Experiment());
-
-		Config.NUM_MONOMER_SWAPS = 5;
-		Bootstrapper.bootstrap("Peptides_linear_100_5", new Experiment());
-
-		// test linear polyketides with 1, 2, 3, 4, and 5 swaps 
-		Config.INITIAL_MONOMERS = PolyketideMonomers.values();
-		Config.SWAP_MONOMERS = PolyketideMonomers.values();
-		Config.NUM_MONOMER_SWAPS = 1;
-		Bootstrapper.bootstrap("Polyketides_linear_100_1", new Experiment());
+		// construct boolean options 
+		Option writeStructures = Option.builder("w").longOpt("write")
+				.argName("write")
+				.desc("Write generated natural product SMILES to text file")
+				.build();
+		Option testFingerprints = Option.builder("f").longOpt("fp")
+				.argName("fingerprint")
+				.desc("Generate fingerprints and rank Tanimoto coefficients for generated structures")
+				.build();
 		
-		Config.NUM_MONOMER_SWAPS = 2;
-		Bootstrapper.bootstrap("Polyketides_linear_100_2", new Experiment());
-		
-		Config.NUM_MONOMER_SWAPS = 3;
-		Bootstrapper.bootstrap("Polyketides_linear_100_3", new Experiment());
+		// construct options with one value 
+		Option minSize = Option.builder().longOpt("min_size")
+				.argName("min scaffold size")
+				.desc("The minimum size, in monomers, for the scaffold")
+				.hasArg().build();
+		Option maxSize = Option.builder().longOpt("max_size")
+				.argName("max scaffold size")
+				.desc("The maximum size, in monomers, for the scaffold")
+				.hasArg().build();
+		Option baseDir = Option.builder("dir").longOpt("base_dir")
+				.argName("base directory")
+				.desc("Directory in which all bootstrap and experiment files will be generated")
+				.hasArg().build();
+		Option libSize = Option.builder("l").longOpt("lib_size")
+				.argName("library size")
+				.desc("The size of a single library in one of multiple bootstraps")
+				.hasArg().build();
+		Option bootstraps = Option.builder("b").longOpt("bootstraps")
+				.argName("bootstraps")
+				.desc("The number of bootstraps to use per experiment")
+				.hasArg().build();
+		Option numSwaps = Option.builder().longOpt("swaps")
+				.argName("monomer swaps")
+				.desc("The number of monomer swaps to execute")
+				.hasArg().build();
 
-		Config.NUM_MONOMER_SWAPS = 4;
-		Bootstrapper.bootstrap("Polyketides_linear_100_4", new Experiment());
-		
-		Config.NUM_MONOMER_SWAPS = 5;
-		Bootstrapper.bootstrap("Polyketides_linear_100_5", new Experiment());
+		// construct options with multiple values 
+		Option initialMonomers = Option.builder().longOpt("initial_monomers")
+				.argName("initial scaffold monomers").desc("Monomers used to construct the initial scaffolds.\n"
+						+ "Options: p, proteinogenic amino acids; np, nonproteinogenic amino acids;"
+						+ "pk, polyketide monomers"
+				).hasArgs().build();
+		Option swapMonomers = Option.builder().longOpt("swap_monomers")
+				.argName("swap scaffold monomers").desc("Monomers that can be swapped into a modified scaffold.\n"
+						+ "Options: p, proteinogenic amino acids; np, nonproteinogenic amino acids;"
+						+ "pk, polyketide monomers"
+				).hasArgs().build();
+		Option initialReactions = Option.builder().longOpt("initial_reactions")
+				.argName("").desc("Reactions that can be swapped into a modified scaffold.\n"
+						+ "Options: p, proteinogenic amino acids; np, nonproteinogenic amino acids;"
+						+ "pk, polyketide monomers"
+				).hasArgs().build();
 
-		// test cyclic/branched peptides with 1, 2, 3, 4, and 5 swaps 
-	/*	Config.REACTIONS.put(ReactionTypes.CYCLIZATION, 1);
-		Bootstrapper.bootstrap(new PeptideExperiment(100, 1), 1000);
-		Bootstrapper.bootstrap(new PeptideExperiment(100, 2), 1000);
-		Bootstrapper.bootstrap(new PeptideExperiment(100, 3), 1000);
-		Bootstrapper.bootstrap(new PeptideExperiment(100, 4), 1000);
-		Bootstrapper.bootstrap(new PeptideExperiment(100, 5), 1000);
-		Bootstrapper.bootstrap(new PolyketideExperiment(100, 1), 1000);
-		Bootstrapper.bootstrap(new PolyketideExperiment(100, 2), 1000);
-		Bootstrapper.bootstrap(new PolyketideExperiment(100, 3), 1000);
-		Bootstrapper.bootstrap(new PolyketideExperiment(100, 4), 1000);
-		Bootstrapper.bootstrap(new PolyketideExperiment(100, 5), 1000);*/
+		//XXX TODO How to do this...? 
+/*		public static Map<IReactionType, Double> INITIAL_REACTIONS;
+		public static Map<IReactionType, Double> SWAP_REACTIONS;
+		public static Map<IReactionType, Double> ADD_REACTIONS;
+		public static Map<IReactionType, Double> REMOVE_REACTIONS; */
 
-		// test tailoring reactions
+		options.addOption(writeStructures);
+		options.addOption(testFingerprints);
+		options.addOption(minSize);
+		options.addOption(maxSize);
+		options.addOption(baseDir);
+		options.addOption(libSize);
+		options.addOption(bootstraps);
+		options.addOption(numSwaps);
+		options.addOption(initialMonomers);
+		options.addOption(swapMonomers);
+		options.addOption(minSize);
 		
-		// O-glycosylation
-		// oxazole/thiazole formation 
-		// N-methylation 
-		// halogenation 
-		
+		return options;
 	}
+	
+	
+
+	/**
+	 * Parse the command line input.
+	 * 
+	 * @param line
+	 *            line to parse
+	 * @throws ParseException
+	 */
+	public static void parseCommandLine(CommandLine line) throws ParseException {
+		// parse boolean options
+		if (line.hasOption("w")) {
+			Config.WRITE_STRUCTURES = true;
+		}
+		if (line.hasOption("f")) {
+			Config.GET_FINGERPRINTS = true;
+		}
+		
+		// parse options with arguments 
+		if (line.hasOption("min_size")) {
+			String value = line.getOptionValue("min_size");
+			Config.MIN_SCAFFOLD_SIZE = Integer.parseInt(value);
+
+		}
+		if (line.hasOption("max_size")) {
+			String value = line.getOptionValue("max_size");
+			Config.MAX_SCAFFOLD_SIZE = Integer.parseInt(value);
+		}
+		if (line.hasOption("base_dir")) {
+			Config.BASE_DIRECTORY = line.getOptionValue("base_dir");
+		}
+		if (line.hasOption("lib_size")) {
+			String value = line.getOptionValue("lib_size");
+			Config.LIBRARY_SIZE = Integer.parseInt(value);
+		}
+		if (line.hasOption("bootstraps")) {
+			String value = line.getOptionValue("bootstraps");
+			Config.BOOTSTRAPS = Integer.parseInt(value);
+		}
+		if (line.hasOption("swaps")) {
+			String value = line.getOptionValue("swaps");
+			Config.NUM_MONOMER_SWAPS = Integer.parseInt(value);
+		}
+		
+		// parse options with multiple arguments 
+	}
+	
+	
+	/**
+	 * Handle an exception by printing the stack trace to the command line, and
+	 * exiting.
+	 * 
+	 * @param e
+	 *            exception
+	 * @param message
+	 *            message associated with the exception cause
+	 */
+	public static void handleException(Exception e, String message) {
+		System.out.println("[LEMONS] " + message);
+		e.printStackTrace();
+		System.exit(0);
+	}
+
 	
 }
