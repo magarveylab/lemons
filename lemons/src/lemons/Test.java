@@ -30,6 +30,7 @@ public class Test {
 		Config.INITIAL_MONOMERS.addAll(Arrays.asList(Starters.values()));
 		Config.INITIAL_MONOMERS.addAll(Arrays.asList(ProteinogenicAminoAcids.values()));
 		Config.MIN_SCAFFOLD_SIZE = 14;
+		Config.SWAP_MONOMERS.addAll(Arrays.asList(Starters.values()));
 		Config.SWAP_MONOMERS.addAll(Arrays.asList(ProteinogenicAminoAcids.values()));
 		Config.NUM_MONOMER_SWAPS = 3;
 		Config.BOOTSTRAPS = 1;

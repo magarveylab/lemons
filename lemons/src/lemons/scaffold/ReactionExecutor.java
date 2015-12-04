@@ -9,7 +9,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import lemons.enums.Reactions;
-import lemons.enums.tags.AtomTags;
+import lemons.enums.tags.ReactionTags;
 import lemons.enums.tags.ScaffoldTags;
 import lemons.interfaces.IReaction;
 import lemons.interfaces.IScaffold;
@@ -35,6 +35,8 @@ public class ReactionExecutor {
 		for (IReaction reaction : scaffold.reactions()) {
 			if (reaction.type() == Reactions.CYCLIZATION) 
 				executeCyclization(reaction, scaffold);
+			if (reaction.type() == Reactions.N_METHYLATION)
+				executeNMethylation(reaction, scaffold);
 		}
 		logger.log(Level.INFO, "Executed reactions, new scaffold: " + SmilesIO.smiles(scaffold.molecule()));
 	}
@@ -51,7 +53,7 @@ public class ReactionExecutor {
 					ScaffoldTags.BACKBONE_NITROGEN);
 		} else {
 			cyclization = TagManipulator.getSingleTag(tags, 
-					AtomTags.SP3_CARBON_HYDROXYL);
+					ReactionTags.SP3_CARBON_HYDROXYL);
 		}
 		IAtom ketoneAtom = ketone.atom();
 		IAtom cyclizationAtom = cyclization.atom();
@@ -67,6 +69,17 @@ public class ReactionExecutor {
 
 		ReactionsUtil.removeAlcohol(ketoneAtom, molecule);
 		ReactionsUtil.addBond(cyclizationAtom, ketoneAtom, molecule);
+	}
+	
+	public static void executeNMethylation(IReaction reaction, IScaffold scaffold)
+			throws PolymerGenerationException, CDKException {
+		IAtomContainer molecule = scaffold.molecule();
+		ITagList<ITag> tags = reaction.getTags();
+		ITag nitrogen = TagManipulator.getSingleTag(tags, 
+				ScaffoldTags.BACKBONE_NITROGEN);
+		
+		String smiles = "IC";
+		ReactionsUtil.functionalize(smiles, nitrogen.atom(), molecule);
 	}
 	
 }

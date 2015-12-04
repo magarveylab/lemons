@@ -11,7 +11,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import lemons.data.Tag;
 import lemons.data.TagList;
-import lemons.enums.tags.AtomTags;
+import lemons.enums.tags.ReactionTags;
 import lemons.interfaces.IMonomer;
 import lemons.interfaces.ITag;
 import lemons.interfaces.ITagList;
@@ -30,8 +30,7 @@ public class TagPerceiver {
 						continue;
 					IAtom connectedAtom = bonds.get(0).getConnectedAtom(atom);
 					if (connectedAtom.getHybridization() == IAtomType.Hybridization.SP3) {
-						ITag tag = new Tag(AtomTags.SP3_CARBON_HYDROXYL, atom);
-						monomer.addTag(tag);
+						ITag tag = new Tag(ReactionTags.SP3_CARBON_HYDROXYL, atom);
 						tags.add(tag);
 					} else if (connectedAtom.getHybridization() == IAtomType.Hybridization.SP2) {
 						// do this

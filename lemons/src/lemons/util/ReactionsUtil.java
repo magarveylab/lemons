@@ -21,12 +21,28 @@ import org.openscience.cdk.interfaces.IBond;
 public class ReactionsUtil {
 
 	/**
-	 * Create a single bond between two atoms. 
-	 * @param atom1		the first atom
-	 * @param atom2		the second atom
-	 * @param container	the container containing both atoms
-	 * @throws BondFormationException 
-	 * @throws ScaffoldGenerationException 
+	 * Decrement the implicit hydrogen count of an atom, if it is greater than
+	 * or equal to 1.
+	 * 
+	 * @param atom
+	 *            the atom to decrement
+	 */
+	public static void decrementHydrogenCount(IAtom atom) {
+		if (atom.getImplicitHydrogenCount() >= 1)
+			atom.setImplicitHydrogenCount(atom.getImplicitHydrogenCount() - 1);
+	}
+
+	/**
+	 * Create a single bond between two atoms.
+	 * 
+	 * @param atom1
+	 *            the first atom
+	 * @param atom2
+	 *            the second atom
+	 * @param container
+	 *            the container containing both atoms
+	 * @throws BondFormationException
+	 * @throws ScaffoldGenerationException
 	 */
 	public static void addBond(IAtom atom1, IAtom atom2, IAtomContainer container) 
 			throws PolymerGenerationException {
@@ -307,6 +323,7 @@ public class ReactionsUtil {
 			// add bond
 			molecule.add(functionalGroup);
 			ReactionsUtil.addBond(carbon, atom, molecule);
+			ReactionsUtil.decrementHydrogenCount(atom);
 		} else {
 			throw new PolymerGenerationException("Error: tried to functionalize"
 					+ " atom with too many bonds!");
