@@ -38,5 +38,7 @@ public interface IMonomer {
 	public ITagList<ITag> getTags(ITagType type);
 
 	public ITagList<ITag> getTags(IAtom atom);
+	
+	public boolean containsTag(ITagType type, IAtom atom);
 
 }

@@ -88,6 +88,7 @@ public class MonomerManipulator {
 		List<IMonomer> monomers = original.monomers();
 		for (IReaction reaction : reactions) {
 			IReaction copy = new Reaction(reaction.type());
+			copy.setSmiles(reaction.smiles());
 
 			ITagList<ITag> tags = reaction.getTags();
 			for (ITag tag : tags) {
@@ -104,9 +105,13 @@ public class MonomerManipulator {
 				}
 				
 				// copy tag-reaction association 
-				IMonomer monomerCopy = newScaffold.getMonomer(parentIdx);
-				ITag tagCopy = monomerCopy.getTags().get(tagIdx);
-				copy.addTag(tagCopy);
+				try {
+					IMonomer monomerCopy = newScaffold.getMonomer(parentIdx);
+					ITag tagCopy = monomerCopy.getTags().get(tagIdx);
+					copy.addTag(tagCopy);
+				} catch (ArrayIndexOutOfBoundsException e) {
+					throw new RuntimeException("Couldn't get monomer for tag with type " + tag.type());
+				}
 			}
 			
 			newScaffold.addReaction(copy);

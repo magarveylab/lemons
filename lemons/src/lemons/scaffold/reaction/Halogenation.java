@@ -64,6 +64,11 @@ public class Halogenation implements IReactionPlanner {
 
 					ITag tag = new Tag(ReactionTags.HALOGENATION_CARBON, atom);
 					carbons.add(tag);
+					
+					// add to monomer
+					if (!monomer.containsTag(ReactionTags.HALOGENATION_CARBON,
+							atom))
+						monomer.addTag(tag);
 				}
 			}
 		}
@@ -72,6 +77,17 @@ public class Halogenation implements IReactionPlanner {
 		IReactionList<IReaction> reactions = new ReactionList();
 		for (ITag carbon : carbons) {
 			IReaction reaction = new Reaction(Reactions.HALOGENATION);
+			
+			// set smiles
+			String smiles = null;
+			double p = new Random().nextDouble();
+			if (p < 0.5) {
+				smiles = "ICl";
+			} else {
+				smiles = "IBr";
+			}
+			reaction.setSmiles(smiles);
+			
 			reaction.addTag(carbon);
 			reactions.add(reaction);
 		}
@@ -89,15 +105,7 @@ public class Halogenation implements IReactionPlanner {
 		ITag nitrogen = TagManipulator.getSingleTag(tags,
 				ReactionTags.HALOGENATION_CARBON);
 
-		String smiles = null;
-		double p = new Random().nextDouble();
-		if (p < 0.5) {
-			smiles = "ICl";
-		} else {
-			smiles = "IBr";
-		}
-
-		ReactionsUtil.functionalize(smiles, nitrogen.atom(), molecule);
+		ReactionsUtil.functionalize(reaction.smiles(), nitrogen.atom(), molecule);
 	}
 
 }

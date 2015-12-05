@@ -27,7 +27,7 @@ import lemons.util.exception.BadTagException;
 import lemons.util.exception.PolymerGenerationException;
 
 /**
- * Oxazole or thiazole formation. 
+ * Oxazole/thiazole, or oxazoline/thiazoline, formation. 
  * 
  * @author michaelskinnider
  *
@@ -44,16 +44,16 @@ public class Azole implements IReactionPlanner {
 			// cannot cyclize on first residue! must keep -COOH for cyclization
 			IMonomer first = scaffold.getMonomer(i);
 			IMonomer second = scaffold.getMonomer(i+1);
-			IMonomerType secondType = second.type();
-			
-			// second residue must be a cysteine 
-			if (secondType != ProteinogenicAminoAcids.SERINE
-					&& secondType != ProteinogenicAminoAcids.CYSTEINE)
+			IMonomerType firstType = first.type();
+
+			// first residue must be a cysteine 
+			if (firstType != ProteinogenicAminoAcids.SERINE
+					&& firstType != ProteinogenicAminoAcids.CYSTEINE)
 				continue;
 			
-			// first residue must have a ketone 
+			// second residue must have a ketone 
 			boolean hasKetone = false;
-			ITag ketoneTag = TagManipulator.getSingleTag(first,
+			ITag ketoneTag = TagManipulator.getSingleTag(second,
 					ScaffoldTags.BACKBONE_KETONE);
 			IAtom ketone = ketoneTag.atom();
 			for (IBond bond : molecule.getConnectedBondsList(ketone)) {
@@ -64,11 +64,11 @@ public class Azole implements IReactionPlanner {
 			}
 			if (!hasKetone)
 				continue;
-			
+
 			// get -SH or -OH 
 			IAtom azoleAtom = null;
-			IAtomContainer secondStructure = second.structure();
-			for (IAtom atom : secondStructure.atoms()) {
+			IAtomContainer firstStructure = first.structure();
+			for (IAtom atom : firstStructure.atoms()) {
 				if ((atom.getSymbol().equals("O")
 						|| atom.getSymbol().equals("S"))
 						&& molecule.getConnectedBondsCount(atom) == 1
@@ -79,8 +79,13 @@ public class Azole implements IReactionPlanner {
 				continue;
 			ITag azoleTag = new Tag(ReactionTags.AZOLE_SULFUR_OR_OXYGEN,
 					azoleAtom);
-			ITag nitrogenTag = TagManipulator.getSingleTag(second,
+			ITag nitrogenTag = TagManipulator.getSingleTag(first,
 					ScaffoldTags.BACKBONE_NITROGEN);
+			
+			// add to monomer
+			if (!first.containsTag(ReactionTags.AZOLE_SULFUR_OR_OXYGEN,
+					azoleAtom))
+				first.addTag(azoleTag);
 			
 			IReaction reaction = new Reaction(Reactions.AZOLE);
 			reaction.addTag(ketoneTag);
@@ -89,21 +94,27 @@ public class Azole implements IReactionPlanner {
 			reactions.add(reaction);
 		}
 		
+		System.out.println("Perceived " + reactions.size() + " azole reactions ");
+		
 		// pick random reactions
 		IReactionList<IReaction> random = RandomUtil.pickRandomReactions(
 				numReactions, reactions);
 		scaffold.addReactions(random);
+		System.out.println("Added  " + random.size() + " azole reactions ");
+		
 	}
 
 	public void execute(IReaction reaction, IScaffold scaffold)
 			throws PolymerGenerationException, CDKException {
+		System.out.println("executing azole");
+
 		IAtomContainer molecule = scaffold.molecule();
 		ITagList<ITag> tags = reaction.getTags();
 		
 		ITag ketoneTag = TagManipulator.getSingleTag(tags,
 				ScaffoldTags.BACKBONE_KETONE);
 		ITag nitrogenTag = TagManipulator.getSingleTag(tags,
-				ScaffoldTags.BACKBONE_KETONE);
+				ScaffoldTags.BACKBONE_NITROGEN);
 		ITag azoleAtomTag = TagManipulator.getSingleTag(tags,
 				ReactionTags.AZOLE_SULFUR_OR_OXYGEN);
 		IAtom ketone = ketoneTag.atom();
@@ -123,7 +134,7 @@ public class Azole implements IReactionPlanner {
 		ReactionsUtil.removeAtom(ketoneOxygen, molecule);
 		
 		// add double-bond between nitrogen and ketone 
-		ReactionsUtil.addBond(nitrogen, ketone, molecule);
+		ReactionsUtil.setBondOrder(ketone, nitrogen, molecule, IBond.Order.DOUBLE);
 		ReactionsUtil.decrementHydrogenCount(nitrogen);
 		ReactionsUtil.decrementHydrogenCount(ketone);
 	}

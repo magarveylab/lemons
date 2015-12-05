@@ -47,11 +47,7 @@ public class ScaffoldBuilder {
 		List<IMonomer> monomers = new ArrayList<IMonomer>();
 		for (int i = 0; i < size; i++) {
 			IMonomerType type = null;
-			if (i == 0
-					&& (Config.INITIAL_REACTIONS.get(Reactions.CYCLIZATION) > 0
-							|| Config.ADD_REACTIONS.get(Reactions.CYCLIZATION) > 0
-							|| Config.SWAP_REACTIONS.get(Reactions.CYCLIZATION) > 0
-							|| Config.REMOVE_REACTIONS.get(Reactions.CYCLIZATION) > 0)) {
+			if (i == 0 && generateCyclicScaffolds()) {
 				// terminal residue must have ketone if cyclizing 
 				boolean hasKetone = false;
 				while (!hasKetone) {
@@ -59,15 +55,12 @@ public class ScaffoldBuilder {
 					String smiles = type.smiles();
 					if (smiles.contains("=O"))
 						hasKetone = true;
-					System.out.println("Adding monomer " + i + " " + type);
 				}
 			} else if (i == (size - 1) && types.contains(Starters.values()[0])) {
 				// if starter units, last unit must be starter
 				type = RandomUtil.getRandomMonomer(Starters.values());
-				System.out.println("Adding monomer " + i + " " + type);
 			} else {
 				type = RandomUtil.getRandomMonomer(extenderTypes);
-				System.out.println("Adding monomer " + i + " " + type);
 			}
 			IMonomer monomer = MonomerGenerator.buildMonomer(type); 
 			monomers.add(monomer);
@@ -98,5 +91,16 @@ public class ScaffoldBuilder {
 		newScaffold.setPolymer(newPolymer);
 		return newScaffold;
 	}
-	
+
+	public static boolean generateCyclicScaffolds() {
+		return (Config.INITIAL_REACTIONS.containsKey(Reactions.CYCLIZATION) && Config.INITIAL_REACTIONS
+				.get(Reactions.CYCLIZATION) > 0)
+				|| (Config.ADD_REACTIONS.containsKey(Reactions.CYCLIZATION) && Config.ADD_REACTIONS
+						.get(Reactions.CYCLIZATION) > 0)
+				|| (Config.SWAP_REACTIONS.containsKey(Reactions.CYCLIZATION) && Config.SWAP_REACTIONS
+						.get(Reactions.CYCLIZATION) > 0)
+				|| (Config.REMOVE_REACTIONS.containsKey(Reactions.CYCLIZATION) && Config.REMOVE_REACTIONS
+						.get(Reactions.CYCLIZATION) > 0);
+	}
+
 }

@@ -3,6 +3,7 @@ package lemons;
 import java.io.IOException;
 import java.util.Arrays;
 
+import lemons.enums.Reactions;
 import lemons.enums.monomers.*;
 import lemons.experiments.Bootstrapper;
 import lemons.experiments.Experiment;
@@ -27,10 +28,9 @@ public class Test {
 			IOException, FingerprintGenerationException {
 		// for bug testing
 
-		Config.INITIAL_MONOMERS.addAll(Arrays.asList(Starters.values()));
 		Config.INITIAL_MONOMERS.addAll(Arrays.asList(ProteinogenicAminoAcids.values()));
+		Config.INITIAL_REACTIONS.put(Reactions.AZOLE, 1.0d);
 		Config.MIN_SCAFFOLD_SIZE = 14;
-		Config.SWAP_MONOMERS.addAll(Arrays.asList(Starters.values()));
 		Config.SWAP_MONOMERS.addAll(Arrays.asList(ProteinogenicAminoAcids.values()));
 		Config.NUM_MONOMER_SWAPS = 3;
 		Config.BOOTSTRAPS = 1;

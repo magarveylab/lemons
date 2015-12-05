@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lemons.enums.Reactions;
 import lemons.interfaces.IMonomerType;
 import lemons.interfaces.IReactionType;
 
@@ -106,32 +105,9 @@ public class Config {
 	public static Map<IReactionType, Double> REMOVE_REACTIONS;
 	static {
 		INITIAL_REACTIONS 	= new HashMap<IReactionType, Double>();
-		INITIAL_REACTIONS.put(Reactions.CYCLIZATION, 0.0d);
-		INITIAL_REACTIONS.put(Reactions.AZOLE, 0.0d);
-		INITIAL_REACTIONS.put(Reactions.GLYCOSYLATION, 0.0d);
-		INITIAL_REACTIONS.put(Reactions.N_METHYLATION, 0.0d);
-		INITIAL_REACTIONS.put(Reactions.HALOGENATION, 0.0d);
-
 		SWAP_REACTIONS 		= new HashMap<IReactionType, Double>();
-		SWAP_REACTIONS.put(Reactions.CYCLIZATION, 0.0d);
-		SWAP_REACTIONS.put(Reactions.AZOLE, 0.0d);
-		SWAP_REACTIONS.put(Reactions.GLYCOSYLATION, 0.0d);
-		SWAP_REACTIONS.put(Reactions.N_METHYLATION, 0.0d);
-		SWAP_REACTIONS.put(Reactions.HALOGENATION, 0.0d);
-
 		ADD_REACTIONS 		= new HashMap<IReactionType, Double>();
-		ADD_REACTIONS.put(Reactions.CYCLIZATION, 0.0d);
-		ADD_REACTIONS.put(Reactions.AZOLE, 0.0d);
-		ADD_REACTIONS.put(Reactions.GLYCOSYLATION, 0.0d);
-		ADD_REACTIONS.put(Reactions.N_METHYLATION, 0.0d);
-		ADD_REACTIONS.put(Reactions.HALOGENATION, 0.0d);
-
 		REMOVE_REACTIONS 	= new HashMap<IReactionType, Double>();
-		REMOVE_REACTIONS.put(Reactions.CYCLIZATION, 0.0d);
-		REMOVE_REACTIONS.put(Reactions.AZOLE, 0.0d);
-		REMOVE_REACTIONS.put(Reactions.GLYCOSYLATION, 0.0d);
-		REMOVE_REACTIONS.put(Reactions.N_METHYLATION, 0.0d);
-		REMOVE_REACTIONS.put(Reactions.HALOGENATION, 0.0d);
 	}
 
 }

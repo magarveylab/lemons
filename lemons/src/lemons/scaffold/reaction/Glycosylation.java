@@ -19,7 +19,6 @@ import lemons.interfaces.ITagList;
 import lemons.scaffold.TagPerceiver;
 import lemons.util.RandomUtil;
 import lemons.util.ReactionsUtil;
-import lemons.util.TagManipulator;
 import lemons.util.exception.BadTagException;
 import lemons.util.exception.PolymerGenerationException;
 
@@ -36,14 +35,24 @@ public class Glycosylation implements IReactionPlanner {
 			throws BadTagException, CDKException {
 		// perceive -OH tags
 		ITagList<ITag> hydroxyls = new TagList();
-		for (IMonomer monomer : scaffold.monomers()) 
-			hydroxyls.addAll(TagPerceiver.perceiveHydroxyls(monomer,
-					scaffold.molecule()));
+		for (IMonomer monomer : scaffold.monomers()) {
+			TagPerceiver.perceiveHydroxyls(monomer,
+					scaffold.molecule());
+			hydroxyls.addAll(monomer.getTags(ReactionTags.SP2_CARBON_HYDROXYL));
+			hydroxyls.addAll(monomer.getTags(ReactionTags.SP3_CARBON_HYDROXYL));
+		}
 
 		// create reactions
 		IReactionList<IReaction> reactions = new ReactionList();
 		for (ITag hydroxyl : hydroxyls) {
 			IReaction reaction = new Reaction(Reactions.GLYCOSYLATION);
+			
+			// set smiles 
+			int idx = RandomUtil.randomInt(0, Sugars.values().length - 1);
+			Sugars sugar = Sugars.values()[idx];
+			String smiles = sugar.smiles();
+			reaction.setSmiles(smiles);
+			
 			reaction.addTag(hydroxyl);
 			reactions.add(reaction);
 		}
@@ -58,13 +67,9 @@ public class Glycosylation implements IReactionPlanner {
 			throws PolymerGenerationException, CDKException {
 		IAtomContainer molecule = scaffold.molecule();
 		ITagList<ITag> tags = reaction.getTags();
-		ITag hydroxyl = TagManipulator.getSingleTag(tags,
-				ReactionTags.SP3_CARBON_HYDROXYL);
+		ITag hydroxyl = tags.get(0);
 
-		int idx = RandomUtil.randomInt(0, Sugars.values().length - 1);
-		Sugars sugar = Sugars.values()[idx];
-		String smiles = sugar.smiles();
-		ReactionsUtil.functionalize(smiles, hydroxyl.atom(), molecule);
+		ReactionsUtil.functionalize(reaction.smiles(), hydroxyl.atom(), molecule);
 	}
 
 }

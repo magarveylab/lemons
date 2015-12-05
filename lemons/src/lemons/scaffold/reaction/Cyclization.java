@@ -48,8 +48,8 @@ public class Cyclization implements IReactionPlanner {
 		ITagList<ITag> hydroxyls = new TagList();
 		for (int i = 3; i < scaffold.size(); i++) {
 			IMonomer monomer = scaffold.getMonomer(i);
-			hydroxyls.addAll(TagPerceiver.perceiveHydroxyls(monomer,
-					scaffold.molecule()));
+			TagPerceiver.perceiveHydroxyls(monomer, scaffold.molecule());
+			hydroxyls.addAll(monomer.getTags(ReactionTags.SP3_CARBON_HYDROXYL));
 		}
 
 		// create reactions

@@ -37,19 +37,19 @@ public class NMethylation implements IReactionPlanner {
 		ITagList<ITag> nitrogens = new TagList();
 		IAtomContainer molecule = scaffold.molecule();
 		for (IMonomer monomer : scaffold.monomers()) {
-			if (monomer instanceof IAminoAcidType) {
+			if (monomer.type() instanceof IAminoAcidType) {
 				ITag nitrogen = TagManipulator.getSingleTag(monomer,
 						ScaffoldTags.BACKBONE_NITROGEN);
 
 				// check ability to form new bond
 				IAtom atom = nitrogen.atom();
-				if (molecule.getBondOrderSum(atom) >= 3)
+				if (molecule.getBondOrderSum(atom) >= 3) 
 					continue;
 
 				nitrogens.add(nitrogen);
 			}
 		}
-
+		
 		// create reactions
 		IReactionList<IReaction> reactions = new ReactionList();
 		for (ITag nitrogen : nitrogens) {
@@ -57,7 +57,7 @@ public class NMethylation implements IReactionPlanner {
 			reaction.addTag(nitrogen);
 			reactions.add(reaction);
 		}
-
+		
 		// pick random reactions
 		IReactionList<IReaction> random = RandomUtil.pickRandomReactions(
 				numReactions, reactions);

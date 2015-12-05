@@ -95,5 +95,9 @@ public class Monomer implements IMonomer {
 	public void setTags(ITagList<ITag> tags) {
 		this.tags = tags;
 	}
+	
+	public boolean containsTag(ITagType type, IAtom atom) {
+		return tags.contains(type, atom);
+	}
 
 }

@@ -4,6 +4,10 @@ import org.openscience.cdk.interfaces.IAtom;
 
 public interface IReaction {
 	
+	public String smiles();
+	
+	public void setSmiles(String smiles);
+	
 	public IReactionType type();
 	
 	public ITagList<ITag> getTags();
@@ -17,9 +21,5 @@ public interface IReaction {
 	public ITagList<ITag> getTags(ITagType type);
 
 	public ITagList<ITag> getTags(IAtom atom);
-	
-	public boolean wasExecuted();
-
-	public void setExecuted(boolean executed);
 	
 }

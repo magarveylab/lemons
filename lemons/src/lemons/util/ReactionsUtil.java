@@ -296,7 +296,7 @@ public class ReactionsUtil {
 		try {
 			functionalGroup = SmilesIO.molecule(smiles);
 		} catch (Exception e) {
-			throw new PolymerGenerationException("Error encountered building functional group SMILES");
+			throw new PolymerGenerationException("Error encountered building functional group SMILES " + smiles);
 		}
 		
 		// get reverse-prenylation site
