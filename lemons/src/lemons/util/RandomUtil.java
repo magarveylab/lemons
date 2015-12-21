@@ -13,8 +13,15 @@ import lemons.util.exception.BadTagException;
 
 public class RandomUtil {
 
+	public static int SEED = -1;
+	
 	public static int randomInt(int min, int max) {
-		Random rand = new Random();
+		Random rand;
+		if (SEED > 0) {
+			rand = new Random(SEED); 
+		} else {
+			rand = new Random();
+		}
 		int size = rand.nextInt((max - min) + 1) + min;
 		return size;
 	}

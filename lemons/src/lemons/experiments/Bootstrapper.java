@@ -9,6 +9,7 @@ import org.openscience.cdk.exception.CDKException;
 
 import lemons.Config;
 import lemons.interfaces.IExperiment;
+import lemons.io.ConfigWriter;
 import lemons.util.IOUtil;
 import lemons.util.exception.FingerprintGenerationException;
 import lemons.util.exception.PolymerGenerationException;
@@ -18,8 +19,16 @@ public class Bootstrapper {
 	public static void bootstrap(IExperiment experiment)
 			throws CDKException, PolymerGenerationException, IOException,
 			FingerprintGenerationException {
+		// check directories 
 		checkBaseDirectory();
 		setWorkingDirectory();
+		
+		// write config file
+		String config = Config.TIME_DIRECTORY
+				+ File.separator + "config.txt";
+		ConfigWriter.write(config);
+	
+		// run experiments
 		for (int i = 0; i < Config.BOOTSTRAPS; i++) {
 			Config.WORKING_DIRECTORY = Config.TIME_DIRECTORY
 					+ File.separator + "Bootstrap_" + (i + 1);
@@ -31,8 +40,16 @@ public class Bootstrapper {
 	public static void bootstrap(String title, IExperiment experiment)
 			throws CDKException, PolymerGenerationException, IOException,
 			FingerprintGenerationException {
+		// check directories 
 		checkBaseDirectory();
 		setWorkingDirectory(title);
+		
+		// write config file
+		String config = Config.BASE_DIRECTORY + File.separator
+				+ title + File.separator + "config.txt";
+		ConfigWriter.write(config);
+	
+		// run experiments
 		for (int i = 0; i < Config.BOOTSTRAPS; i++) {
 			Config.WORKING_DIRECTORY = Config.BASE_DIRECTORY + File.separator
 					+ title + File.separator + "Bootstrap_" + (i + 1);

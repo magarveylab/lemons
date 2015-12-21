@@ -94,20 +94,14 @@ public class Azole implements IReactionPlanner {
 			reactions.add(reaction);
 		}
 		
-		System.out.println("Perceived " + reactions.size() + " azole reactions ");
-		
 		// pick random reactions
 		IReactionList<IReaction> random = RandomUtil.pickRandomReactions(
 				numReactions, reactions);
 		scaffold.addReactions(random);
-		System.out.println("Added  " + random.size() + " azole reactions ");
-		
 	}
 
 	public void execute(IReaction reaction, IScaffold scaffold)
 			throws PolymerGenerationException, CDKException {
-		System.out.println("executing azole");
-
 		IAtomContainer molecule = scaffold.molecule();
 		ITagList<ITag> tags = reaction.getTags();
 		
@@ -132,7 +126,7 @@ public class Azole implements IReactionPlanner {
 					&& molecule.getBond(ketone, atom).getOrder() == IBond.Order.DOUBLE)
 				ketoneOxygen = atom;
 		ReactionsUtil.removeAtom(ketoneOxygen, molecule);
-		
+
 		// add double-bond between nitrogen and ketone 
 		ReactionsUtil.setBondOrder(ketone, nitrogen, molecule, IBond.Order.DOUBLE);
 		ReactionsUtil.decrementHydrogenCount(nitrogen);
