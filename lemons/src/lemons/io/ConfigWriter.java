@@ -45,11 +45,11 @@ public class ConfigWriter {
 		bw.append("\n");
 		bw.append("Monomers\n");
 		bw.append("-----\n");
-		bw.append("Initial\t");
+		bw.append("Initial:\t");
 		for (IMonomerType m : Config.INITIAL_MONOMERS)
 			bw.append(m.toString() + " ");
 		bw.append("\n");
-		bw.append("Swap\t");
+		bw.append("Swap:\t");
 		for (IMonomerType m : Config.SWAP_MONOMERS)
 			bw.append(m.toString() + " ");
 		bw.append("\n");
@@ -58,19 +58,19 @@ public class ConfigWriter {
 		bw.append("\n");
 		bw.append("Reactions\n");
 		bw.append("-----\n");
-		bw.append("Initial\t");
+		bw.append("Initial:\t");
 		for (Map.Entry<IReactionType,Double> entry : Config.INITIAL_REACTIONS.entrySet()) 
 			bw.append(entry.getKey().toString() + "-" + entry.getValue() + " ");
 		bw.append("\n");
-		bw.append("Add\t");
+		bw.append("Add:\t");
 		for (Map.Entry<IReactionType,Double> entry : Config.ADD_REACTIONS.entrySet()) 
 			bw.append(entry.getKey().toString() + ";" + entry.getValue());
 		bw.append("\n");
-		bw.append("Remove\t");
+		bw.append("Remove:\t");
 		for (Map.Entry<IReactionType,Double> entry : Config.REMOVE_REACTIONS.entrySet()) 
 			bw.append(entry.getKey().toString() + ";" + entry.getValue());
 		bw.append("\n");
-		bw.append("Swap\t");
+		bw.append("Swap:\t");
 		for (Map.Entry<IReactionType,Double> entry : Config.SWAP_REACTIONS.entrySet()) 
 			bw.append(entry.getKey().toString() + ";" + entry.getValue());
 		bw.append("\n");
