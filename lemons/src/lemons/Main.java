@@ -137,6 +137,10 @@ public class Main {
 				.argName("monomer swaps")
 				.desc("The number of monomer swaps to execute")
 				.hasArg().build();
+		Option seed = Option.builder().longOpt("seed")
+				.argName("seed")
+				.desc("The seed for the random number generator")
+				.hasArg().build();
 
 		// construct options with multiple values 
 		Option initialMonomers = Option.builder().longOpt("initial_monomers")
@@ -179,6 +183,7 @@ public class Main {
 		options.addOption(libSize);
 		options.addOption(bootstraps);
 		options.addOption(numSwaps);
+		options.addOption(seed);
 		options.addOption(initialMonomers);
 		options.addOption(swapMonomers);
 		options.addOption(initialReactions);
@@ -229,6 +234,10 @@ public class Main {
 		if (line.hasOption("swaps")) {
 			String value = line.getOptionValue("swaps");
 			Config.NUM_MONOMER_SWAPS = Integer.parseInt(value);
+		}
+		if (line.hasOption("seed")) {
+			String value = line.getOptionValue("seed");
+			Config.SEED = Integer.parseInt(value);
 		}
 
 		// parse options with multiple arguments

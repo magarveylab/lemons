@@ -60,6 +60,11 @@ public class Config {
 	 * The number of bootstraps to perform.
 	 */
 	public static int BOOTSTRAPS = 100;
+	
+	/**
+	 * The seed for the random number generator. 
+	 */
+	public static int SEED = -1;
 
 	/**
 	 * The number of monomers to swap between original and swapped scaffolds.

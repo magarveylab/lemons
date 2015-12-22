@@ -3,6 +3,7 @@ package lemons.util;
 import java.util.List;
 import java.util.Random;
 
+import lemons.Config;
 import lemons.data.ReactionList;
 import lemons.interfaces.IMonomerType;
 import lemons.interfaces.IReaction;
@@ -12,16 +13,17 @@ import lemons.interfaces.ITagList;
 import lemons.util.exception.BadTagException;
 
 public class RandomUtil {
-
-	public static int SEED = -1;
 	
-	public static int randomInt(int min, int max) {
-		Random rand;
-		if (SEED > 0) {
-			rand = new Random(SEED); 
+	private static Random rand;
+	static { 
+		if (Config.SEED > 0) {
+			rand = new Random(Config.SEED); 
 		} else {
 			rand = new Random();
 		}
+	}
+
+	public static int randomInt(int min, int max) {
 		int size = rand.nextInt((max - min) + 1) + min;
 		return size;
 	}
