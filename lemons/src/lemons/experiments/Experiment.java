@@ -86,7 +86,7 @@ public class Experiment implements IExperiment {
 		return newScaffolds;
 	}
 
-	private void calculateRanks(List<IScaffold> scaffolds,
+	public static void calculateRanks(List<IScaffold> scaffolds,
 			List<IScaffold> swapScaffolds)
 			throws FingerprintGenerationException, CDKException, IOException {
 		for (int i = 0; i < scaffolds.size(); i++) {
