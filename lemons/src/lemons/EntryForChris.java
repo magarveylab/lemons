@@ -54,39 +54,37 @@ public class EntryForChris {
 					
 					// check directories 
 					Bootstrapper.checkBaseDirectory();
-					Bootstrapper.setWorkingDirectory();
-					
-					// write config file
-					String config = Config.TIME_DIRECTORY
-							+ File.separator + "config.txt";
-					ConfigWriter.write(config);
+					// Bootstrapper.setWorkingDirectory();
+//					
+//					// write config file
+//					String config = Config.TIME_DIRECTORY
+//							+ File.separator + "config.txt";
+//					ConfigWriter.write(config);
 				
-					// run experiments
-					for (int i = 0; i < Config.BOOTSTRAPS; i++) {
-						Config.WORKING_DIRECTORY = Config.TIME_DIRECTORY
-								+ File.separator + "Bootstrap_" + (i + 1);
+					// run experiment
+					Config.WORKING_DIRECTORY = Config.BASE_DIRECTORY
+								+ File.separator + "Bootstrap_" + Config.BOOTSTRAPS;
 						IOUtil.checkDir(Config.WORKING_DIRECTORY);
+						System.out.println(Config.WORKING_DIRECTORY);
+					// read scaffolds
+					List<IScaffold> scaffolds = SmilesReader
+							.read(Config.WORKING_DIRECTORY + File.separator
+									+ "scaffolds.tsv");
+					List<IScaffold> swapScaffolds = SmilesReader
+							.read(Config.WORKING_DIRECTORY + File.separator
+									+ "swap_scaffolds.tsv");
+					
+					// generate fingerprints
+					if (Config.GET_FINGERPRINTS) {
+						FingerprintUtil.setFingerprints(scaffolds);
+						FingerprintUtil.setFingerprints(swapScaffolds);
 
-						// read scaffolds
-						List<IScaffold> scaffolds = SmilesReader
-								.read(Config.WORKING_DIRECTORY + File.separator
-										+ "scaffolds.tsv");
-						List<IScaffold> swapScaffolds = SmilesReader
-								.read(Config.WORKING_DIRECTORY + File.separator
-										+ "swap_scaffolds.tsv");
-						
-						
-						// generate fingerprints
-						if (Config.GET_FINGERPRINTS) {
-							FingerprintUtil.setFingerprints(scaffolds);
-							FingerprintUtil.setFingerprints(swapScaffolds);
-
-							// calculate all Tanimoto coefficients
-							Experiment.calculateRanks(scaffolds, swapScaffolds);
-						}
+						// calculate all Tanimoto coefficients
+						Experiment.calculateRanks(scaffolds, swapScaffolds);
 					}
 				}
-			} 
+			}
+			
 		} catch (UnsupportedEncodingException e) {
 			Main.handleException(e, "Error: unsupported encoding!");
 		} catch (ParseException e) {
