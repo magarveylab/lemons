@@ -76,6 +76,9 @@ public class PolymerGenerator {
 		polymer.addMonomer(monomer);
 		molecule.add(monomer.structure());
 
+		if (starter.extend() == null) 
+			throw new PolymerGenerationException("Could not extend residue " + starter.type());
+		
 		try {
 			ReactionsUtil.addBond(starter.extend(), monomer.begin(), molecule);
 		} catch (Exception e) {
