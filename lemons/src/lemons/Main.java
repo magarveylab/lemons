@@ -111,6 +111,10 @@ public class Main {
 				.argName("fingerprint")
 				.desc("Generate fingerprints and rank Tanimoto coefficients for generated structures")
 				.build();
+		Option terminalCooh = Option.builder("c").longOpt("c")
+				.argName("terminal_cooh")
+				.desc("Automatically end natural product structures with a C-terminal carboxylic acid")
+				.build();
 		
 		// construct options with one value 
 		Option minSize = Option.builder().longOpt("min_size")
@@ -190,6 +194,7 @@ public class Main {
 		options.addOption(addReactions);
 		options.addOption(swapReactions);
 		options.addOption(removeReactions);
+		options.addOption(terminalCooh);
 		
 		return options;
 	}
@@ -208,6 +213,9 @@ public class Main {
 		}
 		if (line.hasOption("f")) {
 			Config.GET_FINGERPRINTS = true;
+		}
+		if (line.hasOption("c")) {
+			Config.TERMINAL_COOH = true;
 		}
 		
 		// parse options with arguments 

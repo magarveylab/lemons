@@ -93,8 +93,9 @@ public class ScaffoldBuilder {
 	}
 
 	public static boolean generateCyclicScaffolds() {
-		return (Config.INITIAL_REACTIONS.containsKey(Reactions.CYCLIZATION) && Config.INITIAL_REACTIONS
-				.get(Reactions.CYCLIZATION) > 0)
+		return Config.TERMINAL_COOH
+				|| (Config.INITIAL_REACTIONS.containsKey(Reactions.CYCLIZATION) && Config.INITIAL_REACTIONS
+						.get(Reactions.CYCLIZATION) > 0)
 				|| (Config.ADD_REACTIONS.containsKey(Reactions.CYCLIZATION) && Config.ADD_REACTIONS
 						.get(Reactions.CYCLIZATION) > 0)
 				|| (Config.SWAP_REACTIONS.containsKey(Reactions.CYCLIZATION) && Config.SWAP_REACTIONS
