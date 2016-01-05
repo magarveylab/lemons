@@ -56,7 +56,9 @@ public class MonomerManipulator {
 			usedSwaps[s] = true;
 			
 			IMonomerType swapType = null;
-			if (s == (original.size() - 1)) {
+			if (s == (original.size() - 1)
+					&& Config.SWAP_MONOMERS
+							.contains(Starters._2_3_DIHYDROXYBENZOIC_ACID)) {
 				int r = RandomUtil.randomInt(0, Starters.values().length - 1);
 				swapType = Starters.values()[r];
 			} else {
