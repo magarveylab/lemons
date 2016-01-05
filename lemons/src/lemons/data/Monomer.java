@@ -56,18 +56,10 @@ public class Monomer implements IMonomer {
 				ScaffoldTags.BACKBONE_EXTEND).atom();
 	}
 	
-	/**
-	 * Get the entire structure of this monomer.
-	 * @return	the monomer's structure
-	 */
 	public IAtomContainer structure() {
 		return structure;
 	}
 	
-	/**
-	 * Set the structure of this monomer.
-	 * @param structure	the monomer structure
-	 */
 	public void setStructure(IAtomContainer structure) {
 		this.structure = structure;
 	}

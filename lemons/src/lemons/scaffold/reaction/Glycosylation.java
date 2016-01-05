@@ -23,8 +23,8 @@ import lemons.util.exception.BadTagException;
 import lemons.util.exception.PolymerGenerationException;
 
 /**
- * Glycosylation of a free, aliphatic, SP3 carbon-bound hydroxyl with a hexose
- * or deoxy sugar.
+ * Glycosylation of a free, SP3 carbon-bound hydroxyl with a hexose or deoxy
+ * sugar.
  * 
  * @author michaelskinnider
  *
