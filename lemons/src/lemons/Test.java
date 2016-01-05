@@ -22,7 +22,9 @@ public class Test {
 		if (args.length > 0)
 			Config.BASE_DIRECTORY = args[0];
 
-		test();
+		System.out.println(Starters.values().length);
+		
+//		test();
 	}
 
 	public static void test() throws CDKException, PolymerGenerationException,

@@ -3,8 +3,8 @@ package lemons.util;
 import java.util.List;
 
 import lemons.io.SmilesIO;
-import lemons.util.Chemoinformatics.Atoms;
-import lemons.util.Chemoinformatics.Bonds;
+import lemons.util.Cheminformatics.Atoms;
+import lemons.util.Cheminformatics.Bonds;
 import lemons.util.exception.BondFormationException;
 import lemons.util.exception.NoBondException;
 import lemons.util.exception.PolymerGenerationException;

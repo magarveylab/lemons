@@ -96,4 +96,5 @@ public enum Sugars {
 	public String smiles() {
 		return smiles; 
 	}
+	
 }

@@ -10,7 +10,7 @@ import lemons.interfaces.IMonomer;
 import lemons.interfaces.IMonomerType;
 import lemons.interfaces.ITag;
 import lemons.io.SmilesIO;
-import lemons.util.Chemoinformatics.Substrates;
+import lemons.util.Cheminformatics.Substrates;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;

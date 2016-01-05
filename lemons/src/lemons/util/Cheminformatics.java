@@ -11,13 +11,14 @@ import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
 
 /**
- * Performs chemoinformatic analysis of virtual molecules.
+ * Performs cheminformatic analysis of virtual molecules.
+ * 
  * @author skinnider
  */
-public class Chemoinformatics {
+public class Cheminformatics {
 
 	/**
-	 * Performs chemoinformatic analysis of virtual adenylation or acyltransferase substrates.
+	 * Performs cheminformatic analysis of virtual adenylation or acyltransferase substrates.
 	 * @author skinnider
 	 *
 	 */
@@ -129,7 +130,7 @@ public class Chemoinformatics {
 	}
 	
 	/**
-	 * Performs chemoinformatic analysis of virtual molecule atoms.
+	 * Performs cheminformatic analysis of virtual molecule atoms.
 	 * @author skinnider
 	 *
 	 */
@@ -608,7 +609,7 @@ public class Chemoinformatics {
 	}
 	
 	/**
-	 * Performs chemoinformatic analysis of virtual molecule bonds.
+	 * Performs cheminformatic analysis of virtual molecule bonds.
 	 * @author skinnider
 	 *
 	 */
