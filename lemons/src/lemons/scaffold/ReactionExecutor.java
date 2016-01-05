@@ -29,8 +29,7 @@ public class ReactionExecutor {
 			IReactionType type = reaction.type();
 			IReactionPlanner planner = type.planner();
 			planner.execute(reaction, scaffold);
-			logger.log(
-					Level.INFO,
+			logger.log(Level.INFO,
 					"Executed " + type + " reaction, new scaffold: "
 							+ SmilesIO.smiles(scaffold.molecule()));
 		}

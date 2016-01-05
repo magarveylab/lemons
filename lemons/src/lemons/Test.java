@@ -30,20 +30,22 @@ public class Test {
 		// for bug testing
 
 		Config.INITIAL_MONOMERS.addAll(Arrays.asList(ProteinogenicAminoAcids.values()));
-		Config.INITIAL_MONOMERS.addAll(Arrays.asList(NonProteinogenicAminoAcids.values()));
-		Config.INITIAL_MONOMERS.addAll(Arrays.asList(Starters.values()));
+//		Config.INITIAL_MONOMERS.addAll(Arrays.asList(NonProteinogenicAminoAcids.values()));
+//		Config.INITIAL_MONOMERS.addAll(Arrays.asList(Starters.values()));
 		Config.SWAP_MONOMERS.addAll(Arrays.asList(ProteinogenicAminoAcids.values()));
-		Config.SWAP_MONOMERS.addAll(Arrays.asList(NonProteinogenicAminoAcids.values()));
-		Config.SWAP_MONOMERS.addAll(Arrays.asList(Starters.values()));
+//		Config.SWAP_MONOMERS.addAll(Arrays.asList(NonProteinogenicAminoAcids.values()));
+//		Config.SWAP_MONOMERS.addAll(Arrays.asList(Starters.values()));
 
 		Config.MIN_SCAFFOLD_SIZE = 4;
 		Config.MIN_SCAFFOLD_SIZE = 15;
 		
-		Config.NUM_MONOMER_SWAPS = 1;
+		Config.NUM_MONOMER_SWAPS = 5;
 		Config.BOOTSTRAPS = 1;
 		Config.LIBRARY_SIZE = 100;
 		
 		Config.GET_FINGERPRINTS = false;
+		
+		Config.SEED = 12345;
 
 		//	Config.INITIAL_REACTIONS.put(Reactions.AZOLE, 1.0d);
 //		Config.INITIAL_REACTIONS.put(Reactions.CYCLIZATION, 1.0d);

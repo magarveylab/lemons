@@ -37,6 +37,9 @@ public class ConfigWriter {
 		bw.append("Write fingerprint ranks: " + Config.GET_FINGERPRINTS + "\n");
 		bw.append("Minimum scaffold size: " + Config.MIN_SCAFFOLD_SIZE + "\n");
 		bw.append("Maximum scaffold size: " + Config.MAX_SCAFFOLD_SIZE + "\n");
+		bw.append("Monomer swaps: " + Config.NUM_MONOMER_SWAPS + "\n");
+		bw.append("Seed: " + Config.SEED);
+		bw.append("Terminal -COOH: " + Config.TERMINAL_COOH);
 		bw.append("Library size: " + Config.LIBRARY_SIZE + "\n");
 		bw.append("Bootstrap size: " + Config.BOOTSTRAPS + "\n");
 		bw.append("Working directory: " + Config.WORKING_DIRECTORY + "\n");
