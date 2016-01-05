@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.exception.CDKException;
 
@@ -15,6 +17,8 @@ import lemons.util.exception.FingerprintGenerationException;
 import lemons.util.exception.PolymerGenerationException;
 
 public class Bootstrapper {
+	
+	private static final Logger logger = Logger.getLogger(Bootstrapper.class.getName());
 	
 	public static void bootstrap(IExperiment experiment)
 			throws CDKException, PolymerGenerationException, IOException,
@@ -30,10 +34,12 @@ public class Bootstrapper {
 	
 		// run experiments
 		for (int i = 0; i < Config.BOOTSTRAPS; i++) {
+			logger.log(Level.INFO, "Running bootstrap " + i);
 			Config.WORKING_DIRECTORY = Config.TIME_DIRECTORY
 					+ File.separator + "Bootstrap_" + (i + 1);
 			IOUtil.checkDir(Config.WORKING_DIRECTORY);
 			experiment.run();
+			logger.log(Level.INFO, "Finished bootstrap " + i);
 		}
 	}
 	
@@ -51,6 +57,7 @@ public class Bootstrapper {
 	
 		// run experiments
 		for (int i = 0; i < Config.BOOTSTRAPS; i++) {
+			logger.log(Level.INFO, "Running bootstrap " + i);
 			Config.WORKING_DIRECTORY = Config.BASE_DIRECTORY + File.separator
 					+ title + File.separator + "Bootstrap_" + (i + 1);
 			IOUtil.checkDir(Config.WORKING_DIRECTORY);

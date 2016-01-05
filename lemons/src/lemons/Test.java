@@ -18,13 +18,11 @@ public class Test {
 	public static void main(String[] args) throws CDKException,
 			PolymerGenerationException, IOException,
 			FingerprintGenerationException {		
-		// set fir 
+		// set dir 
 		if (args.length > 0)
 			Config.BASE_DIRECTORY = args[0];
-
-		System.out.println(Starters.values().length);
 		
-//		test();
+		test();
 	}
 
 	public static void test() throws CDKException, PolymerGenerationException,
@@ -47,7 +45,7 @@ public class Test {
 		
 		Config.GET_FINGERPRINTS = false;
 		
-		Config.SEED = 12345;
+	//	Config.SEED = 12345;
 
 		//	Config.INITIAL_REACTIONS.put(Reactions.AZOLE, 1.0d);
 //		Config.INITIAL_REACTIONS.put(Reactions.CYCLIZATION, 1.0d);

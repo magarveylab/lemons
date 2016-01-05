@@ -46,8 +46,12 @@ public class MonomerManipulator {
 		// set new monomers 
 		for (int j = 0; j < Config.NUM_MONOMER_SWAPS; j++) {
 			int s = -1;
-			while (s == -1 || usedSwaps[s] == true
-					|| newMonomers[s] != null)
+			while (s == -1
+					|| (usedSwaps[s] == true 
+						&& Arrays.asList(usedSwaps).contains(false))
+					|| (newMonomers[s] != null 
+						&& Arrays.asList(newMonomers).contains(null))
+				)
 				s = RandomUtil.randomInt(0, original.size() - 1);
 			usedSwaps[s] = true;
 			
@@ -61,10 +65,10 @@ public class MonomerManipulator {
 				int r = RandomUtil.randomInt(0, extenderSwapTypes.size() - 1);
 				swapType = extenderSwapTypes.get(r);
 			}
-
+			
 			newMonomers[s] = MonomerGenerator.buildMonomer(swapType);
 		}
-		
+
 		// copy unset monomers 
 		for (int k = 0; k < original.size(); k++)
 			if (newMonomers[k] == null)

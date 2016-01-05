@@ -31,7 +31,7 @@ public class Config {
 	 * If true, generates fingerprint rank distributions and writes them to
 	 * files.
 	 */
-	public static boolean GET_FINGERPRINTS = true;
+	public static boolean GET_FINGERPRINTS = false;
 
 	/**
 	 * The maximum number of monomers in generated natural product scaffolds.

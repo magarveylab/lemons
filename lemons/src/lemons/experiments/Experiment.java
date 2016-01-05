@@ -3,8 +3,11 @@ package lemons.experiments;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.exception.CDKException;
+
 import lemons.Config;
 import lemons.data.TanimotoCoefficientList;
 import lemons.fingerprint.Fingerprinters;
@@ -27,19 +30,21 @@ import lemons.util.exception.FingerprintGenerationException;
 import lemons.util.exception.PolymerGenerationException;
 
 public class Experiment implements IExperiment {
+	
+	private static final Logger logger = Logger.getLogger(Experiment.class.getName());
 
 	public void run() throws CDKException, PolymerGenerationException,
-	IOException, FingerprintGenerationException {
+	IOException, FingerprintGenerationException {		
 		// generate a set of linear scaffolds
 		List<IScaffold> scaffolds = ScaffoldBuilder.buildScaffolds(Config.LIBRARY_SIZE);
 
 		// detect reactions 
 		for (IScaffold scaffold : scaffolds) 
 			ReactionManipulator.detectReactions(scaffold);
-
+		
 		// swap monomers and add, remove, or swap reactions 
 		List<IScaffold> swapScaffolds = swapScaffolds(scaffolds);
-
+		
 		// execute reactions
 		ReactionExecutor.executeReactions(scaffolds);
 		ReactionExecutor.executeReactions(swapScaffolds);
@@ -63,23 +68,25 @@ public class Experiment implements IExperiment {
 	private List<IScaffold> swapScaffolds(List<IScaffold> scaffolds)
 			throws IOException, CDKException, PolymerGenerationException {
 		List<IScaffold> newScaffolds = new ArrayList<IScaffold>();
-		
+				
 		// create swapped scaffolds
 		for (int i = 0; i < scaffolds.size(); i++) {
+			logger.log(Level.INFO, "Swapping scaffold " + i);
+			
 			IScaffold scaffold = scaffolds.get(i);
 
 			// swap monomers and copy reactions 
 			IScaffold newScaffold = MonomerManipulator.swapMonomers(scaffold);
-			
+
 			// remove reactions
 			ReactionManipulator.removeReactions(newScaffold);
-			
+
 			// swap reactions
 			ReactionManipulator.swapReactions(newScaffold); 
 
 			// add new reactions
 			ReactionManipulator.addReactions(newScaffold);
-			
+
 			newScaffolds.add(newScaffold);
 		}
 		

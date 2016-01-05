@@ -43,7 +43,8 @@ public class ScaffoldBuilder {
 		List<IMonomerType> types = Config.INITIAL_MONOMERS;
 		List<IMonomerType> extenderTypes = new ArrayList<IMonomerType>(types);
 		extenderTypes.removeAll(Arrays.asList(Starters.values()));
-		int size = RandomUtil.randomInt(Config.MIN_SCAFFOLD_SIZE, Config.MAX_SCAFFOLD_SIZE);
+
+		int size = RandomUtil.randomInt(Config.MIN_SCAFFOLD_SIZE, Config.MAX_SCAFFOLD_SIZE);		
 		List<IMonomer> monomers = new ArrayList<IMonomer>();
 		for (int i = 0; i < size; i++) {
 			IMonomerType type = null;
@@ -65,8 +66,9 @@ public class ScaffoldBuilder {
 			IMonomer monomer = MonomerGenerator.buildMonomer(type); 
 			monomers.add(monomer);
 		}
-		
+
 		IPolymer polymer = PolymerGenerator.buildPolymer(monomers);
+
 		scaffold.setPolymer(polymer);
 		return scaffold;
 	}
