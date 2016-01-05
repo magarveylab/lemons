@@ -24,6 +24,15 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  */
 public class MonomerGenerator {
 
+	/**
+	 * Construct a monomer corresponding to a given monomer type.
+	 * 
+	 * @param type
+	 *            the IMonomerType to construct
+	 * @return a new monomer of the given type
+	 * @throws IOException
+	 * @throws CDKException
+	 */
 	public static IMonomer buildMonomer(IMonomerType type) throws IOException,
 			CDKException {
 		String smiles = type.smiles();
@@ -46,6 +55,17 @@ public class MonomerGenerator {
 		return monomer;
 	}
 
+	/**
+	 * Set the default tags (the begin and extend tags, as well as the ketone,
+	 * alpha carbon, and nitrogen, where applicable) for a new monomer.
+	 * 
+	 * @param monomer
+	 *            the monomer to tag
+	 * @param extendAtom
+	 *            the atom at which this monomer is extended
+	 * @param beginAtom
+	 *            the atom at which this monomer extends the previous monomer
+	 */
 	public static void tagMonomer(IMonomer monomer, IAtom extendAtom,
 			IAtom beginAtom) {
 		IMonomerType type = monomer.type();

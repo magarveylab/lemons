@@ -7,15 +7,18 @@ import lemons.interfaces.ITanimotoCoefficient;
 import lemons.interfaces.ITanimotoCoefficientList;
 
 /**
- * Performs sorting operations. 
+ * Performs sorting operations.
+ * 
  * @author michaelskinnider
  *
  */
 public class Sorter {
-	
+
 	/**
-	 * Sort a list of Tanimoto coefficients by their value, largest first. 
-	 * @param tcList	list of Tanimoto coefficients 
+	 * Sort a list of Tanimoto coefficients by their value, largest first.
+	 * 
+	 * @param tcList
+	 *            list of Tanimoto coefficients
 	 */
 	public static void sort(ITanimotoCoefficientList<ITanimotoCoefficient> tcList) {
 		Collections.sort(tcList, new Comparator<ITanimotoCoefficient>() {

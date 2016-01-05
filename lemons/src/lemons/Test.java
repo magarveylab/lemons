@@ -3,11 +3,9 @@ package lemons;
 import java.io.IOException;
 import java.util.Arrays;
 
-import lemons.enums.Reactions;
 import lemons.enums.monomers.*;
 import lemons.experiments.Bootstrapper;
 import lemons.experiments.Experiment;
-import lemons.interfaces.IMonomerType;
 import lemons.util.exception.FingerprintGenerationException;
 import lemons.util.exception.PolymerGenerationException;
 
@@ -22,7 +20,9 @@ public class Test {
 		if (args.length > 0)
 			Config.BASE_DIRECTORY = args[0];
 		
-		test();
+		System.out.println(Sugars.values().length);
+		
+	//	test();
 	}
 
 	public static void test() throws CDKException, PolymerGenerationException,

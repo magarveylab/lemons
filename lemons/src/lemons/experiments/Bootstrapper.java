@@ -39,7 +39,7 @@ public class Bootstrapper {
 					+ File.separator + "Bootstrap_" + (i + 1);
 			IOUtil.checkDir(Config.WORKING_DIRECTORY);
 			experiment.run();
-			logger.log(Level.INFO, "Finished bootstrap " + i);
+			logger.log(Level.INFO, "Finished bootstrap " + (i+1));
 		}
 	}
 	

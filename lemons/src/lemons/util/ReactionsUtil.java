@@ -15,6 +15,7 @@ import org.openscience.cdk.interfaces.IBond;
 
 /**
  * Perform common virtual reactions on chemical structures.
+ * 
  * @author skinnider
  *
  */

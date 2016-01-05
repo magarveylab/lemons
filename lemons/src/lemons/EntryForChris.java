@@ -8,7 +8,6 @@ import java.util.List;
 import lemons.experiments.Bootstrapper;
 import lemons.experiments.Experiment;
 import lemons.interfaces.IScaffold;
-import lemons.io.ConfigWriter;
 import lemons.io.SmilesReader;
 import lemons.util.FingerprintUtil;
 import lemons.util.IOUtil;

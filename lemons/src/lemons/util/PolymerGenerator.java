@@ -18,10 +18,27 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+/**
+ * Generate polymers.
+ * 
+ * @author michaelskinnider
+ *
+ */
 public class PolymerGenerator {
 	
 	private static final Logger logger = Logger.getLogger(PolymerGenerator.class.getName());
 	
+	/**
+	 * Create a deep copy of a polymer. The structure and tags will be deep
+	 * copied.
+	 * 
+	 * @param original
+	 *            the polymer to deep copy
+	 * @return a deep copied polymer
+	 * @throws CDKException
+	 * @throws PolymerGenerationException
+	 * @throws IOException
+	 */
 	public static IPolymer deepCopyPolymer(IPolymer original)
 			throws CDKException, PolymerGenerationException, IOException {
 		List<IMonomer> monomersCopy = new ArrayList<IMonomer>();
@@ -34,6 +51,17 @@ public class PolymerGenerator {
 		return copy;
 	}
 
+	/**
+	 * Construct a polymer from a list of monomers, building its chemical
+	 * structure.
+	 * 
+	 * @param monomers
+	 *            list of monomers within the polymer
+	 * @return the resulting polymer
+	 * @throws CDKException
+	 * @throws PolymerGenerationException
+	 * @throws IOException
+	 */
 	public static IPolymer buildPolymer(List<IMonomer> monomers)
 			throws CDKException, PolymerGenerationException, IOException {
 		int i = 0;
@@ -56,7 +84,7 @@ public class PolymerGenerator {
 		return polymer;
 	}
 
-	public static IPolymer beginPolymer(IMonomer monomer) throws IOException,
+	private static IPolymer beginPolymer(IMonomer monomer) throws IOException,
 			CDKException {
 		IPolymer polymer = new Polymer();
 		IAtomContainer molecule = new AtomContainer();
@@ -68,7 +96,7 @@ public class PolymerGenerator {
 		return polymer;
 	}
 
-	public static void extendPolymer(IMonomer monomer, IPolymer polymer)
+	private static void extendPolymer(IMonomer monomer, IPolymer polymer)
 			throws IOException, CDKException, PolymerGenerationException {
 		IAtomContainer molecule = polymer.molecule();
 		IMonomer starter = polymer.getLastMonomer();
@@ -90,7 +118,7 @@ public class PolymerGenerator {
 		}
 	}
 
-	public static void finishPolymer(IPolymer polymer) throws CDKException,
+	private static void finishPolymer(IPolymer polymer) throws CDKException,
 			PolymerGenerationException {
 		IMonomer first = polymer.getFirstMonomer();
 		IAtomContainer molecule = polymer.molecule();

@@ -71,7 +71,7 @@ public class Experiment implements IExperiment {
 				
 		// create swapped scaffolds
 		for (int i = 0; i < scaffolds.size(); i++) {
-			logger.log(Level.INFO, "Swapping scaffold " + i);
+			logger.log(Level.INFO, "Swapping scaffold " + (i+1));
 			
 			IScaffold scaffold = scaffolds.get(i);
 

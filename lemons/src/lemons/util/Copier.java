@@ -18,15 +18,29 @@ import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.interfaces.IStereoElement;
 
+/**
+ * Create deep copies of LEMONS objects. 
+ * @author michaelskinnider
+ *
+ */
 public class Copier {
 
+	/**
+	 * Create a deep copy of a monomer. The type, structure, and atom tags are
+	 * all deep copied.
+	 * 
+	 * @param monomer
+	 *            the monomer to copy
+	 * @return a deep copy of that monomer
+	 */
 	public static IMonomer deepCopy(IMonomer monomer) {
 		IMonomer copy = new Monomer(monomer.type());
 		deepCopy(monomer, copy);
 		return copy;
 	}
 
-	public static void deepCopy(IMonomer monomer, IMonomer copy) {
+	
+	private static void deepCopy(IMonomer monomer, IMonomer copy) {
 		IAtomContainer original = monomer.structure();
 
 		IAtomContainer structureCopy = original.getBuilder().newInstance(
@@ -39,7 +53,7 @@ public class Copier {
 		copy.setTags(tagsCopy);
 	}
 
-	public static void copyAtoms(IAtomContainer original, IAtomContainer copy) {
+	private static void copyAtoms(IAtomContainer original, IAtomContainer copy) {
 		int atomCount = original.getAtomCount();
 		IAtom[] atoms = new IAtom[atomCount];
 		for (int i = 0; i < atomCount; i++) {
@@ -68,7 +82,7 @@ public class Copier {
 			copy.addStereoElement(stereoElement);
 	}
 
-	public static void copyBonds(IAtomContainer original, IAtomContainer copy) {
+	private static void copyBonds(IAtomContainer original, IAtomContainer copy) {
 		int bondCount = original.getBondCount();
 		IBond[] bonds = new IBond[bondCount];
 		for (int index = 0; index < bondCount; index++) {
@@ -109,7 +123,7 @@ public class Copier {
 		}
 	}
 
-	public static ITagList<ITag> copyTags(IMonomer monomer, IAtomContainer original,
+	private static ITagList<ITag> copyTags(IMonomer monomer, IAtomContainer original,
 			IAtomContainer copy) {
 		ITagList<ITag> tagsCopy = new TagList();
 		
