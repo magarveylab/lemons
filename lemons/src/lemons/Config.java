@@ -64,7 +64,7 @@ public class Config {
 	/**
 	 * The number of bootstraps to perform.
 	 */
-	public static int BOOTSTRAPS = 100;
+	public static int BOOTSTRAPS = 1;
 	
 	/**
 	 * The seed for the random number generator. 
@@ -80,6 +80,9 @@ public class Config {
 	 * The monomers to be used in the construction of the initial scaffolds.
 	 */
 	public static List<IMonomerType> INITIAL_MONOMERS;
+	static {
+		INITIAL_MONOMERS = new ArrayList<IMonomerType>();
+	}
 
 	/**
 	 * The monomers to be used in swapping monomers in the initial scaffolds to
@@ -87,7 +90,6 @@ public class Config {
 	 */
 	public static List<IMonomerType> SWAP_MONOMERS;
 	static {
-		INITIAL_MONOMERS = new ArrayList<IMonomerType>();
 		SWAP_MONOMERS = new ArrayList<IMonomerType>();
 	}
 
@@ -113,6 +115,8 @@ public class Config {
 	 * Reactions to be removed from the initial scaffolds. 
 	 */
 	public static Map<IReactionType, Double> REMOVE_REACTIONS;
+	
+	// static initialization 
 	static {
 		INITIAL_REACTIONS 	= new HashMap<IReactionType, Double>();
 		SWAP_REACTIONS 		= new HashMap<IReactionType, Double>();
