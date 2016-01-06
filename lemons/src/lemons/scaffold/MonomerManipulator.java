@@ -71,6 +71,8 @@ public class MonomerManipulator {
 			} else {
 				List<IMonomerType> extenderSwapTypes = new ArrayList<IMonomerType>(Config.SWAP_MONOMERS);
 				extenderSwapTypes.removeAll(Arrays.asList(Starters.values()));
+				if (extenderSwapTypes.size() == 0)
+					continue;
 				int r = RandomUtil.randomInt(0, extenderSwapTypes.size() - 1);
 				swapType = extenderSwapTypes.get(r);
 			}
