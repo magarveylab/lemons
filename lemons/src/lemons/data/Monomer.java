@@ -13,7 +13,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
- * A biological monomer.
+ * A generic biological monomer.
  * 
  * @author michaelskinnider
  *

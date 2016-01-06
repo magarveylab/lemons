@@ -115,7 +115,7 @@ public class MonomerManipulator {
 					IMonomer monomerCopy = newScaffold.getMonomer(parentIdx);
 					ITag tagCopy = monomerCopy.getTags().get(tagIdx);
 					copy.addTag(tagCopy);
-				} catch (ArrayIndexOutOfBoundsException e) {
+				} catch (IndexOutOfBoundsException e) {
 					throw new RuntimeException("Couldn't get monomer for tag with type " + tag.type());
 				}
 			}

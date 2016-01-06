@@ -8,10 +8,17 @@ import lemons.interfaces.IFingerprint;
 import lemons.interfaces.IFingerprintList;
 import lemons.util.exception.FingerprintGenerationException;
 
-public class FingerprintList extends ArrayList<IFingerprint> implements IFingerprintList<IFingerprint> {
+/**
+ * A generic list of chemical fingerprints.
+ * 
+ * @author michaelskinnider
+ *
+ */
+public class FingerprintList extends ArrayList<IFingerprint> implements
+		IFingerprintList<IFingerprint> {
 
 	private static final long serialVersionUID = -2896195724076412726L;
-	
+
 	@Override
 	public IFingerprint getFingerprint(Fingerprinters fingerprinter)
 			throws FingerprintGenerationException {
@@ -27,5 +34,5 @@ public class FingerprintList extends ArrayList<IFingerprint> implements IFingerp
 					+ fingerprinter.toString() + " fingerprint");
 		return fingerprint;
 	}
-	
+
 }
