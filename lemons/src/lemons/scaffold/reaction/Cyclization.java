@@ -1,5 +1,8 @@
 package lemons.scaffold.reaction;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -32,6 +35,8 @@ import lemons.util.exception.PolymerGenerationException;
  *
  */
 public class Cyclization implements IReactionPlanner {
+	
+	private static final Logger logger = Logger.getLogger(Cyclization.class.getName());
 
 	public void perceive(double numReactions, IScaffold scaffold)
 			throws BadTagException, CDKException {
@@ -94,13 +99,18 @@ public class Cyclization implements IReactionPlanner {
 		}
 		IAtom ketoneAtom = ketone.atom();
 		IAtom cyclizationAtom = cyclization.atom();
+		
+		if (molecule.getConnectedBondsCount(cyclizationAtom) > 1
+				|| cyclizationAtom.getImplicitHydrogenCount() == 0) {
+			logger.log(Level.INFO, "Could not cyclize an atom which already has more than one bond");
+			return;
+		}
 
 		// correct valency of cyclization atom
 		int valency = cyclizationAtom.getValency();
 		int bondOrderSum = (int) molecule.getBondOrderSum(cyclizationAtom)
-				+ cyclizationAtom.getImplicitHydrogenCount() + 1; // (a bond is
-																	// about to
-																	// be added)
+				+ cyclizationAtom.getImplicitHydrogenCount() + 1; 
+				// +1 because a bond is about to be added)
 		if (valency != bondOrderSum) {
 			int remainder = valency - bondOrderSum;
 			cyclizationAtom.setImplicitHydrogenCount(cyclizationAtom

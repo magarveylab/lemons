@@ -1,5 +1,8 @@
 package lemons.scaffold.reaction;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -33,6 +36,8 @@ import lemons.util.exception.PolymerGenerationException;
  *
  */
 public class Azole implements IReactionPlanner {
+	
+	private static final Logger logger = Logger.getLogger(Azole.class.getName());
 
 	public void perceive(double numReactions, IScaffold scaffold)
 			throws BadTagException {
@@ -114,6 +119,13 @@ public class Azole implements IReactionPlanner {
 		IAtom ketone = ketoneTag.atom();
 		IAtom nitrogen = nitrogenTag.atom();
 		IAtom azoleAtom = azoleAtomTag.atom();
+		
+		// make sure an azole doesn't already exist
+		if (molecule.getConnectedBondsCount(azoleAtom) > 1
+				|| azoleAtom.getImplicitHydrogenCount() == 0) {
+			logger.log(Level.INFO, "Couldn't execute azole formation: O or S atom already has >1 bond");
+			return;
+		}
 		
 		// add bond between -SH/-OH and ketone
 		ReactionsUtil.addBond(azoleAtom, ketone, molecule);

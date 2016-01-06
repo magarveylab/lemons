@@ -40,19 +40,26 @@ public class MonomerManipulator {
 		
 		// copy in old monomers which have a reaction tag 
 		for (int i = 0; i < original.size(); i++)
-			if (reactions[i] == true) 
+			if (reactions[i] == true) {
 				newMonomers[i] = Copier.deepCopy(original.getMonomer(i));
+				usedSwaps[i] = true;
+			}
 		
 		// set new monomers 
 		for (int j = 0; j < Config.NUM_MONOMER_SWAPS; j++) {
+			if (!Arrays.asList(usedSwaps).contains(false)
+					&& !Arrays.asList(newMonomers).contains(null))
+				break;
+
 			int s = -1;
 			while (s == -1
 					|| (usedSwaps[s] == true 
 						&& Arrays.asList(usedSwaps).contains(false))
 					|| (newMonomers[s] != null 
 						&& Arrays.asList(newMonomers).contains(null))
-				)
+				)			
 				s = RandomUtil.randomInt(0, original.size() - 1);
+			
 			usedSwaps[s] = true;
 			
 			IMonomerType swapType = null;
@@ -97,6 +104,7 @@ public class MonomerManipulator {
 			copy.setSmiles(reaction.smiles());
 
 			ITagList<ITag> tags = reaction.getTags();
+			
 			for (ITag tag : tags) {
 				// get the indices of the parent monomer & tag index in monomer 
 				int parentIdx = -1;

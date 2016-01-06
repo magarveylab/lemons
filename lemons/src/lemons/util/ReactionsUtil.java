@@ -1,6 +1,8 @@
 package lemons.util;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import lemons.io.SmilesIO;
 import lemons.util.Cheminformatics.Atoms;
@@ -20,6 +22,8 @@ import org.openscience.cdk.interfaces.IBond;
  *
  */
 public class ReactionsUtil {
+	
+	private static final Logger logger = Logger.getLogger(ReactionsUtil.class.getName());
 
 	/**
 	 * Decrement the implicit hydrogen count of an atom, if it is greater than
@@ -326,8 +330,8 @@ public class ReactionsUtil {
 			ReactionsUtil.addBond(carbon, atom, molecule);
 			ReactionsUtil.decrementHydrogenCount(atom);
 		} else {
-			throw new PolymerGenerationException("Error: tried to functionalize"
-					+ " atom with too many bonds!");
+			logger.log(Level.INFO, "Error: tried to functionalize"
+					+ " atom with too many bonds! SMILES: " + smiles);
 		}
 	}
 	

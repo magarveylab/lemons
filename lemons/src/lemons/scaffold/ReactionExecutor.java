@@ -26,12 +26,20 @@ public class ReactionExecutor {
 	public static void executeReactions(IScaffold scaffold)
 			throws PolymerGenerationException, CDKException {
 		for (IReaction reaction : scaffold.reactions()) {
-			IReactionType type = reaction.type();
-			IReactionPlanner planner = type.planner();
-			planner.execute(reaction, scaffold);
-			logger.log(Level.INFO,
-					"Executed " + type + " reaction, new scaffold: "
-							+ SmilesIO.smiles(scaffold.molecule()));
+			String originalSmiles = SmilesIO.smiles(scaffold.molecule());
+			try {
+				IReactionType type = reaction.type();
+				IReactionPlanner planner = type.planner();
+				planner.execute(reaction, scaffold);
+				logger.log(Level.INFO,
+						"Executed " + type + " reaction, new scaffold: "
+								+ SmilesIO.smiles(scaffold.molecule()));
+			} catch (IllegalArgumentException e) {
+				throw new PolymerGenerationException("Could not execute "
+						+ reaction.type()
+						+ " reaction on molecule with SMILES " + originalSmiles
+						+ ". Underlying exception: " + e.getMessage());
+			}
 		}
 	}
 
