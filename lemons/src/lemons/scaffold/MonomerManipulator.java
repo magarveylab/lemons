@@ -48,8 +48,22 @@ public class MonomerManipulator {
 		// set new monomers 
 		for (int j = 0; j < Config.NUM_MONOMER_SWAPS; j++) {
 			if (!Arrays.asList(usedSwaps).contains(false)
-					&& !Arrays.asList(newMonomers).contains(null))
+					&& !Arrays.asList(newMonomers).contains(null)) 
 				break;
+			
+			IMonomerType swapType = null;
+			List<IMonomerType> extenderSwapTypes = new ArrayList<IMonomerType>(
+					Config.SWAP_MONOMERS);
+			extenderSwapTypes.removeAll(Arrays.asList(Starters.values()));
+			if (extenderSwapTypes.size() == 0) {
+				// if no swaps will extend, just swap the starter
+				int i = original.size() - 1;
+				int r = RandomUtil.randomInt(0, Starters.values().length - 1);
+				swapType = Starters.values()[r];
+				if (newMonomers[i] == null)
+					newMonomers[i] = MonomerGenerator.buildMonomer(swapType);
+				break;
+			}
 
 			int s = -1;
 			while (s == -1
@@ -59,24 +73,17 @@ public class MonomerManipulator {
 						&& Arrays.asList(newMonomers).contains(null))
 				)			
 				s = RandomUtil.randomInt(0, original.size() - 1);
-			
 			usedSwaps[s] = true;
 			
-			IMonomerType swapType = null;
 			if (s == (original.size() - 1)
-					&& Config.SWAP_MONOMERS
-							.contains(Starters._2_3_DIHYDROXYBENZOIC_ACID)) {
+					&& Config.SWAP_MONOMERS.containsAll(Arrays.asList(Starters
+							.values()))) {
 				int r = RandomUtil.randomInt(0, Starters.values().length - 1);
 				swapType = Starters.values()[r];
 			} else {
-				List<IMonomerType> extenderSwapTypes = new ArrayList<IMonomerType>(Config.SWAP_MONOMERS);
-				extenderSwapTypes.removeAll(Arrays.asList(Starters.values()));
-				if (extenderSwapTypes.size() == 0)
-					continue;
 				int r = RandomUtil.randomInt(0, extenderSwapTypes.size() - 1);
 				swapType = extenderSwapTypes.get(r);
 			}
-			
 			newMonomers[s] = MonomerGenerator.buildMonomer(swapType);
 		}
 

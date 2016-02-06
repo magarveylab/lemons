@@ -48,8 +48,8 @@ public class ScaffoldBuilder {
 		List<IMonomer> monomers = new ArrayList<IMonomer>();
 		for (int i = 0; i < size; i++) {
 			IMonomerType type = null;
-			if (i == 0 && generateCyclicScaffolds()) {
-				// terminal residue must have ketone if cyclizing 
+			if (i == 0) {
+				// terminal residue must have ketone
 				boolean hasKetone = false;
 				while (!hasKetone) {
 					type = RandomUtil.getRandomMonomer(extenderTypes);
@@ -92,18 +92,6 @@ public class ScaffoldBuilder {
 		IPolymer newPolymer = PolymerGenerator.buildPolymer(newMonomers);
 		newScaffold.setPolymer(newPolymer);
 		return newScaffold;
-	}
-
-	public static boolean generateCyclicScaffolds() {
-		return Config.TERMINAL_COOH
-				|| (Config.INITIAL_REACTIONS.containsKey(Reactions.CYCLIZATION) && Config.INITIAL_REACTIONS
-						.get(Reactions.CYCLIZATION) > 0)
-				|| (Config.ADD_REACTIONS.containsKey(Reactions.CYCLIZATION) && Config.ADD_REACTIONS
-						.get(Reactions.CYCLIZATION) > 0)
-				|| (Config.SWAP_REACTIONS.containsKey(Reactions.CYCLIZATION) && Config.SWAP_REACTIONS
-						.get(Reactions.CYCLIZATION) > 0)
-				|| (Config.REMOVE_REACTIONS.containsKey(Reactions.CYCLIZATION) && Config.REMOVE_REACTIONS
-						.get(Reactions.CYCLIZATION) > 0);
 	}
 
 }

@@ -214,9 +214,6 @@ public class Main {
 		if (line.hasOption("f")) {
 			Config.GET_FINGERPRINTS = true;
 		}
-		if (line.hasOption("c")) {
-			Config.TERMINAL_COOH = true;
-		}
 		
 		// parse options with arguments 
 		if (line.hasOption("min_size")) {
