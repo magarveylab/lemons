@@ -38,7 +38,6 @@ public class Copier {
 		deepCopy(monomer, copy);
 		return copy;
 	}
-
 	
 	private static void deepCopy(IMonomer monomer, IMonomer copy) {
 		IAtomContainer original = monomer.structure();

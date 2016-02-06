@@ -9,5 +9,6 @@ public enum ReactionTags implements ITagType {
 	CARBOXYLIC_ACID,
 	HALOGENATION_CARBON, 
 	AZOLE_SULFUR_OR_OXYGEN,
+	RANDOM_BOND_ATOM,
 	
 }

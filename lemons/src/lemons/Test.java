@@ -3,6 +3,7 @@ package lemons;
 import java.io.IOException;
 import java.util.Arrays;
 
+import lemons.enums.Reactions;
 import lemons.enums.monomers.*;
 import lemons.experiments.Bootstrapper;
 import lemons.experiments.Experiment;
@@ -28,12 +29,12 @@ public class Test {
 		// for bug testing
 
 		Config.INITIAL_MONOMERS.addAll(Arrays.asList(ProteinogenicAminoAcids.values()));
-		Config.INITIAL_MONOMERS.addAll(Arrays.asList(NonProteinogenicAminoAcids.values()));
-		Config.INITIAL_MONOMERS.addAll(Arrays.asList(PolyketideMonomers.values()));
-		Config.INITIAL_MONOMERS.addAll(Arrays.asList(Starters.values()));
+//		Config.INITIAL_MONOMERS.addAll(Arrays.asList(NonProteinogenicAminoAcids.values()));
+//		Config.INITIAL_MONOMERS.addAll(Arrays.asList(PolyketideMonomers.values()));
+//		Config.INITIAL_MONOMERS.addAll(Arrays.asList(Starters.values()));
 //		Config.SWAP_MONOMERS.addAll(Arrays.asList(ProteinogenicAminoAcids.values()));
 //		Config.SWAP_MONOMERS.addAll(Arrays.asList(NonProteinogenicAminoAcids.values()));
-		Config.SWAP_MONOMERS.addAll(Arrays.asList(Starters.values()));
+//		Config.SWAP_MONOMERS.addAll(Arrays.asList(Starters.values()));
 
 		Config.MIN_SCAFFOLD_SIZE = 4;
 		Config.MIN_SCAFFOLD_SIZE = 15;
@@ -47,6 +48,8 @@ public class Test {
 	
 		Config.SEED = 12345;
 
+		Config.ADD_REACTIONS.put(Reactions.RANDOM, 1.0d);
+		
 		//	Config.INITIAL_REACTIONS.put(Reactions.AZOLE, 1.0d);
 //		Config.INITIAL_REACTIONS.put(Reactions.CYCLIZATION, 1.0d);
 		

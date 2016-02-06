@@ -16,7 +16,9 @@ public enum Reactions implements IReactionType {
 	AZOLE(new Azole()), 
 	GLYCOSYLATION(new Glycosylation()), 
 	N_METHYLATION(new NMethylation()),
-	HALOGENATION(new Halogenation());
+	HALOGENATION(new Halogenation()),
+	RANDOM(new RandomBondReaction()),
+	;
 	
 	private IReactionPlanner planner;
 	

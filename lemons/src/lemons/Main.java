@@ -163,7 +163,7 @@ public class Main {
 						+ "The execution number can be probabilistic: e.g. 0.33 means the reaction will be "
 						+ "executed on 1/3 of  scaffolds.\n"
 						+ "Example: --initial_reactions glycosylation 1.5 cyclization 1\n"
-						+ "Options: cyclization, azole, glycosylation, n_methylation, halogenation.\n"
+						+ "Options: cyclization, azole, glycosylation, n_methylation, halogenation, random.\n"
 						+ "This option MUST have an even number of arguments!"
 				).hasArgs().build();
 		Option addReactions = Option.builder().longOpt("add_reactions")
