@@ -62,7 +62,7 @@ public class Main {
 		} catch (ParseException e) {
 			handleException(e, "Error parsing command line arguments!");
 		} catch (IllegalArgumentException e) {
-			handleException(e, "Error: must specify input sequence file!");
+			handleException(e, "Error: illegal argument!");
 		} catch (Exception e) {
 			handleException(e, "Error!");
 		} finally {
@@ -77,7 +77,7 @@ public class Main {
 	 */
 	public static Options createHelp() {
 		Options options = new Options();
-		Option help = new Option("help", "help", false, "Print this message");
+		Option help = new Option("h", "help", false, "Print this message");
 		options.addOption(help);
 		return options;
 	}
@@ -89,7 +89,7 @@ public class Main {
 	 */
 	public static Options createVersion() {
 		Options options = new Options();
-		Option version = new Option("version", "version", false, "Print the current version and exit");
+		Option version = new Option("v", "version", false, "Print the current version and exit");
 		options.addOption(version);
 		return options;
 	}
