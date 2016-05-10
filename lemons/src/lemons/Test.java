@@ -28,16 +28,17 @@ public class Test {
 			IOException, FingerprintGenerationException {
 		// for bug testing
 
-		Config.INITIAL_MONOMERS.addAll(Arrays.asList(ProteinogenicAminoAcids.values()));
+//		Config.INITIAL_MONOMERS.addAll(Arrays.asList(ProteinogenicAminoAcids.values()));
 //		Config.INITIAL_MONOMERS.addAll(Arrays.asList(NonProteinogenicAminoAcids.values()));
-//		Config.INITIAL_MONOMERS.addAll(Arrays.asList(PolyketideMonomers.values()));
+		Config.INITIAL_MONOMERS.addAll(Arrays.asList(PolyketideMonomers.values()));
 //		Config.INITIAL_MONOMERS.addAll(Arrays.asList(Starters.values()));
 //		Config.SWAP_MONOMERS.addAll(Arrays.asList(ProteinogenicAminoAcids.values()));
 //		Config.SWAP_MONOMERS.addAll(Arrays.asList(NonProteinogenicAminoAcids.values()));
+		Config.SWAP_MONOMERS.addAll(Arrays.asList(PolyketideMonomers.values()));
 //		Config.SWAP_MONOMERS.addAll(Arrays.asList(Starters.values()));
 
 		Config.MIN_SCAFFOLD_SIZE = 4;
-		Config.MIN_SCAFFOLD_SIZE = 15;
+		Config.MAX_SCAFFOLD_SIZE = 15;
 		
 		Config.NUM_MONOMER_SWAPS = 1;
 		Config.BOOTSTRAPS = 1;
@@ -47,8 +48,6 @@ public class Test {
 		Config.GET_FINGERPRINTS = false;
 	
 		Config.SEED = 12345;
-
-		Config.ADD_REACTIONS.put(Reactions.RANDOM, 1.0d);
 		
 		//	Config.INITIAL_REACTIONS.put(Reactions.AZOLE, 1.0d);
 //		Config.INITIAL_REACTIONS.put(Reactions.CYCLIZATION, 1.0d);

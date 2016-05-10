@@ -65,6 +65,7 @@ public class MonomerManipulator {
 				break;
 			}
 
+			// get the index of the monomer to swap 
 			int s = -1;
 			while (s == -1
 					|| (usedSwaps[s] == true 
@@ -80,6 +81,14 @@ public class MonomerManipulator {
 							.values()))) {
 				int r = RandomUtil.randomInt(0, Starters.values().length - 1);
 				swapType = Starters.values()[r];
+			} else if (s == 0) { 
+				boolean cooh = false;
+				while (cooh == false) {
+					int r = RandomUtil.randomInt(0, extenderSwapTypes.size() - 1);
+					swapType = extenderSwapTypes.get(r);
+					if (swapType.smiles().contains("=O"))
+						cooh = true;
+				}
 			} else {
 				int r = RandomUtil.randomInt(0, extenderSwapTypes.size() - 1);
 				swapType = extenderSwapTypes.get(r);

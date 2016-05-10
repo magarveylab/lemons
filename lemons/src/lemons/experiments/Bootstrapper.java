@@ -12,9 +12,10 @@ import org.openscience.cdk.exception.CDKException;
 import lemons.Config;
 import lemons.interfaces.IExperiment;
 import lemons.io.ConfigWriter;
-import lemons.util.IOUtil;
 import lemons.util.exception.FingerprintGenerationException;
 import lemons.util.exception.PolymerGenerationException;
+
+import skinnider.utilities.io.IOUtil;
 
 public class Bootstrapper {
 	

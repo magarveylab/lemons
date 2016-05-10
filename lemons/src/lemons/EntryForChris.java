@@ -10,7 +10,6 @@ import lemons.experiments.Experiment;
 import lemons.interfaces.IScaffold;
 import lemons.io.SmilesReader;
 import lemons.util.FingerprintUtil;
-import lemons.util.IOUtil;
 import lemons.util.exception.FingerprintGenerationException;
 import lemons.util.exception.PolymerGenerationException;
 
@@ -21,6 +20,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.openscience.cdk.exception.CDKException;
+
+import skinnider.utilities.io.IOUtil;
 
 public class EntryForChris {
 
