@@ -26,7 +26,7 @@ import lemons.util.exception.PolymerGenerationException;
  * @author michaelskinnider
  *
  */
-public class Main {
+public class Lemons {
 
 	public static void main(String[] args) throws CDKException,
 			PolymerGenerationException, IOException,

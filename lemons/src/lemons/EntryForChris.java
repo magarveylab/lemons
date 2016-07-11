@@ -28,9 +28,9 @@ public class EntryForChris {
 	public static void main(String[] args) throws CDKException,
 	PolymerGenerationException, IOException,
 	FingerprintGenerationException {
-		Options help = Main.createHelp();
-		Options version = Main.createVersion();
-		Options options = Main.createOptions();
+		Options help = Lemons.createHelp();
+		Options version = Lemons.createVersion();
+		Options options = Lemons.createOptions();
 
 		CommandLineParser parser = new DefaultParser();
 
@@ -50,7 +50,7 @@ public class EntryForChris {
 					System.out.println("LEMONS: version " + Config.VERSION);
 				} else {
 					line = parser.parse(options, args);
-					Main.parseCommandLine(line);
+					Lemons.parseCommandLine(line);
 					
 					// check directories 
 					Bootstrapper.checkBaseDirectory();
@@ -86,13 +86,13 @@ public class EntryForChris {
 			}
 			
 		} catch (UnsupportedEncodingException e) {
-			Main.handleException(e, "Error: unsupported encoding!");
+			Lemons.handleException(e, "Error: unsupported encoding!");
 		} catch (ParseException e) {
-			Main.handleException(e, "Error parsing command line arguments!");
+			Lemons.handleException(e, "Error parsing command line arguments!");
 		} catch (IllegalArgumentException e) {
-			Main.handleException(e, "Error: must specify input sequence file!");
+			Lemons.handleException(e, "Error: must specify input sequence file!");
 		} catch (Exception e) {
-			Main.handleException(e, "Error!");
+			Lemons.handleException(e, "Error!");
 		} finally {
 			System.exit(0);
 		}
