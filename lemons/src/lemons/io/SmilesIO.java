@@ -3,7 +3,6 @@ package lemons.io;
 import java.io.IOException;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -22,6 +21,7 @@ public class SmilesIO {
 	 * @throws IOException
 	 * @throws CDKException
 	 */
+	@SuppressWarnings("deprecation")
 	public static IAtomContainer molecule(String smiles) throws IOException,
 			CDKException {
 		IAtomContainer mol = null;
@@ -42,6 +42,7 @@ public class SmilesIO {
 	 * @return The molecule's structures as a SMILES string
 	 * @throws CDKException
 	 */
+	@SuppressWarnings("deprecation")
 	public static String smiles(IAtomContainer mol) throws CDKException {
 		SmilesGenerator sg = new SmilesGenerator();
 		sg.setUseAromaticityFlag(true);

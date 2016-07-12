@@ -11,7 +11,6 @@ import org.openscience.cdk.exception.CDKException;
 
 import lemons.Config;
 import lemons.data.Scaffold;
-import lemons.enums.Reactions;
 import lemons.enums.monomers.Starters;
 import lemons.interfaces.IMonomer;
 import lemons.interfaces.IMonomerType;
