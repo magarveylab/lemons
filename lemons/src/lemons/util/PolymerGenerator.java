@@ -72,6 +72,7 @@ public class PolymerGenerator {
 				polymer = PolymerGenerator.beginPolymer(monomer);
 			} else {
 				PolymerGenerator.extendPolymer(monomer, polymer);
+				// System.out.println("Extended polymer, SMILES " + SmilesIO.smiles(polymer.molecule()));
 			}
 			i++;
 		}
@@ -136,6 +137,9 @@ public class PolymerGenerator {
 					extend.setImplicitHydrogenCount(extend.getImplicitHydrogenCount() + 1);
 			} else if (extend.getSymbol().equals("C")) {
 				while (bondOrderSum + extend.getImplicitHydrogenCount() < 4)
+					extend.setImplicitHydrogenCount(extend.getImplicitHydrogenCount() + 1);
+			} else if (extend.getSymbol().equals("O")) {
+				while (bondOrderSum + extend.getImplicitHydrogenCount() < 2)
 					extend.setImplicitHydrogenCount(extend.getImplicitHydrogenCount() + 1);
 			}
 		}
