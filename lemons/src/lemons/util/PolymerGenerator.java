@@ -72,7 +72,6 @@ public class PolymerGenerator {
 				polymer = PolymerGenerator.beginPolymer(monomer);
 			} else {
 				PolymerGenerator.extendPolymer(monomer, polymer);
-				// System.out.println("Extended polymer, SMILES " + SmilesIO.smiles(polymer.molecule()));
 			}
 			i++;
 		}
@@ -105,9 +104,10 @@ public class PolymerGenerator {
 		polymer.addMonomer(monomer);
 		molecule.add(monomer.structure());
 
-		if (starter.extend() == null) 
-			throw new PolymerGenerationException("Could not extend residue " + starter.type());
-		
+		if (starter.extend() == null)
+			throw new PolymerGenerationException(
+					"Could not extend residue " + starter.type());
+
 		try {
 			ReactionsUtil.addBond(starter.extend(), monomer.begin(), molecule);
 		} catch (Exception e) {
@@ -117,6 +117,8 @@ public class PolymerGenerator {
 							+ starter.type() + "\nFull message: "
 							+ e.getLocalizedMessage());
 		}
+		
+		System.out.println(SmilesIO.smiles(molecule));
 	}
 
 	private static void finishPolymer(IPolymer polymer) throws CDKException,
