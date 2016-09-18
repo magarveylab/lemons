@@ -23,38 +23,43 @@ import lemons.interfaces.ITag;
 import lemons.interfaces.ITagList;
 import lemons.util.Copier;
 import lemons.util.MonomerGenerator;
+import lemons.util.MonomerUtil;
 import lemons.util.PolymerGenerator;
 import lemons.util.RandomUtil;
 import lemons.util.exception.PolymerGenerationException;
 
 public class MonomerManipulator {
-	
+
 	public static IScaffold swapMonomers(IScaffold original)
 			throws CDKException, PolymerGenerationException, IOException {
+		List<IMonomerType> extenderSwapTypes = new ArrayList<IMonomerType>(
+				Config.SWAP_MONOMERS);
+		extenderSwapTypes.removeAll(Arrays.asList(Starters.values()));
+
+		// get amino acid monomers
+		List<IMonomerType> aa = MonomerUtil.getAminoAcidTypes();
+
 		// create empty lists
 		IMonomer[] newMonomers = new IMonomer[original.size()];
 		boolean[] usedSwaps = new boolean[original.size()];
 
 		// get monomers which contain a reaction
 		boolean[] reactions = getMonomersWithReactions(original);
-		
-		// copy in old monomers which have a reaction tag 
+
+		// copy in old monomers which have a reaction tag
 		for (int i = 0; i < original.size(); i++)
 			if (reactions[i] == true) {
 				newMonomers[i] = Copier.deepCopy(original.getMonomer(i));
 				usedSwaps[i] = true;
 			}
-		
-		// set new monomers 
+
+		// set new monomers
 		for (int j = 0; j < Config.NUM_MONOMER_SWAPS; j++) {
 			if (!Arrays.asList(usedSwaps).contains(false)
-					&& !Arrays.asList(newMonomers).contains(null)) 
+					&& !Arrays.asList(newMonomers).contains(null))
 				break;
-			
+
 			IMonomerType swapType = null;
-			List<IMonomerType> extenderSwapTypes = new ArrayList<IMonomerType>(
-					Config.SWAP_MONOMERS);
-			extenderSwapTypes.removeAll(Arrays.asList(Starters.values()));
 			if (extenderSwapTypes.size() == 0) {
 				// if no swaps will extend, just swap the starter
 				int i = original.size() - 1;
@@ -65,56 +70,79 @@ public class MonomerManipulator {
 				break;
 			}
 
-			// get the index of the monomer to swap 
+			// get the index of the monomer to swap
 			int s = -1;
 			while (s == -1
-					|| (usedSwaps[s] == true 
-						&& Arrays.asList(usedSwaps).contains(false))
-					|| (newMonomers[s] != null 
-						&& Arrays.asList(newMonomers).contains(null))
-				)			
+					|| (usedSwaps[s] == true
+							&& Arrays.asList(usedSwaps).contains(false))
+					|| (newMonomers[s] != null
+							&& Arrays.asList(newMonomers).contains(null)))
 				s = RandomUtil.randomInt(0, original.size() - 1);
 			usedSwaps[s] = true;
-			
-			if (s == (original.size() - 1)
-					&& Config.SWAP_MONOMERS.containsAll(Arrays.asList(Starters
-							.values()))) {
+
+			if (s == (original.size() - 1) && Config.SWAP_MONOMERS
+					.containsAll(Arrays.asList(Starters.values()))) {
 				int r = RandomUtil.randomInt(0, Starters.values().length - 1);
 				swapType = Starters.values()[r];
-			} else if (s == 0) { 
+			} else if (s == 0) {
 				boolean cooh = false;
 				while (cooh == false) {
-					int r = RandomUtil.randomInt(0, extenderSwapTypes.size() - 1);
+					int r = RandomUtil.randomInt(0,
+							extenderSwapTypes.size() - 1);
 					swapType = extenderSwapTypes.get(r);
 					if (swapType.smiles().contains("=O"))
 						cooh = true;
 				}
 			} else {
+				List<IMonomerType> monomerSwapTypes = new ArrayList<IMonomerType>(
+						extenderSwapTypes);
+				// if previous monomer is swapped, check if it's an AA
+				int prevIdx = s - 1;
+				if (newMonomers[prevIdx] != null
+						&& aa.contains(newMonomers[prevIdx])) {
+					// get only amino acid extender types
+					monomerSwapTypes = MonomerUtil
+							.getAminoAcidExtenderTypes(monomerSwapTypes);
+				}
+				// if next monomer is swapped, check if it's a PK non-extender
+				int nextIdx = s + 1;
+				if (newMonomers.length > nextIdx
+						&& newMonomers[nextIdx] != null) {
+					IMonomer next = newMonomers[nextIdx];
+					IMonomerType nextType = next.type();
+					if (MonomerUtil.isAminoAcidNonExtender(nextType)) {
+						// if so - this can't be an amino acid
+						monomerSwapTypes.removeAll(aa);
+					}
+				}
+
 				int r = RandomUtil.randomInt(0, extenderSwapTypes.size() - 1);
 				swapType = extenderSwapTypes.get(r);
 			}
 			newMonomers[s] = MonomerGenerator.buildMonomer(swapType);
 		}
 
-		// copy unset monomers 
+		// copy unset monomers
 		for (int k = 0; k < original.size(); k++)
 			if (newMonomers[k] == null)
 				newMonomers[k] = Copier.deepCopy(original.getMonomer(k));
-		
+
 		// create new scaffold
 		IScaffold newScaffold = new Scaffold();
-		
-		// construct polymer 
-		IPolymer polymer = PolymerGenerator.buildPolymer(Arrays.asList(newMonomers));
+
+		// construct polymer
+		IPolymer polymer = PolymerGenerator
+				.buildPolymer(Arrays.asList(newMonomers));
 		newScaffold.setPolymer(polymer);
-		
-		// copy old reactions 
+
+		// copy old reactions
 		copyReactions(original, newScaffold);
-		
+
 		return newScaffold;
 	}
-	
-	public static void copyReactions(IScaffold original, IScaffold newScaffold) {
+
+	public static void copyReactions(IScaffold original,
+			IScaffold newScaffold) {
 		IReactionList<IReaction> reactions = original.reactions();
 		List<IMonomer> monomers = original.monomers();
 		for (IReaction reaction : reactions) {
@@ -122,9 +150,9 @@ public class MonomerManipulator {
 			copy.setSmiles(reaction.smiles());
 
 			ITagList<ITag> tags = reaction.getTags();
-			
+
 			for (ITag tag : tags) {
-				// get the indices of the parent monomer & tag index in monomer 
+				// get the indices of the parent monomer & tag index in monomer
 				int parentIdx = -1;
 				int tagIdx = -1;
 				for (int i = 0; i < monomers.size(); i++) {
@@ -135,17 +163,19 @@ public class MonomerManipulator {
 						tagIdx = monomerTags.indexOf(tag);
 					}
 				}
-				
-				// copy tag-reaction association 
+
+				// copy tag-reaction association
 				try {
 					IMonomer monomerCopy = newScaffold.getMonomer(parentIdx);
 					ITag tagCopy = monomerCopy.getTags().get(tagIdx);
 					copy.addTag(tagCopy);
 				} catch (IndexOutOfBoundsException e) {
-					throw new RuntimeException("Couldn't get monomer for tag with type " + tag.type());
+					throw new RuntimeException(
+							"Couldn't get monomer for tag with type "
+									+ tag.type());
 				}
 			}
-			
+
 			newScaffold.addReaction(copy);
 		}
 	}
@@ -168,5 +198,5 @@ public class MonomerManipulator {
 		}
 		return monomerHasReactions;
 	}
-	
+
 }
