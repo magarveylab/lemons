@@ -26,7 +26,8 @@ public class TagPerceiver {
 					if (bonds.size() > 1)
 						continue;
 					IAtom connectedAtom = bonds.get(0).getConnectedAtom(atom);
-					if (connectedAtom.getHybridization() == IAtomType.Hybridization.SP3) {
+					if (connectedAtom.getHybridization() == IAtomType.Hybridization.SP3
+							&& connectedAtom.getSymbol().equals("C")) {
 						ITag tag = new Tag(ReactionTags.SP3_CARBON_HYDROXYL, atom);
 						if (!monomer.containsTag(ReactionTags.SP3_CARBON_HYDROXYL, atom))
 							monomer.addTag(tag);
