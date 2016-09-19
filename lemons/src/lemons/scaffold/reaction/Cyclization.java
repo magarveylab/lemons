@@ -119,7 +119,6 @@ public class Cyclization implements IReactionPlanner {
 
 		ReactionsUtil.removeAlcohol(ketoneAtom, molecule);
 		ReactionsUtil.addBond(cyclizationAtom, ketoneAtom, molecule);
-
 	}
 
 }

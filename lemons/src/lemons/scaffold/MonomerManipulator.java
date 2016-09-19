@@ -96,32 +96,34 @@ public class MonomerManipulator {
 			} else {
 				List<IMonomerType> monomerSwapTypes = new ArrayList<IMonomerType>(
 						extenderSwapTypes);
-				// if previous monomer is swapped, check if it's an AA
 				int prevIdx = s - 1;
-				if (newMonomers[prevIdx] != null
-						&& aa.contains(newMonomers[prevIdx])) {
+				if (aa.contains(newMonomers[prevIdx])
+						|| aa.contains(original.getMonomer(prevIdx).type())) {
 					// get only amino acid extender types
 					monomerSwapTypes = MonomerUtil
 							.getAminoAcidExtenderTypes(monomerSwapTypes);
 				}
 				// if next monomer is swapped, check if it's a PK non-extender
 				int nextIdx = s + 1;
-				if (newMonomers.length > nextIdx
-						&& newMonomers[nextIdx] != null) {
-					IMonomer next = newMonomers[nextIdx];
-					IMonomerType nextType = next.type();
-					if (MonomerUtil.isAminoAcidNonExtender(nextType)) {
+				if (newMonomers.length > nextIdx) { // TODO 
+					IMonomerType nextType = null;
+					if (newMonomers[nextIdx] != null) {
+						IMonomer next = newMonomers[nextIdx];
+						nextType = next.type();
+					} else {
+						nextType = original.getMonomer(nextIdx).type();
+					}
+					if (MonomerUtil.isAminoAcidNonExtender(nextType))
 						// if so - this can't be an amino acid
 						monomerSwapTypes.removeAll(aa);
-					}
 				}
 
-				int r = RandomUtil.randomInt(0, extenderSwapTypes.size() - 1);
-				swapType = extenderSwapTypes.get(r);
+				int r = RandomUtil.randomInt(0, monomerSwapTypes.size() - 1);
+				swapType = monomerSwapTypes.get(r);
 			}
 			newMonomers[s] = MonomerGenerator.buildMonomer(swapType);
 		}
-
+		
 		// copy unset monomers
 		for (int k = 0; k < original.size(); k++)
 			if (newMonomers[k] == null)

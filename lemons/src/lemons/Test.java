@@ -34,23 +34,24 @@ public class Test {
 //		Config.INITIAL_MONOMERS.addAll(Arrays.asList(Starters.values()));
 		Config.SWAP_MONOMERS.addAll(Arrays.asList(ProteinogenicAminoAcids.values()));
 		Config.SWAP_MONOMERS.addAll(Arrays.asList(NonProteinogenicAminoAcids.values()));
-//		Config.SWAP_MONOMERS.addAll(Arrays.asList(PolyketideMonomers.values()));
+		Config.SWAP_MONOMERS.addAll(Arrays.asList(PolyketideMonomers.values()));
 //		Config.SWAP_MONOMERS.addAll(Arrays.asList(Starters.values()));
 
 		Config.MIN_SCAFFOLD_SIZE = 4;
 		Config.MAX_SCAFFOLD_SIZE = 15;
 		
 		Config.NUM_MONOMER_SWAPS = 1;
-		Config.BOOTSTRAPS = 1;
-		Config.LIBRARY_SIZE = 1;
+		Config.BOOTSTRAPS = 10;
+		Config.LIBRARY_SIZE = 100;
 		
 		Config.WRITE_STRUCTURES = true;
-		Config.GET_FINGERPRINTS = false;
+		Config.GET_FINGERPRINTS = true;
 	
 		Config.SEED = 12345;
 		
 		// Config.INITIAL_REACTIONS.put(Reactions.AZOLE, 1.0d);
 		// Config.INITIAL_REACTIONS.put(Reactions.RANDOM, 5.0d);
+		Config.INITIAL_REACTIONS.put(Reactions.CYCLIZATION, 1.0d);
 		
 		Bootstrapper.bootstrap(new Experiment());
 	}

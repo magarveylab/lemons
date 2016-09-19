@@ -117,8 +117,6 @@ public class PolymerGenerator {
 							+ starter.type() + "\nFull message: "
 							+ e.getLocalizedMessage());
 		}
-		
-		System.out.println(SmilesIO.smiles(molecule));
 	}
 
 	private static void finishPolymer(IPolymer polymer) throws CDKException,

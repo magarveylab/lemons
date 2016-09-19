@@ -26,12 +26,12 @@ public class MonomerUtil {
 		Iterator<IMonomerType> itr = aaExtenderTypes.iterator();
 		while (itr.hasNext()) {
 			IMonomerType next = itr.next();
-			if (isAminoAcidNonExtender(next)) 
+			if (isAminoAcidNonExtender(next))
 				itr.remove();
 		}
 		return aaExtenderTypes;
 	}
-	
+
 	public static boolean isAminoAcidNonExtender(IMonomerType type) {
 		List<IMonomerType> pkTypes = new ArrayList<IMonomerType>();
 		pkTypes.addAll(Arrays.asList(PolyketideMonomers.values()));
