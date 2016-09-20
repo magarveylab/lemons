@@ -31,7 +31,8 @@ public class TagPerceiver {
 						ITag tag = new Tag(ReactionTags.SP3_CARBON_HYDROXYL, atom);
 						if (!monomer.containsTag(ReactionTags.SP3_CARBON_HYDROXYL, atom))
 							monomer.addTag(tag);
-					} else if (connectedAtom.getHybridization() == IAtomType.Hybridization.SP2) {
+					} else if (connectedAtom.getHybridization() == IAtomType.Hybridization.SP2 
+							&& connectedAtom.getSymbol().equals("C")) {
 						boolean hasKetone = false;
 						for (IAtom atom2 : structure.getConnectedAtomsList(connectedAtom))
 						if (atom2.getSymbol().equals("O")
