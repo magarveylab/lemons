@@ -40,76 +40,44 @@ public class RandomBondReaction implements IReactionPlanner {
 			throws BadTagException, CDKException {
 		IAtomContainer molecule = scaffold.molecule();
 		
+		// detect all potential random bond sites
 		List<IAtom> atoms = new ArrayList<IAtom>();
 		for (IMonomer monomer : scaffold.monomers())
 			for (IAtom atom : monomer.structure().atoms())
-				atoms.add(atom);
+				if (isPotentialRandomBondSite(atom, molecule))
+					atoms.add(atom);
 		int atomCount = atoms.size();
 		boolean[] used = new boolean[atomCount];
 		
 		IReactionList<IReaction> reactions = new ReactionList();
-		for (int i = 0; i < numReactions + 1; i++) {
+		reactionLoop: for (int i = 0; i < numReactions + 1; i++) {
 			ITag tag1 = null, tag2 = null;
 			IAtom atom1 = null, atom2 = null;
+			int loops = 0;
 			while (tag1 == null || tag2 == null) {
+				// avoid infinite loop over outer loop
+				loops++;
+				if (loops > 1_000)
+					break reactionLoop;
+				// avoid infinite loop over first inner loop
+				if (!arrayContainsFalse(used))
+					break reactionLoop;
+
 				int r1 = -1;
 				while (r1 == -1 || used[r1]) {
 					r1 = RandomUtil.randomInt(0, atomCount - 1);
 					atom1 = atoms.get(r1);
-					String symbol = atom1.getSymbol();				
-					if (symbol.equals("N")) {
-						if (molecule.getConnectedBondsCount(atom1) >= 3
-								|| getBondOrderSum(atom1, molecule) >= 3) {
-							r1 = -1;
-							continue;
-						}
-					} else if (symbol.equals("C")) {
-						if (molecule.getConnectedBondsCount(atom1) >= 4
-								|| getBondOrderSum(atom1, molecule) >= 4) {
-							r1 = -1;
-							continue;
-						}
-					} else if (symbol.equals("O") || symbol.equals("S")) {
-						if (molecule.getConnectedBondsCount(atom1) >= 2
-								|| getBondOrderSum(atom1, molecule) >= 2) {
-							r1 = -1;
-							continue;
-						}
-					} else {
-						r1 = -1;
-						continue;
-					}
 				}
 				int r2 = -1;
-				while (r2 == -1 || r2 == r1 || used[r2]) { 
+				while (r2 == -1 || r2 == r1 || used[r2]) {
+					// avoid infinite loop over second inner loop
+					loops++;
+					if (loops > 1_000)
+						break reactionLoop;
 					r2 = RandomUtil.randomInt(0, atomCount - 1);
 					atom2 = atoms.get(r2);
 					if (molecule.getBond(atom1, atom2) != null) {
 						r2 = -1; 
-						continue;
-					}
-					
-					String symbol = atom2.getSymbol();
-					if (symbol.equals("N")) {
-						if (molecule.getConnectedBondsCount(atom2) >= 3
-								|| getBondOrderSum(atom2, molecule) >= 3) {
-							r2 = -1;
-							continue;
-						}
-					} else if (symbol.equals("C")) {
-						if (molecule.getConnectedBondsCount(atom2) >= 4
-								|| getBondOrderSum(atom2, molecule) >= 4) {
-							r2 = -1;
-							continue;
-						}
-					} else if (symbol.equals("O") || symbol.equals("S")) {
-						if (molecule.getConnectedBondsCount(atom2) >= 2
-								|| getBondOrderSum(atom2, molecule) >= 2) {
-							r2 = -1;
-							continue;
-						}
-					} else { 
-						r2 = -1;
 						continue;
 					}
 				}				
@@ -189,6 +157,38 @@ public class RandomBondReaction implements IReactionPlanner {
 			}
 		}
 		return bondOrderSum;
+	}
+	
+	private boolean isPotentialRandomBondSite(IAtom atom,
+			IAtomContainer molecule) {
+		String symbol = atom.getSymbol();
+		if (symbol.equals("N")) {
+			if (molecule.getConnectedBondsCount(atom) >= 3
+					|| getBondOrderSum(atom, molecule) >= 3) {
+				return false;
+			}
+		} else if (symbol.equals("C")) {
+			if (molecule.getConnectedBondsCount(atom) >= 4
+					|| getBondOrderSum(atom, molecule) >= 4) {
+				return false;
+			}
+		} else if (symbol.equals("O") || symbol.equals("S")) {
+			if (molecule.getConnectedBondsCount(atom) >= 2
+					|| getBondOrderSum(atom, molecule) >= 2) {
+				return false;
+			}
+		} else {
+			return false; // only add bonds at C, N, O, S
+		}
+		return true;
+	}
+	
+	private boolean arrayContainsFalse(boolean[] array) {
+		int f = 0;
+		for (boolean b : array)
+			if (b == false)
+				f++;
+		return f > 0;
 	}
 
 }
