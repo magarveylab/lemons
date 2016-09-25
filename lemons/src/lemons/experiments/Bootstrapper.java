@@ -2,6 +2,8 @@ package lemons.experiments;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
@@ -19,6 +21,7 @@ import skinnider.utilities.io.IOUtil;
 
 public class Bootstrapper {
 	
+	private static final SecureRandom random = new SecureRandom();
 	private static final Logger logger = Logger.getLogger(Bootstrapper.class.getName());
 	
 	public static void bootstrap(IExperiment experiment)
@@ -71,7 +74,9 @@ public class Bootstrapper {
 		Date initDate = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HHmm-ss");
 		String date = sdf.format(initDate);
-		Config.TIME_DIRECTORY = Config.BASE_DIRECTORY + File.separator + date;
+		String uniqueIdentifier = new BigInteger(130, random).toString(32);
+		Config.TIME_DIRECTORY = Config.BASE_DIRECTORY + File.separator + date
+				+ "-" + uniqueIdentifier;
 		IOUtil.checkDir(Config.TIME_DIRECTORY);
 	}
 	
