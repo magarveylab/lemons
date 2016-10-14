@@ -73,17 +73,17 @@ public class ConfigWriter {
 		bw.append("Add:\t");
 		for (Map.Entry<IReactionType, Double> entry : Config.ADD_REACTIONS
 				.entrySet())
-			bw.append(entry.getKey().toString() + "-" + entry.getValue());
+			bw.append(entry.getKey().toString() + "-" + entry.getValue() + " ");
 		bw.append("\n");
 		bw.append("Remove:\t");
 		for (Map.Entry<IReactionType, Double> entry : Config.REMOVE_REACTIONS
 				.entrySet())
-			bw.append(entry.getKey().toString() + "-" + entry.getValue());
+			bw.append(entry.getKey().toString() + "-" + entry.getValue() + " ");
 		bw.append("\n");
 		bw.append("Swap:\t");
 		for (Map.Entry<IReactionType, Double> entry : Config.SWAP_REACTIONS
 				.entrySet())
-			bw.append(entry.getKey().toString() + "-" + entry.getValue());
+			bw.append(entry.getKey().toString() + "-" + entry.getValue() + " ");
 		bw.append("\n");
 
 		bw.close();
