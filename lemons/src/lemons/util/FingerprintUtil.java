@@ -3,6 +3,9 @@ package lemons.util;
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import lemons.data.Fingerprint;
 import lemons.fingerprint.Fingerprinters;
 import lemons.interfaces.IFingerprint;
@@ -16,12 +19,15 @@ import org.openscience.cdk.fingerprint.IFingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
- * Utilities class for operations on fingerprints. 
+ * Utilities class for operations on fingerprints.
  * 
  * @author michaelskinnider
  *
  */
 public class FingerprintUtil {
+
+	private static final Logger logger = Logger
+			.getLogger(FingerprintUtil.class.getName());
 
 	/**
 	 * Set fingerprints for a list of hypothetical natural product structures.
@@ -39,7 +45,7 @@ public class FingerprintUtil {
 		// generate fingerprints
 		for (int i = 0; i < scaffolds.size(); i++) {
 			IScaffold peptide = scaffolds.get(i);
-			
+
 			String name = "Scaffold_" + (i + 1);
 			setFingerprints(peptide, name);
 		}
@@ -63,7 +69,7 @@ public class FingerprintUtil {
 		// I/O -- *required* to fix double bond stereochemistry
 		String smiles = SmilesIO.smiles(scaffold.molecule());
 		IAtomContainer molecule = SmilesIO.molecule(smiles);
-				
+
 		// calculate fingerprints
 		for (Fingerprinters fingerprinter : Fingerprinters.values()) {
 			IFingerprinter fp = fingerprinter.getFingerprinter();
@@ -73,8 +79,11 @@ public class FingerprintUtil {
 						fingerprinter);
 				scaffold.addFingerprint(fingerprint);
 			} catch (Exception e) {
-				throw new FingerprintGenerationException(
-						"Could not generate fingerprint for molecule" + name);
+				logger.log(Level.WARNING,
+						"Could not generate fingerprint for molecule " + name);
+				IFingerprint fingerprint = new Fingerprint(name, null,
+						fingerprinter);
+				scaffold.addFingerprint(fingerprint);
 			}
 		}
 	}

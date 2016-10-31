@@ -16,7 +16,7 @@ import org.openscience.cdk.similarity.Tanimoto;
  *
  */
 public class TanimotoUtil {
-	
+
 	/**
 	 * Calculate the Tanimoto coefficient between two chemical fingerprints.
 	 * 
@@ -33,15 +33,17 @@ public class TanimotoUtil {
 		double value = TanimotoUtil.calculate(fp1, fp2);
 		String name1 = fp1.name();
 		String name2 = fp2.name();
-		ITanimotoCoefficient tc = new TanimotoCoefficient(name1, name2, value); 
+		ITanimotoCoefficient tc = new TanimotoCoefficient(name1, name2, value);
 		return tc;
 	}
-	
+
 	private static double calculate(IFingerprint fp1, IFingerprint fp2)
 			throws CDKException {
 		BitSet b1 = fp1.bitset();
 		BitSet b2 = fp2.bitset();
+		if (b1 == null || b2 == null)
+			return 0.0d;
 		return Tanimoto.calculate(b1, b2);
 	}
-	
+
 }

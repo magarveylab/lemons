@@ -123,7 +123,8 @@ public class Azole implements IReactionPlanner {
 		// make sure an azole doesn't already exist
 		if (molecule.getConnectedBondsCount(azoleAtom) > 1
 				|| azoleAtom.getImplicitHydrogenCount() == 0) {
-			logger.log(Level.INFO, "Couldn't execute azole formation: O or S atom already has >1 bond");
+			logger.log(Level.INFO, "Couldn't execute azole formation: "
+					+ "O or S atom already has >1 bond");
 			return;
 		}
 		

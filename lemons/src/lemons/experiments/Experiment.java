@@ -30,25 +30,27 @@ import lemons.util.exception.FingerprintGenerationException;
 import lemons.util.exception.PolymerGenerationException;
 
 public class Experiment implements IExperiment {
-	
-	private static final Logger logger = Logger.getLogger(Experiment.class.getName());
+
+	private static final Logger logger = Logger
+			.getLogger(Experiment.class.getName());
 
 	public void run() throws CDKException, PolymerGenerationException,
-	IOException, FingerprintGenerationException {		
+			IOException, FingerprintGenerationException {
 		// generate a set of linear scaffolds
-		List<IScaffold> scaffolds = ScaffoldBuilder.buildScaffolds(Config.LIBRARY_SIZE);
+		List<IScaffold> scaffolds = ScaffoldBuilder
+				.buildScaffolds(Config.LIBRARY_SIZE);
 
-		// detect reactions 
-		for (IScaffold scaffold : scaffolds) 
+		// detect reactions
+		for (IScaffold scaffold : scaffolds)
 			ReactionManipulator.detectReactions(scaffold);
-		
-		// swap monomers and add, remove, or swap reactions 
+
+		// swap monomers and add, remove, or swap reactions
 		List<IScaffold> swapScaffolds = swapScaffolds(scaffolds);
-		
+
 		// execute reactions
 		ReactionExecutor.executeReactions(scaffolds);
 		ReactionExecutor.executeReactions(swapScaffolds);
-		
+
 		// write structures
 		if (Config.WRITE_STRUCTURES) {
 			SmilesWriter.write("scaffolds.tsv", scaffolds);
@@ -64,32 +66,32 @@ public class Experiment implements IExperiment {
 			calculateRanks(scaffolds, swapScaffolds);
 		}
 	}
-	
+
 	private List<IScaffold> swapScaffolds(List<IScaffold> scaffolds)
 			throws IOException, CDKException, PolymerGenerationException {
 		List<IScaffold> newScaffolds = new ArrayList<IScaffold>();
-				
+
 		// create swapped scaffolds
 		for (int i = 0; i < scaffolds.size(); i++) {
-			logger.log(Level.INFO, "Swapping scaffold " + (i+1));
-			
+			logger.log(Level.INFO, "Swapping scaffold " + (i + 1));
+
 			IScaffold scaffold = scaffolds.get(i);
 
-			// swap monomers and copy reactions 
+			// swap monomers and copy reactions
 			IScaffold newScaffold = MonomerManipulator.swapMonomers(scaffold);
 
 			// remove reactions
 			ReactionManipulator.removeReactions(newScaffold);
 
 			// swap reactions
-			ReactionManipulator.swapReactions(newScaffold); 
+			ReactionManipulator.swapReactions(newScaffold);
 
 			// add new reactions
 			ReactionManipulator.addReactions(newScaffold);
 
 			newScaffolds.add(newScaffold);
 		}
-		
+
 		return newScaffolds;
 	}
 
@@ -121,7 +123,7 @@ public class Experiment implements IExperiment {
 				Sorter.sort(tcList);
 
 				// write
-				String name = "Scaffold_" + (i+1);
+				String name = "Scaffold_" + (i + 1);
 				ITanimotoCoefficient match = tcList.getMatch(name);
 				ExperimentWriter.writeRow(match, tcList, fp);
 			}

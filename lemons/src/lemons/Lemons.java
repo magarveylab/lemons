@@ -21,15 +21,15 @@ import lemons.util.exception.FingerprintGenerationException;
 import lemons.util.exception.PolymerGenerationException;
 
 /**
- * LEMONS: Library for the Enumeration of MOdular Natural Structures. 
+ * LEMONS: Library for the Enumeration of MOdular Natural Structures.
  * 
  * @author michaelskinnider
  *
  */
 public class Lemons {
 
-	public static void main(String[] args) throws CDKException,
-			PolymerGenerationException, IOException,
+	public static void main(String[] args)
+			throws CDKException, PolymerGenerationException, IOException,
 			FingerprintGenerationException {
 		Options help = createHelp();
 		Options version = createVersion();
@@ -47,7 +47,7 @@ public class Lemons {
 						+ "and use them to compare chemical fingerprints.\n\n";
 				String footer = "\nSource available at http://github.com/magarveylab/lemons";
 				formatter.printHelp("lemons", header, options, footer, true);
-			} else { 
+			} else {
 				line = parser.parse(version, args, true);
 				if (line.hasOption("version")) {
 					System.out.println("LEMONS: version " + Config.VERSION);
@@ -56,7 +56,7 @@ public class Lemons {
 					parseCommandLine(line);
 					Bootstrapper.bootstrap(new Experiment());
 				}
-			} 
+			}
 		} catch (UnsupportedEncodingException e) {
 			handleException(e, "Error: unsupported encoding!");
 		} catch (ParseException e) {
@@ -68,7 +68,7 @@ public class Lemons {
 		} finally {
 			System.exit(0);
 		}
-	}	
+	}
 
 	/**
 	 * Create the help option.
@@ -81,7 +81,7 @@ public class Lemons {
 		options.addOption(help);
 		return options;
 	}
-	
+
 	/**
 	 * Create the version option.
 	 * 
@@ -89,7 +89,8 @@ public class Lemons {
 	 */
 	public static Options createVersion() {
 		Options options = new Options();
-		Option version = new Option("v", "version", false, "Print the current version and exit");
+		Option version = new Option("v", "version", false,
+				"Print the current version and exit");
 		options.addOption(version);
 		return options;
 	}
@@ -101,8 +102,8 @@ public class Lemons {
 	 */
 	public static Options createOptions() {
 		Options options = new Options();
-		
-		// construct boolean options 
+
+		// construct boolean options
 		Option writeStructures = Option.builder("w").longOpt("write")
 				.argName("write")
 				.desc("Write generated natural product SMILES to text file")
@@ -111,8 +112,8 @@ public class Lemons {
 				.argName("fingerprint")
 				.desc("Generate fingerprints and rank Tanimoto coefficients for generated structures")
 				.build();
-		
-		// construct options with one value 
+
+		// construct options with one value
 		Option minSize = Option.builder().longOpt("min_size")
 				.argName("min scaffold size")
 				.desc("The minimum size, in monomers, for the scaffold")
@@ -131,49 +132,54 @@ public class Lemons {
 				.hasArg().build();
 		Option bootstraps = Option.builder("b").longOpt("bootstraps")
 				.argName("bootstraps")
-				.desc("The number of bootstraps to use per experiment")
-				.hasArg().build();
+				.desc("The number of bootstraps to use per experiment").hasArg()
+				.build();
 		Option numSwaps = Option.builder().longOpt("swaps")
 				.argName("monomer swaps")
-				.desc("The number of monomer swaps to execute")
-				.hasArg().build();
-		Option seed = Option.builder().longOpt("seed")
-				.argName("seed")
-				.desc("The seed for the random number generator")
-				.hasArg().build();
+				.desc("The number of monomer swaps to execute").hasArg()
+				.build();
+		Option seed = Option.builder().longOpt("seed").argName("seed")
+				.desc("The seed for the random number generator").hasArg()
+				.build();
 
-		// construct options with multiple values 
+		// construct options with multiple values
 		Option initialMonomers = Option.builder().longOpt("initial_monomers")
-				.argName("initial scaffold monomers").desc("Monomers used to construct the initial scaffolds.\n"
+				.argName("initial scaffold monomers")
+				.desc("Monomers used to construct the initial scaffolds.\n"
 						+ "Options: p, proteinogenic amino acids; np, nonproteinogenic amino acids;"
-						+ "pk, polyketide monomers; s, starter units"
-				).hasArgs().build();
+						+ "pk, polyketide monomers; s, starter units")
+				.hasArgs().build();
 		Option swapMonomers = Option.builder().longOpt("swap_monomers")
-				.argName("swap scaffold monomers").desc("Monomers that can be swapped into a modified scaffold.\n"
+				.argName("swap scaffold monomers")
+				.desc("Monomers that can be swapped into a modified scaffold.\n"
 						+ "Options: p, proteinogenic amino acids; np, nonproteinogenic amino acids;"
-						+ "pk, polyketide monomers; s, starter units"
-				).hasArgs().build();
+						+ "pk, polyketide monomers; s, starter units")
+				.hasArgs().build();
 		Option initialReactions = Option.builder().longOpt("initial_reactions")
-				.argName("initial reactions").desc("Reactions that can be swapped into a modified scaffold.\n"
+				.argName("initial reactions")
+				.desc("Reactions that can be swapped into a modified scaffold.\n"
 						+ "Specify the reaction and the number of times that it is executed.\n"
 						+ "The execution number can be probabilistic: e.g. 0.33 means the reaction will be "
 						+ "executed on 1/3 of  scaffolds.\n"
 						+ "Example: --initial_reactions glycosylation 1.5 cyclization 1\n"
 						+ "Options: cyclization, azole, glycosylation, n_methylation, halogenation, random.\n"
-						+ "This option MUST have an even number of arguments!"
-				).hasArgs().build();
+						+ "This option MUST have an even number of arguments!")
+				.hasArgs().build();
 		Option addReactions = Option.builder().longOpt("add_reactions")
-				.argName("initial reactions").desc("Reactions that can be added to a modified scaffold.\n"
-						+ "Usage is the same as initial_reactions."
-				).hasArgs().build();
+				.argName("initial reactions")
+				.desc("Reactions that can be added to a modified scaffold.\n"
+						+ "Usage is the same as initial_reactions.")
+				.hasArgs().build();
 		Option swapReactions = Option.builder().longOpt("swap_reactions")
-				.argName("swap reactions").desc("Reactions that can be swapped into a modified scaffold.\n"
-						+ "Usage is the same as initial_reactions."
-				).hasArgs().build();
+				.argName("swap reactions")
+				.desc("Reactions that can be swapped into a modified scaffold.\n"
+						+ "Usage is the same as initial_reactions.")
+				.hasArgs().build();
 		Option removeReactions = Option.builder().longOpt("remove_reactions")
-				.argName("remove reactions").desc("Reactions that can be removed from the original scaffold.\n"
-						+ "Usage is the same as initial_reactions."
-				).hasArgs().build();
+				.argName("remove reactions")
+				.desc("Reactions that can be removed from the original scaffold.\n"
+						+ "Usage is the same as initial_reactions.")
+				.hasArgs().build();
 
 		options.addOption(writeStructures);
 		options.addOption(testFingerprints);
@@ -190,7 +196,7 @@ public class Lemons {
 		options.addOption(addReactions);
 		options.addOption(swapReactions);
 		options.addOption(removeReactions);
-		
+
 		return options;
 	}
 
@@ -201,7 +207,8 @@ public class Lemons {
 	 *            line to parse
 	 * @throws ParseException
 	 */
-	public static void parseCommandLine(CommandLine line) throws ParseException {
+	public static void parseCommandLine(CommandLine line)
+			throws ParseException {
 		// parse boolean options
 		if (line.hasOption("w")) {
 			Config.WRITE_STRUCTURES = true;
@@ -209,8 +216,8 @@ public class Lemons {
 		if (line.hasOption("f")) {
 			Config.GET_FINGERPRINTS = true;
 		}
-		
-		// parse options with arguments 
+
+		// parse options with arguments
 		if (line.hasOption("min_size")) {
 			String value = line.getOptionValue("min_size");
 			Config.MIN_SCAFFOLD_SIZE = Integer.parseInt(value);
@@ -249,17 +256,17 @@ public class Lemons {
 					throw new IllegalArgumentException(
 							"Illegal initial_monomers value: " + v);
 				if (v.equals("np"))
-					Config.INITIAL_MONOMERS.addAll(Arrays
-							.asList(NonProteinogenicAminoAcids.values()));
+					Config.INITIAL_MONOMERS.addAll(
+							Arrays.asList(NonProteinogenicAminoAcids.values()));
 				if (v.equals("p"))
-					Config.INITIAL_MONOMERS.addAll(Arrays
-							.asList(ProteinogenicAminoAcids.values()));
+					Config.INITIAL_MONOMERS.addAll(
+							Arrays.asList(ProteinogenicAminoAcids.values()));
 				if (v.equals("pk"))
-					Config.INITIAL_MONOMERS.addAll(Arrays
-							.asList(PolyketideMonomers.values()));
+					Config.INITIAL_MONOMERS
+							.addAll(Arrays.asList(PolyketideMonomers.values()));
 				if (v.equals("s"))
-					Config.INITIAL_MONOMERS.addAll(Arrays
-							.asList(Starters.values()));
+					Config.INITIAL_MONOMERS
+							.addAll(Arrays.asList(Starters.values()));
 			}
 		}
 		if (line.hasOption("swap_monomers")) {
@@ -273,72 +280,88 @@ public class Lemons {
 					if (v.equals("np"))
 						Config.SWAP_MONOMERS.addAll(Arrays
 								.asList(NonProteinogenicAminoAcids.values()));
-					if (v.equals("p"))
-						Config.SWAP_MONOMERS.addAll(Arrays
-								.asList(ProteinogenicAminoAcids.values()));
-					if (v.equals("pk"))
-						Config.SWAP_MONOMERS.addAll(Arrays
-								.asList(PolyketideMonomers.values()));
-					if (v.equals("s"))
-						Config.SWAP_MONOMERS.addAll(Arrays
-								.asList(Starters.values()));
+				if (v.equals("p"))
+					Config.SWAP_MONOMERS.addAll(
+							Arrays.asList(ProteinogenicAminoAcids.values()));
+				if (v.equals("pk"))
+					Config.SWAP_MONOMERS
+							.addAll(Arrays.asList(PolyketideMonomers.values()));
+				if (v.equals("s"))
+					Config.SWAP_MONOMERS
+							.addAll(Arrays.asList(Starters.values()));
 			}
 		}
 		if (line.hasOption("initial_reactions")) {
 			String[] values = line.getOptionValues("initial_reactions");
 			if (values.length % 2 != 0)
-				throw new IllegalArgumentException("Illegal number of arguments for "
-						+ "parameter initial_reactions: must be an even number!");
+				throw new IllegalArgumentException(
+						"Illegal number of arguments for "
+								+ "parameter initial_reactions: must be an even number!");
 			for (int i = 0; i < values.length - 1; i += 2) {
 				String reaction = values[i];
-				String num = values[i+1];
+				String num = values[i + 1];
 				if (getReaction(reaction) == null)
-					throw new IllegalArgumentException("Illegal reaction type in initial_reactions: " + reaction);
-				Config.INITIAL_REACTIONS.put(getReaction(reaction), Double.parseDouble(num));
+					throw new IllegalArgumentException(
+							"Illegal reaction type in initial_reactions: "
+									+ reaction);
+				Config.INITIAL_REACTIONS.put(getReaction(reaction),
+						Double.parseDouble(num));
 			}
 		}
 		if (line.hasOption("add_reactions")) {
 			String[] values = line.getOptionValues("add_reactions");
 			if (values.length % 2 != 0)
-				throw new IllegalArgumentException("Illegal number of arguments for "
-						+ "parameter add_reactions: must be an even number!");
+				throw new IllegalArgumentException(
+						"Illegal number of arguments for "
+								+ "parameter add_reactions: must be an even number!");
 			for (int i = 0; i < values.length - 1; i += 2) {
 				String reaction = values[i];
-				String num = values[i+1];
+				String num = values[i + 1];
 				if (getReaction(reaction) == null)
-					throw new IllegalArgumentException("Illegal reaction type in add_reactions: " + reaction);
-				Config.ADD_REACTIONS.put(getReaction(reaction), Double.parseDouble(num));
+					throw new IllegalArgumentException(
+							"Illegal reaction type in add_reactions: "
+									+ reaction);
+				Config.ADD_REACTIONS.put(getReaction(reaction),
+						Double.parseDouble(num));
 			}
 		}
 		if (line.hasOption("swap_reactions")) {
 			String[] values = line.getOptionValues("swap_reactions");
 			if (values.length % 2 != 0)
-				throw new IllegalArgumentException("Illegal number of arguments for "
-						+ "parameter swap_reactions: must be an even number!");
+				throw new IllegalArgumentException(
+						"Illegal number of arguments for "
+								+ "parameter swap_reactions: must be an even number!");
 			for (int i = 0; i < values.length - 1; i += 2) {
 				String reaction = values[i];
-				String num = values[i+1];
+				String num = values[i + 1];
 				if (getReaction(reaction) == null)
-					throw new IllegalArgumentException("Illegal reaction type in swap_reactions: " + reaction);
-				Config.SWAP_REACTIONS.put(getReaction(reaction), Double.parseDouble(num));
+					throw new IllegalArgumentException(
+							"Illegal reaction type in swap_reactions: "
+									+ reaction);
+				Config.SWAP_REACTIONS.put(getReaction(reaction),
+						Double.parseDouble(num));
 			}
 		}
 		if (line.hasOption("remove_reactions")) {
 			String[] values = line.getOptionValues("remove_reactions");
 			if (values.length % 2 != 0)
-				throw new IllegalArgumentException("Illegal number of arguments for "
-						+ "parameter remove_reactions: must be an even number!");
+				throw new IllegalArgumentException(
+						"Illegal number of arguments for "
+								+ "parameter remove_reactions: must be an even number!");
 			for (int i = 0; i < values.length - 1; i += 2) {
 				String reaction = values[i];
-				String num = values[i+1];
+				String num = values[i + 1];
 				if (getReaction(reaction) == null)
-					throw new IllegalArgumentException("Illegal reaction type in remove_reactions: " + reaction);
-				Config.REMOVE_REACTIONS.put(getReaction(reaction), Double.parseDouble(num));
+					throw new IllegalArgumentException(
+							"Illegal reaction type in remove_reactions: "
+									+ reaction);
+				Config.REMOVE_REACTIONS.put(getReaction(reaction),
+						Double.parseDouble(num));
 			}
 		}
 
 	}
-	
+
 	/**
 	 * Get the reaction that corresponds to a string.
 	 * 
@@ -354,7 +377,7 @@ public class Lemons {
 				reaction = r;
 		return reaction;
 	}
-	
+
 	/**
 	 * Handle an exception by printing the stack trace to the command line, and
 	 * exiting.
