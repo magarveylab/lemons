@@ -19,7 +19,7 @@ public class Config {
 	/**
 	 * The version of LEMONS which is being run.
 	 */
-	public static final String VERSION = "0.0.7";
+	public static final String VERSION = "0.0.8";
 
 	/**
 	 * If true, writes all generated structures (both original and swapped
